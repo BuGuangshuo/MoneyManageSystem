@@ -1,0 +1,110 @@
+.left-wrap {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 48px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: @primary-color;
+  transition: all 0.3s;
+  @media screen and (max-width: 1024px) {
+    min-width: 410px;
+    max-width: 410px;
+  }
+  @media screen and (min-width: 1024px) {
+    min-width: 596px;
+    max-width: 596px;
+  }
+
+  & .introduce-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  & .introduce-img-wrap {
+    height: 400px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  & .introduce-text-wrap {
+    position: relative;
+    height: 200px;
+
+    & .introduce-text-context {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+
+      & .introduce-title {
+        color: #fff;
+        font-size: 32px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      & .introduce-desc {
+        color: #fff;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: normal;
+      }
+    }
+  }
+
+  :global {
+    .ant-carousel,.ant-carousel .slick-slider {
+      height: 100%;
+    }
+  }
+}
+
+.right-wrap {
+  display: flex;
+  position: relative;
+  flex: 1;
+  flex-direction: column;
+  padding: 48px;
+
+  & .theme-icon {
+    position: absolute;
+    right: 50px;
+    & svg {
+      width: 2em;
+      height: 2em;
+    }
+  }
+
+  & .login-form-wrap {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & .form-wrap {
+      display: flex;
+      flex-direction: column;
+
+      & .form-title {
+        margin: 0 auto;
+        text-align: center;
+        font-size: 32px;
+        font-weight:600;
+        margin-bottom:58px;
+        color: @title-color;
+      }
+
+      & form {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        justify-content: center;
+        width: 360px;
+        height: 100%;
+      }
+    }
+  }
+}

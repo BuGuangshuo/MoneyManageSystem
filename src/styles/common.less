@@ -1,0 +1,76 @@
+html,
+body,
+#root,
+.c-router {
+  width: 100%;
+  min-width: 1300px;
+  height: 100%;
+  overflow: auto;
+}
+
+.c-flex {
+  display: flex;
+}
+
+.c-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  margin-bottom: 16px;
+}
+
+.c-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.c-colunm-center {
+  display: flex;
+  align-items: center;
+}
+
+#nprogress .bar {
+  background: @primary-color !important;
+}
+
+.c-text-limit-one {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.table-link {
+  color: @primary-color;
+  cursor: pointer;
+}
+
+.hide {
+  display: none !important;
+}
+
+.label-name {
+  margin-bottom: 8px;
+  color: @gray;
+}
+
+.effected::before {
+  background-color: @success !important;
+}
+
+.uneffect::before {
+  background-color: @error !important;
+}
+
+.use-idle {
+  color: @disable;
+}
+
+.icon {
+  width: 1.3em;
+  height: 1.3em;
+  vertical-align: -0.3em;
+  fill: currentColor;
+  overflow: hidden;
+}
