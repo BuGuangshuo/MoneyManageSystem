@@ -3,13 +3,13 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 const modifyVars = {
-  '@primary-color': '#6236FF',
+  '@primary-color': '#536DFE',
   '@title-color': '#372E5B',
   '@white': '#fff',
   '@error': '#ff3e27',
   '@success': '#37b184',
   '@warning': '#ffb413',
-  '@pale-grey': '#eceef0',
+  '@pale-grey': '#ECF2F7',
   '@background': '#f9fafa',
   '@title-black': '#000',
   '@secondary-text': '#687c8a',

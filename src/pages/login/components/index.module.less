@@ -40,14 +40,14 @@
       transform: translate(-50%,-50%);
 
       & .introduce-title {
-        color: #fff;
+        color: @white;
         font-size: 32px;
         font-weight: 600;
         text-align: center;
       }
 
       & .introduce-desc {
-        color: #fff;
+        color: @white;
         text-align: center;
         margin-top: 20px;
         font-weight: normal;
@@ -94,7 +94,7 @@
         font-size: 32px;
         font-weight:600;
         margin-bottom:58px;
-        color: @title-color;
+        color: @gray;
       }
 
       & form {
@@ -105,12 +105,23 @@
         width: 360px;
         height: 100%;
       }
+
+      :global {
+        .ant-form-item-label > label {
+          font-size: 16px;
+          font-weight: 500;
+          color: @gray;
+        }
+        .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+          display: none;
+        }   
+      }
     }
 
     :global {
       .ant-input-affix-wrapper-borderless {
-        background: #ECF2F7;
-        height: 40px;
+        background: @pale-grey;
+        height: 46px;
         border-radius: 4px;
       }
 

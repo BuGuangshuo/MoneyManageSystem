@@ -26,45 +26,50 @@ export default function RightArea() {
       <div className={styles['login-form-wrap']}>
         <div className={styles['form-wrap']}>
           <div className={styles['form-title']}>
-            welcome
+            用户登录
           </div>
           <Form
             name="normal_login"
             className="login-form"
+            layout = "vertical"
             initialValues={{ remember: true }}
             onFinish={onFinish}
           >
             <Form.Item
+              label="账号"
+              colon = {false}
               name="username"
-              rules={[{ required: true, message: 'Please input your Username!' }]}
+              rules={[{ required: true, message: '请输入账号!' }]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username" bordered = {false}/>
+              <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="请输入账号" bordered = {false}/>
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[{ required: true, message: 'Please input your Password!' }]}
+              label="密码"
+              colon = {false}
+              rules={[{ required: true, message: '请输入密码!' }]}
             >
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Password"
+                placeholder="请输入密码"
                 bordered = {false}
               />
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox>记住我</Checkbox>
               </Form.Item>
 
               <a className="login-form-forgot" href="">
-                Forgot password
+                忘记密码
               </a>
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
-                Log in
+                登录
               </Button>
             </Form.Item>
           </Form>
