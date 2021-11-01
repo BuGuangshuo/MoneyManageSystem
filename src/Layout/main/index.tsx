@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { navigate } from '@reach/router'
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, message } from 'antd';
 
 import { DEFAULT_SETTINGS_ROUTE } from '../../utils/constants'
 
@@ -22,6 +22,13 @@ export default function MainLayout({ children }: any) {
   
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    message.success('注销成功！')
+    navigate('/login')
   }
 
   useEffect(() => {
@@ -60,7 +67,11 @@ export default function MainLayout({ children }: any) {
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
+          <Header className="site-layout-background" style={{ padding: 0 }}>
+            <div style={{float:"right",marginRight:"12px"}}>
+              <Button type = "primary" onClick={handleLogout}>注销登陆</Button>
+            </div>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             {children}
           </Content>
