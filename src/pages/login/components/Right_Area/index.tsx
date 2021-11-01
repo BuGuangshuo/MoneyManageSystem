@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { Button, Checkbox, Form, Input } from 'antd'
+import { Button, Checkbox, Form, Input, message } from 'antd'
+import { navigate } from '@reach/router'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import styles from '../index.module.less'
@@ -8,7 +9,15 @@ import styles from '../index.module.less'
 export default function RightArea() {
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    const { username, password } = values
+    if(username === "admin" && password === "123456") {
+      localStorage.setItem('token',"Acess")
+      localStorage.setItem('user',JSON.stringify(values))
+      message.success("登陆成功！")
+      navigate('/home')
+    } else {
+      message.error("用户名或密码错误！")
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
