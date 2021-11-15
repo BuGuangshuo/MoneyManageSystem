@@ -30,7 +30,13 @@ export default defineConfig({
     react(),
   ],
   server: {
-    port: 9081
+    port: 9081,
+    proxy: {
+      '/v1': {
+        target: 'http://127.0.0.1:5000/',
+        changeOrigin: false,
+      },
+    },
   },
   resolve: {
     alias: [

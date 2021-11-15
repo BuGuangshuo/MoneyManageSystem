@@ -26,7 +26,7 @@ export default function MainLayout({ children }: any) {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    sessionStorage.removeItem('user')
     message.success('注销成功！')
     navigate('/login')
   }
@@ -75,7 +75,7 @@ export default function MainLayout({ children }: any) {
           <Content style={{ margin: '0 16px' }}>
             {children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}> Design ©2021 Created by G.S</Footer>
         </Layout>
       </Layout>
   )
