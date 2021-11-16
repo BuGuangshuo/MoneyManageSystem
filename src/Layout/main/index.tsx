@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { navigate } from '@reach/router'
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
 import { DEFAULT_SETTINGS_ROUTE } from '../../utils/constants'
 
@@ -11,6 +11,7 @@ import MenuSider from '../menuArea';
 const { Content } = Layout;
 
 export default function MainLayout({ children }: any) {
+
   useEffect(() => {
     const loginState: string = localStorage.getItem('token') || "login"
     if(loginState === "Acess") {

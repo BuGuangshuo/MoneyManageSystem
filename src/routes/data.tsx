@@ -28,4 +28,5 @@ export const routeMap: Record<
   // 登陆
   '/login': asyncRoute(lazy(() => import('../pages/login'))),
   '/home': asyncRoute(lazy(() => import('../pages/home'))),
+  '/manage/userlist': asyncRoute(lazy(() => import('../pages/manage/userList'))),
 }

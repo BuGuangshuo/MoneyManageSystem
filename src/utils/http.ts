@@ -44,3 +44,11 @@ export const UserRegister = (params: any): Promise<any> => {
     infoname
   })
 }
+
+export const getMenuList = (): Promise<any> => {
+  return axios.get(`/menu`)
+}
+
+export const getRolesList = (params:string): Promise<any> => {
+  return axios.get(`/roles?user=${params}`)
+}
