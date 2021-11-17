@@ -9,6 +9,7 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+
 import { getMenuList, getRolesList } from '../../utils/http';
 import { navigate } from '@reach/router';
 
@@ -21,9 +22,16 @@ export default function MenuSider() {
   const [rolesList,setRolesList] = useState<string []>([])
   const [menuList,setMenuList] = useState<any>([])
   const [menuSelectKeys,setMenuSelectKeys] = useState<string []>(['/home'])
+  const [menuOpenKeys,setMenuOpenKeys] = useState<string []>(['/manage/userlist'])
+
+  const hrefPath = window.location.href
 
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed)
+  }
+
+  const onOpenChange = (opened: string []) => {
+    setMenuOpenKeys([...opened])
   }
 
   //判断当前登录用户是否具有此权限
@@ -32,7 +40,7 @@ export default function MenuSider() {
   }
 
   const renderMenu = (menuData: any,title?:string) => {
-    return menuData.map((menuItem:any,menuIndex: any) => {
+    return menuData.map((menuItem:any) => {
       if(menuItem.childrens?.length && checkPermission(menuItem)) {
         return (
           <SubMenu title={menuItem.title} key={menuItem.menu_key}>
@@ -54,7 +62,9 @@ export default function MenuSider() {
 
   useEffect(() => {
     const { username } = JSON.parse(sessionStorage.getItem('user') || "")
-
+    const currentPathName = hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]
+    setMenuSelectKeys([currentPathName])
+    // setMenuOpenKeys([currentPathName])
     const rolesList = async () => {
       const res = await getRolesList(username)
       if (res) {
@@ -81,7 +91,7 @@ export default function MenuSider() {
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" />
-      <Menu theme="dark" selectedKeys={menuSelectKeys} mode="inline">
+      <Menu theme="dark" selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange}>
         {renderMenu(menuList)}
       </Menu>
     </Sider>
