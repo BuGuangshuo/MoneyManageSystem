@@ -10,8 +10,6 @@ import MenuSider from '../menuArea';
 import { getRolesList } from '../../utils/http';
 import Home from '../../pages/home'
 import UserList from '../../pages/manage/userList'
-import UserDel from '../../pages/manage/userDel'
-import UserUpdate from '../../pages/manage/userUpdate'
 import General from '../../pages/general'
 import Daybook from '../../pages/analysis/daybook'
 import Target from '../../pages/analysis/target'
@@ -26,10 +24,6 @@ export default function MainLayout({ children }: any) {
     "/home": <Home path="/home" key="/home" />,
     //@ts-ignore
     "/manage/userlist": <UserList path="/manage/userlist" key="/manage/userlist" />,
-    //@ts-ignore
-    "/manage/userdel": <UserDel path="/manage/userdel" key="/manage/userdel" />,
-    //@ts-ignore
-    "/manage/userupdate": <UserUpdate path="/manage/userupdate" key="/manage/userupdate" />,
     //@ts-ignore
     "/general": <General path="/general" key="/general" />,
     //@ts-ignore

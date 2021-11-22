@@ -1,20 +1,17 @@
 import React, { useState } from 'react'
 
-import { Button, Checkbox, Form, Input, message, DatePicker } from 'antd'
+import { Button, Checkbox, Form, Input, message } from 'antd'
 import { navigate } from '@reach/router'
+import sha256 from 'sha256'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import QueueAnim from 'rc-queue-anim';
 
 import { Userlogin, UserRegister } from '../../../../utils/http';
 
 import styles from '../index.module.less'
 
-
 export default function RightArea() {
 
   const [registerState, setRegisterState] = useState<boolean>(false)
-  const [dateVal, setDateVal] = useState<any>(null)
   const [loading,setLoading] = useState<boolean>(false)
 
   const [form] = Form.useForm();
@@ -25,7 +22,7 @@ export default function RightArea() {
 
   const onFinish = async (values: any) => {
     const { username, password } = values
-    const res = await Userlogin({username, password})
+    const res = await Userlogin({username, password:sha256(password)})
     if(res) {
       setLoading(false)
       const {code, data, msg } = res
@@ -147,7 +144,7 @@ export default function RightArea() {
             <Form.Item
               name="password"
               colon={false}
-              rules={[{ required: true, message: '请输入密码!' }]}
+              rules={[{ required: true, message: '请输入密码!' },{pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/,message:"密码长度为8-16位， 要同时包含字母与数组，不能有特殊符号"}]}
               hasFeedback
             >
               <Input.Password
