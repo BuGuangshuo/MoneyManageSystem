@@ -62,7 +62,7 @@ export default function MenuSider() {
 
   useEffect(() => {
     const { username } = JSON.parse(sessionStorage.getItem('user') || "")
-    const currentPathName = hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]
+    const currentPathName = hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1].split(':')[0]
     setMenuSelectKeys([currentPathName])
     // setMenuOpenKeys([currentPathName])
     const rolesList = async () => {
@@ -86,7 +86,7 @@ export default function MenuSider() {
     }
     rolesList()
     menuList()
-  }, [])
+  }, [hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]])
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>

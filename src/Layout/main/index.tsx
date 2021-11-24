@@ -13,6 +13,7 @@ import UserList from '../../pages/manage/userList'
 import General from '../../pages/general'
 import Daybook from '../../pages/analysis/daybook'
 import Target from '../../pages/analysis/target'
+import UserCenter from '../../pages/userCenter'
 import NotFound from '../../pages/NotFound'
 
 const { Content } = Layout
@@ -29,7 +30,9 @@ export default function MainLayout({ children }: any) {
     //@ts-ignore
     "/analysis/daybook": <Daybook path="/analysis/daybook" key="/analysis/daybook" />,
     //@ts-ignore
-    "/analysis/target": <Target path="/analysis/target" key="/analysis/target" />
+    "/analysis/target": <Target path="/analysis/target" key="/analysis/target" />,
+    //@ts-ignore
+    "/usercenter": <UserCenter path="/usercenter" key="/usercenter" />
   }
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])

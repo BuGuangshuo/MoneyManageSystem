@@ -1,0 +1,88 @@
+.mix-create-margin(@data) {
+  each(@data, {
+    .c-mr-@{value} {
+      margin-right: @value * 1px;
+    }
+
+    .c-ml-@{value} {
+      margin-left: @value * 1px;
+    }
+
+    .c-mt-@{value} {
+      margin-top: @value * 1px;
+    }
+
+    .c-mb-@{value} {
+      margin-bottom: @value * 1px;
+    }
+
+    .c-pr-@{value} {
+      padding-right: @value * 1px;
+    }
+
+    .c-pl-@{value} {
+      padding-left: @value * 1px;
+    }
+
+    .c-pt-@{value} {
+      padding-top: @value * 1px;
+    }
+
+    .c-pb-@{value} {
+      padding-bottom: @value * 1px;
+    }
+  });
+}
+
+.mix-create-text-color(@data) {
+  each(@data, {
+      @key: at(@value, 1);
+
+      .c-text-@{key} {
+        color: @value;
+      }
+    }
+  );
+}
+
+.mix-create-font-size(@data) {
+  each(@data, {
+    .c-fs-@{value} {
+      font-size: @value * 1px;
+    }
+  });
+}
+
+.mix-create-font-wight(@data) {
+  each(@data, {
+    .c-fw-@{value} {
+      font-weight: @value;
+    }
+  });
+}
+
+@margin_item: 0, 1, 4, -8, 8, 12, 16, 24, 32, 36, 40, 48;
+
+.mix-create-margin(@margin_item);
+
+// 通用文字大小
+@font_sizes: 12, 14, 16, 18;
+
+.mix-create-font-size(@font_sizes);
+
+// 通用文字粗细
+@font_weights: 400, 500, 600;
+
+.mix-create-font-wight(@font_weights);
+
+.required-label() {
+  display: inline-block;
+  width: 2px;
+  height: 12px;
+  margin-right: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+  background-color: @error;
+  border-radius: 3px;
+  content: '';
+}
