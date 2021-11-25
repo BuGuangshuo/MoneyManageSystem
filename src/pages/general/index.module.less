@@ -1,0 +1,107 @@
+.general-wrap {
+  :global {
+    & .ant-card-body {
+      padding: 20px 24px 8px;
+    }
+
+    & .ant-card {
+      border-radius: 8px;
+    }
+  }
+
+  & .card-content {
+    position: relative;
+
+    & .card-content-top {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+
+      & .card-content-top-metaWrap {
+        float: left;
+
+        & .card-content-top-meta {
+          height: 22px;
+          color: rgba(0,0,0,.45);
+          font-size: 14px;
+          line-height: 22px;
+        }
+
+        & .card-content-top-total {
+          height: 38px;
+          margin-top: 4px;
+          margin-bottom: 0;
+          overflow: hidden;
+          color: rgba(0,0,0,.85);
+          font-size: 30px;
+          line-height: 38px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
+        }
+      }
+    }
+
+    & .card-content-center {
+      height: 46px;
+      position: relative;
+      width: 100%;
+      margin-bottom: 12px;
+
+      & .card-content-center-contentFixed {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+
+        & .card-content-center-trendItem {
+          display: inline-block;
+          font-size: 14px;
+          line-height: 22px;
+
+          & .card-content-center-trendItem-percent {
+            margin-left: 8px;
+            color: rgba(0,0,0,.85);
+          }
+
+          & .card-content-center-trendItem-up {
+            color: #f5222d;
+            position: relative;
+            top: 1px;
+            margin-left: 4px;
+          }
+
+          & .card-content-center-trendItem-down {
+            color: #52c41a;
+            position: relative;
+            top: 1px;
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+
+    & .card-content-bottom {
+      margin-top: 8px;
+      padding-top: 9px;
+      border-top: 1px solid #f0f0f0;
+
+      & .card-content-bottom-field {
+        margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        & .card-content-bottom-field-label {
+          font-size: 14px;
+          line-height: 22px;
+        }
+
+        & .card-content-bottom-field-number {
+          margin-left: 8px;
+          color: rgba(0,0,0,.85);
+        }
+      }
+    }
+  }
+}

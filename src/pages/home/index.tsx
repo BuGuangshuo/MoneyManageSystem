@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb } from 'antd'
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu
+import styles from './index.module.less'
 
 export default function Home() {
 
