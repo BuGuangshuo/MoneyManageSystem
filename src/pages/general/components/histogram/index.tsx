@@ -1,76 +1,71 @@
 import React, { useEffect } from 'react'
 
 import { Chart } from '@antv/g2';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, Tabs } from 'antd';
 
 import styles from '../../index.module.less'
 
+const { TabPane } = Tabs
+
 const data = [
-  { type: '未知', value: 654, percent: 0.02 },
-  { type: '17 岁以下', value: 654, percent: 0.02 },
-  { type: '18-24 岁', value: 4400, percent: 0.2 },
-  { type: '25-29 岁', value: 5300, percent: 0.24 },
-  { type: '30-39 岁', value: 6200, percent: 0.28 },
-  { type: '40-49 岁', value: 3300, percent: 0.14 },
-  { type: '50 岁以上', value: 1500, percent: 0.06 },
-]
+  { name: '年收入', 年份: '2016', 金额: 24000 },
+  { name: '年收入', 年份: '2017', 金额: 24000 },
+  { name: '年收入', 年份: '2018', 金额: 24000 },
+  { name: '年收入', 年份: '2019', 金额: 24000 },
+  { name: '年收入', 年份: '2020', 金额: 54000 },
+  { name: '年收入', 年份: '2021', 金额: 288000 },
+  { name: '年支出', 年份: '2016', 金额: 18200 },
+  { name: '年支出', 年份: '2017', 金额: 13600 },
+  { name: '年支出', 年份: '2018', 金额: 14600 },
+  { name: '年支出', 年份: '2019', 金额: 12600 },
+  { name: '年支出', 年份: '2020', 金额: 51200 },
+  { name: '年支出', 年份: '2021', 金额: 144000},
+];
 
 export default function Histogram() {
   useEffect(() => {
     const chart = new Chart({
       container: 'container',
       autoFit: true,
-      height: 500,
-      padding: [50, 20, 50, 20],
+      height: 300,
     });
+
     chart.data(data);
-    chart.scale('value', {
-      alias: '销售额(万)',
+    chart.scale('金额', {
+      nice: true,
     });
-  
-    chart.axis('type', {
-      tickLine: {
-        alignTick: false,
-      },
-    });
-    chart.axis('value', false);
-  
     chart.tooltip({
       showMarkers: false,
+      shared: true,
     });
-    chart.interval().position('type*value');
-    chart.interaction('element-active');
-  
-    // 添加文本标注
-    data.forEach((item) => {
-      chart
-        .annotation()
-        .text({
-          position: [item.type, item.value],
-          content: item.value,
-          style: {
-            textAlign: 'center',
-          },
-          offsetY: -30,
-        })
-        .text({
-          position: [item.type, item.value],
-          content: (item.percent * 100).toFixed(0) + '%',
-          style: {
-            textAlign: 'center',
-          },
-          offsetY: -12,
-        });
-    });
+
+    chart
+      .interval()
+      .position('年份*金额')
+      .color('name')
+      .adjust([
+        {
+          type: 'dodge',
+          marginRatio: 0,
+        },
+      ]);
+
+    chart.interaction('element-highlight-by-x');
+
     chart.render();
-  },[])
+  }, [])
   return (
-    <Row gutter={24} className="c-mt-24">
+    <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} className="c-mt-24">
       <Col span={24}>
         <Card>
-          <div className={styles['card-content']}>
-            <div id="container" />
-          </div>
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="年收入/支出概览" key="1">
+              <div className={styles['card-content']}>
+                <div id="container" />
+              </div>
+            </TabPane>
+          </Tabs>
+
         </Card>
       </Col>
     </Row>

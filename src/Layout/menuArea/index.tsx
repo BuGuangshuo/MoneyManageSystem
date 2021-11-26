@@ -90,7 +90,7 @@ export default function MenuSider() {
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div className="logo" />
+      <div className="logo" style={{color:"white", textAlign:"center", lineHeight:"32px", backgroundColor:"transparent",fontSize:"16px"}}>财政后台系统</div>
       <Menu theme="dark" selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange}>
         {renderMenu(menuList)}
       </Menu>

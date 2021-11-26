@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { navigate, Redirect, Router } from '@reach/router'
 import { Layout } from 'antd';
 
-import { DEFAULT_SETTINGS_ROUTE } from '../../utils/constants'
-
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
 import { getRolesList } from '../../utils/http';
