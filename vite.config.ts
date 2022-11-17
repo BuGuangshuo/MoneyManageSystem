@@ -33,7 +33,7 @@ export default defineConfig({
     port: 9081,
     proxy: {
       '/v1': {
-        target: 'http://127.0.0.1:5000/',
+        target: 'http://localhost:5000/',
         changeOrigin: false,
       },
     },

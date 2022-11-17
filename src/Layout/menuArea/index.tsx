@@ -17,6 +17,8 @@ import { navigate } from '@reach/router';
 const { SubMenu } = Menu
 const { Sider } = Layout
 
+const iconList: any = {"/home" : <TeamOutlined/>,"/manage/userlist": <UserOutlined/>,'/general': <PieChartOutlined/>};
+
 export default function MenuSider() {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [rolesList,setRolesList] = useState<string []>([])
@@ -39,13 +41,13 @@ export default function MenuSider() {
     return rolesList.includes(item.menu_key)
   }
 
-  const renderMenu = (menuData: any,title?:string) => {
+  const renderMenu = (menuData: any,title?:string, hasChildren: boolean) => {
     return menuData.map((menuItem:any) => {
       if(menuItem.childrens?.length && checkPermission(menuItem)) {
         return (
-          <SubMenu title={menuItem.title} key={menuItem.menu_key}>
+          <SubMenu title={menuItem.title} key={menuItem.menu_key} icon={iconList[menuItem.menu_key]}>
             {
-              renderMenu(menuItem.childrens,menuItem.title)
+              renderMenu(menuItem.childrens,menuItem.title,true)
             }
           </SubMenu>
         )
@@ -54,7 +56,7 @@ export default function MenuSider() {
       return checkPermission(menuItem) && <Menu.Item key={menuItem.menu_key} onClick={()=>{
         setMenuSelectKeys(menuItem.menu_key)
         navigate(menuItem.menu_key)
-      }}>
+      }} icon={hasChildren ? null : iconList[menuItem.menu_key]}>
         {menuItem.title}
       </Menu.Item>
     })
