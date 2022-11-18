@@ -1,14 +1,17 @@
 import React from 'react'
 
-import { Carousel } from 'antd'
+import { Carousel, theme } from 'antd'
 import introduceImg from '@/assets/img/undraw_Customer_survey_re_v9cj.svg'
 import introduceImg2 from '@/assets/img/undraw_Statistics_re_kox4.svg'
 import introduceImg3 from '@/assets/img/undraw_spread_love_r9jb.svg'
 import styles from '../index.module.less'
 
+const { useToken } = theme;
+
 export default function LeftArea() {
+  const { token } = useToken();
   return (
-    <div className={styles['left-wrap']}>
+    <div className={styles['left-wrap']} style={{ backgroundColor: token.colorPrimary }}>
       <Carousel className = {styles['carouse-wrap']} autoplay>
         <div className = {styles['introduce-wrap']}>
             <div className={styles['introduce-img-wrap']}>

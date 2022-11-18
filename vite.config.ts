@@ -2,6 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
+// import { theme } from 'antd';
+// import { convertLegacyToken } from '@ant-design/compatible';
+
+// const { defaultAlgorithm, defaultSeed } = theme;
+
+// const mapToken = defaultAlgorithm(defaultSeed);
+// const v4Token = convertLegacyToken(mapToken);
+
+import { theme } from 'antd';
+
+const { defaultAlgorithm, defaultSeed } = theme;
+
+const mapToken = defaultAlgorithm(defaultSeed);
+
 const modifyVars = {
   '@primary-color': '#536DFE',
   '@title-color': '#372E5B',
@@ -48,8 +62,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        javascriptEnabled: true,
-        modifyVars,
+        javascriptEnabled: false,
+        modifyVars: modifyVars,
       }
     },
   },
