@@ -19,7 +19,7 @@ const mapToken = defaultAlgorithm(defaultSeed);
 const modifyVars = {
   '@primary-color': '#536DFE',
   '@title-color': '#372E5B',
-  '@white': '#fff',
+  // '@white': '#fff',
   '@error': '#ff3e27',
   '@success': '#37b184',
   '@warning': '#ffb413',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { navigate, Redirect, Router } from '@reach/router'
-import { Layout } from 'antd';
+import { Layout, ConfigProvider, theme } from 'antd';
 
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
@@ -34,6 +34,10 @@ export default function MainLayout({ children }: any) {
   }
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])
+  
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -59,16 +63,18 @@ export default function MainLayout({ children }: any) {
       <MenuSider />
       <Layout className="site-layout">
         <HeaderArea />
-        <Content style={{ margin: '0 16px' }}>
-          <Router>
-            {
-              rolesMenu.map((item: any) => localList[item])
-            }
-            <NotFound 
-              //@ts-ignore
-              default
-            />
-          </Router>
+        <Content>
+          <div style={{ height: '100%', background: colorBgContainer }}>
+            <Router>
+              {
+                rolesMenu.map((item: any) => localList[item])
+              }
+              <NotFound 
+                //@ts-ignore
+                default
+              />
+            </Router>
+          </div> 
         </Content>
       </Layout>
     </Layout>

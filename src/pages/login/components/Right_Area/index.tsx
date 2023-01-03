@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Button, Checkbox, Form, Input, message } from 'antd'
+import { Button, Checkbox, Form, Input, message, theme, ConfigProvider, Typography  } from 'antd'
 import { navigate } from '@reach/router'
 import sha256 from 'sha256'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -9,12 +9,21 @@ import { Userlogin, UserRegister } from '../../../../utils/http';
 
 import styles from '../index.module.less'
 
+const { useToken } = theme;
+
+const { Text } = Typography;
+
 export default function RightArea() {
 
   const [registerState, setRegisterState] = useState<boolean>(false)
   const [loading,setLoading] = useState<boolean>(false)
 
   const [form] = Form.useForm();
+
+  const { token } = useToken();
+  const {
+    token: { colorBgContainer,  },
+  } = theme.useToken();
 
   const onReset = () => {
     form.resetFields();
@@ -65,13 +74,19 @@ export default function RightArea() {
   }
 
   return (
-    <div className={styles['right-wrap']}>
+    <div className={styles['right-wrap']} style={{ background: token.colorBgContainer}}>
       {/* Login Form */}
       <div className={styles['login-form-wrap']} style={registerState ? { display: "none" } : { display: "flex" }}>
         <div className={styles['form-wrap']}>
-          <div className={styles['form-title']}>
-            用户登录
-          </div>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorText: '#425b6d',
+            },
+          }}
+        >
+          <Text className={styles['form-title']}>用户登录</Text>
+        </ConfigProvider>
           <Form
             name="normal_login"
             className="login-form"
@@ -85,7 +100,7 @@ export default function RightArea() {
               name="username"
               rules={[{ required: true, message: '请输入账号!' }]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" bordered={false} />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" bordered={false} style={{background: token.controlItemBgHover}}/>
             </Form.Item>
 
             <Form.Item
@@ -99,14 +114,15 @@ export default function RightArea() {
                 type="password"
                 placeholder="请输入密码"
                 bordered={false}
+                style={{background: token.controlItemBgHover}}
               />
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>记住我</Checkbox>
+                <Checkbox style={{color: token.colorText}}>记住我</Checkbox>
               </Form.Item>
 
-              <a className="login-form-forgot" href="">
+              <a className="login-form-forgot" href="" style={{ color: token.colorPrimary }}>
                 忘记密码
               </a>
             </Form.Item>
@@ -115,16 +131,22 @@ export default function RightArea() {
                 登录
               </Button>
             </Form.Item>
-            <div>如果你没有账号，在这里 <a onClick={() => setRegisterState(true)}>注册</a></div>
+            <div>如果你没有账号，在这里 <a onClick={() => setRegisterState(true)} style={{ color: token.colorPrimary }}>注册</a></div>
           </Form>
         </div>
       </div>
       {/* Register Form */}
       <div className={styles['login-form-wrap']} style={registerState ? { display: "flex" } : { display: "none" }}>
         <div className={styles['form-wrap']}>
-          <div className={styles['form-title']}>
-            用户注册
-          </div>
+          <ConfigProvider
+          theme={{
+            token: {
+              colorText: '#425b6d',
+            },
+          }}
+        >
+          <Text className={styles['form-title']}>用户注册</Text>
+        </ConfigProvider>
           <Form
             name="normal_register"
             className="login-form"
@@ -138,7 +160,7 @@ export default function RightArea() {
               name="username"
               rules={[{ required: true, message: '请输入账号!' }]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" bordered={false} />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入账号" bordered={false} style={{background: token.controlItemBgHover}}/>
             </Form.Item>
 
             <Form.Item
@@ -152,6 +174,7 @@ export default function RightArea() {
                 type="password"
                 placeholder="密码 (6-16个字符组成，区分大小写)"
                 bordered={false}
+                style={{background: token.controlItemBgHover}}
               />
             </Form.Item>
 
@@ -180,6 +203,7 @@ export default function RightArea() {
                 type="password"
                 placeholder="密码 (6-16个字符组成，区分大小写)"
                 bordered={false}
+                style={{background: token.controlItemBgHover}}
               />
             </Form.Item>
 
@@ -188,7 +212,7 @@ export default function RightArea() {
               name="infoname"
               rules={[{ required: true, message: '请输入昵称' }]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入昵称" bordered={false} />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入昵称" bordered={false} style={{background: token.controlItemBgHover}}/>
             </Form.Item>
 
             <Form.Item>
@@ -196,7 +220,7 @@ export default function RightArea() {
                 注册
               </Button>
             </Form.Item>
-            <div>已有账号？，直接 <a onClick={() => setRegisterState(false)}>登录</a></div>
+            <div>已有账号？，直接 <a onClick={() => setRegisterState(false)} style={{ color: token.colorPrimary }}>登录</a></div>
           </Form>
         </div>
       </div>

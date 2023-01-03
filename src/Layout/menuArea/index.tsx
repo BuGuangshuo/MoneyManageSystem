@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 
 import {
   DesktopOutlined,
@@ -27,6 +27,10 @@ export default function MenuSider() {
   const [menuOpenKeys,setMenuOpenKeys] = useState<string []>(['/manage/userlist'])
 
   const hrefPath = window.location.href
+
+  const {
+    token: { colorBgContainer, colorTextHeading, colorPrimary },
+  } = theme.useToken();
 
   const onCollapse = (collapsed: boolean) => {
     setCollapsed(collapsed)
@@ -91,9 +95,9 @@ export default function MenuSider() {
   }, [hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]])
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div className="logo" style={{color:"white", textAlign:"center", lineHeight:"32px", backgroundColor:"transparent",fontSize:"16px"}}>财政后台系统</div>
-      <Menu theme="dark" selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange}>
+    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} theme='dark'>
+      <div className="logo" style={{ textAlign:"center", lineHeight:"32px",fontSize:"16px", color: colorPrimary }}>财政后台系统</div>
+      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} theme='dark'>
         {renderMenu(menuList)}
       </Menu>
     </Sider>
