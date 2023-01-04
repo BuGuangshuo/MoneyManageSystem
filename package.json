@@ -10,7 +10,7 @@
     "@ant-design/compatible": "^5.0.0",
     "@antv/g2": "^4.1.34",
     "@reach/router": "^1.3.4",
-    "antd": "^5.0.0",
+    "antd": "^5.1.2",
     "axios": "^0.24.0",
     "hox": "^1.1.4",
     "less": "^4.1.2",
@@ -21,7 +21,8 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rsuite": "^5.0.2",
-    "sha256": "^0.2.0"
+    "sha256": "^0.2.0",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.175",
@@ -32,6 +33,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/sha256": "^0.2.0",
+    "@types/styled-components": "^5.1.26",
     "@vitejs/plugin-react": "^1.0.0",
     "typescript": "^4.3.2",
     "vite": "^2.6.4"

@@ -7,20 +7,28 @@
   }
 }
 
+.header-wrap {
+  display: flex;
+  justify-content: end;
+
+  & .theme-wrap {
+    font-size: 20px;
+  }
+}
+
 .avatar-wrap {
   float: right;
-  margin-right: 12px;
+  margin: 0 24px;
   cursor: pointer;
 }
 
 .logout-menu {
-  color: @error;
+  // color: @error;
   font-weight:500;
-  line-height: 36px;
   text-align: center;
-  border-top: 1px solid @grey;
+  // border-top: 1px solid @grey;
 
-  &:hover {
-    color: @error !important;
-  }
+  // &:hover {
+  //   color: @error !important;
+  // }
 }

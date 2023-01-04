@@ -8,19 +8,28 @@ import {
   FileOutlined,
   TeamOutlined,
   UserOutlined,
+  LeftOutlined,
+  RightOutlined,
+  createFromIconfontCN
 } from '@ant-design/icons';
 
 import { getMenuList, getRolesList } from '../../utils/http';
 import { navigate } from '@reach/router';
 
+import styles from './index.module.less'
 
 const { SubMenu } = Menu
 const { Sider } = Layout
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_2880815_uj0g9m3dg5g.js',
+});
 
 const iconList: any = {"/home" : <TeamOutlined/>,"/manage/userlist": <UserOutlined/>,'/general': <PieChartOutlined/>};
 
 export default function MenuSider() {
   const [collapsed, setCollapsed] = useState<boolean>(false)
+  const [siderWidth, setSiderWidth] = useState<number>(280)
   const [rolesList,setRolesList] = useState<string []>([])
   const [menuList,setMenuList] = useState<any>([])
   const [menuSelectKeys,setMenuSelectKeys] = useState<string []>(['/home'])
@@ -29,11 +38,45 @@ export default function MenuSider() {
   const hrefPath = window.location.href
 
   const {
-    token: { colorBgContainer, colorTextHeading, colorPrimary },
+    token: { colorBgContainer, colorBorderSecondary, colorText, colorPrimaryText },
   } = theme.useToken();
 
-  const onCollapse = (collapsed: boolean) => {
-    setCollapsed(collapsed)
+  const SiderStyle: any = {
+    background: colorBgContainer,
+    borderRight: `1px solid ${colorBorderSecondary}`
+  }
+
+  const LogoStyle: any = {
+    textAlign: "center", 
+    lineHeight: "32px",
+    fontSize: "18px", 
+    color: colorText, 
+    fontWeight: 500
+  }
+
+  const MenuStyle = {
+    borderTop: `1px solid ${colorBorderSecondary}`,
+    marginTop: -1,
+    borderRight: 0
+  }
+
+  const TriggerStyle: any = {
+    borderTop: `1px solid ${colorBorderSecondary}`,
+    width: `${siderWidth}px`,
+    height: '48px',
+    lineHeight: '48px',
+    textAlign: "center",
+    color: `${colorText}`,
+    position: "fixed",
+    bottom: 0,
+    zIndex: 1,
+    cursor: "pointer",
+    transition: "all .2s"
+  }
+
+  const onCollapse = () => {
+    setSiderWidth(collapsed ? 280 : 80)
+    setCollapsed(!collapsed)
   }
 
   const onOpenChange = (opened: string []) => {
@@ -95,11 +138,12 @@ export default function MenuSider() {
   }, [hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]])
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} theme='dark'>
-      <div className="logo" style={{ textAlign:"center", lineHeight:"32px",fontSize:"16px", color: colorPrimary }}>财政后台系统</div>
-      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} theme='dark'>
+      <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={280} style={SiderStyle} theme='light' trigger={null}>
+      <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/>财政后台系统</div>}</div>
+      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={MenuStyle}>
         {renderMenu(menuList)}
       </Menu>
-    </Sider>
+      <div style={TriggerStyle} onClick={onCollapse}>{collapsed ? <RightOutlined /> : <LeftOutlined />}</div>
+    </Sider> 
   )
 }

@@ -3,15 +3,20 @@ import React, { useState } from 'react'
 import { Button, Checkbox, Form, Input, message, theme, ConfigProvider, Typography  } from 'antd'
 import { navigate } from '@reach/router'
 import sha256 from 'sha256'
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, createFromIconfontCN  } from '@ant-design/icons';
 
 import { Userlogin, UserRegister } from '../../../../utils/http';
+import { useThemeModel } from '../../../../models/theme'
 
 import styles from '../index.module.less'
 
 const { useToken } = theme;
 
 const { Text } = Typography;
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_2880815_k27ujdzcenl.js',
+});
 
 export default function RightArea() {
 
@@ -21,12 +26,21 @@ export default function RightArea() {
   const [form] = Form.useForm();
 
   const { token } = useToken();
+
+  const { setThemeType } = useThemeModel();
+
   const {
-    token: { colorBgContainer,  },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const onReset = () => {
     form.resetFields();
+  }
+
+  const onThemeClick = () => {
+    const themeType = localStorage.getItem('theme');
+    setThemeType(themeType === 'light' ? 'dark' : 'light');
+    localStorage.setItem('theme',themeType === 'light' ? 'dark' : 'light')
   }
 
   const onFinish = async (values: any) => {
@@ -75,6 +89,9 @@ export default function RightArea() {
 
   return (
     <div className={styles['right-wrap']} style={{ background: token.colorBgContainer}}>
+      <div className={styles['tools-wrap']}>
+        <div className={styles['theme-switch']}><IconFont type={localStorage.getItem('theme') === 'light' ? 'icon-taiyang' : 'icon-yueliang'} className={styles['icon-theme']} style={{color: token.colorText}} onClick={onThemeClick}/></div>
+      </div>
       {/* Login Form */}
       <div className={styles['login-form-wrap']} style={registerState ? { display: "none" } : { display: "flex" }}>
         <div className={styles['form-wrap']}>
