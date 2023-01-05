@@ -988,10 +988,10 @@
   "resolved" "https://registry.npmmirror.com/date-fns/download/date-fns-2.25.0.tgz"
   "version" "2.25.0"
 
-"dayjs@^1.11.1", "dayjs@^1.11.4", "dayjs@>= 1.x":
-  "integrity" "sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ=="
-  "resolved" "http://nexus.dev2.datatist.cn/nexus/repository/npm-all/dayjs/-/dayjs-1.11.6.tgz"
-  "version" "1.11.6"
+"dayjs@^1.11.1", "dayjs@^1.11.4", "dayjs@^1.11.7", "dayjs@>= 1.x":
+  "integrity" "sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ=="
+  "resolved" "http://nexus.dev2.datatist.cn/nexus/repository/npm-all/dayjs/-/dayjs-1.11.7.tgz"
+  "version" "1.11.7"
 
 "debug@^3.2.6":
   "integrity" "sha1-clgLfpFF+zm2Z2+cXl+xALk0F5o="
