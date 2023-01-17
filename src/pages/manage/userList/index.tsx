@@ -2,35 +2,29 @@ import React, { useState, useEffect } from 'react'
 
 import { theme, Button, Card, Table } from 'antd'
 import dayjs from 'dayjs'
+import _ from 'lodash'
+
+import { userListQuery } from '../../../utils/http'
 
 import styles from './index.module.less'
 
 import { UserListParamsType } from './userListType'
 
-const mockData: any = [
-  {
-    id: 1,
-    userName: 'buguangshuo',
-    infoName: '卜卜星',
-    level: 0,
-    createTime: 1672889973980
-  },
-  {
-    id: 2,
-    userName: 'lixuexing',
-    infoName: '莹莹星',
-    level: 1,
-    createTime: 1672889973980
-  }
-]
+let pagination: any = {
+  showTotal: (totals: any) => `共 ${totals} 条`,
+  // showQuickJumper: true,
+  // showSizeChanger: true,
+  // pageSizeOptions: ['15', '10', '50']
+};
+
 export default function UserList() {
   const [dataSource, setDataSource] = useState([])
   const [params, setParams] = useState({
-    page: 0,
-    size: 10,
+    page: 1,
+    size: 5,
     sorts: [{
         direction: 'desc',
-        propetryName: 'updateTime'
+        propetryName: 'createTime'
     }]
 })
   const [todayUserCount, setTodayUserCount] = useState(0)
@@ -39,18 +33,18 @@ export default function UserList() {
   const column = [
     {
       title: '用户ID',
-      dataIndex: 'id',
-      key: 'id'
+      dataIndex: '_id',
+      key: '_id'
     },
     {
       title: '账号',
-      dataIndex: 'userName',
-      key: 'userName'
+      dataIndex: 'username',
+      key: 'username'
     },
     {
       title: '昵称',
-      dataIndex: 'infoName',
-      key: 'infoName'
+      dataIndex: 'infoname',
+      key: 'infoname'
     },
     {
       title: '级别',
@@ -73,9 +67,27 @@ export default function UserList() {
     },
   ]
   useEffect(() => {
-    setDataSource(mockData)
-    setTotal(100)
+    const getUserList = async () => {
+      const res = await userListQuery(params)
+      pagination.total = res.data.total;
+      pagination.current = params.page;
+      pagination.pageSize = params.size;
+      setDataSource(res.data.result)
+      setTotal(res.data.total)
+    }
+
+    getUserList()
   },[params])
+
+  const onUserListChange = (lastpagination: any, filtersArg: any, sorter: any) => {
+    const _params = _.cloneDeep(params);
+    _params.page = lastpagination.current;
+    _params.size = lastpagination.pageSize;
+    // if (sorter.field) {
+    //   param.sorts = [{ propertyName: sorter.field, direction: sorter.order === 'ascend' ? 'asc' : 'desc' }];
+    // }
+    setParams({ ...params, page: _params.page, size: _params.size });
+  };
 
   const {
     token: { colorBgContainer, colorBorderSecondary, colorText, colorPrimaryText, colorBgElevated, colorTextLabel, colorWhite },
@@ -107,7 +119,7 @@ export default function UserList() {
       </div>
 
       <div className={styles['userTable-wrap']}>
-        <Table columns={column} dataSource={dataSource} rowKey="id" style={TableStyle}/>
+        <Table columns={column} dataSource={dataSource} rowKey="id" style={TableStyle} pagination={pagination} onChange={onUserListChange}/>
       </div>
     </div>
   )

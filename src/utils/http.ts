@@ -52,3 +52,7 @@ export const getMenuList = (): Promise<any> => {
 export const getRolesList = (params:string): Promise<any> => {
   return axios.get(`/roles?user=${params}`)
 }
+
+export const userListQuery = (params: any): Promise<any> => {
+  return axios.post(`/userManage/user/query`, params)
+}

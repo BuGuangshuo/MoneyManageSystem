@@ -29,7 +29,7 @@ const iconList: any = {"/home" : <TeamOutlined/>,"/manage/userlist": <UserOutlin
 
 export default function MenuSider() {
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [siderWidth, setSiderWidth] = useState<number>(280)
+  const [siderWidth, setSiderWidth] = useState<number>(200)
   const [rolesList,setRolesList] = useState<string []>([])
   const [menuList,setMenuList] = useState<any>([])
   const [menuSelectKeys,setMenuSelectKeys] = useState<string []>(['/home'])
@@ -75,7 +75,7 @@ export default function MenuSider() {
   }
 
   const onCollapse = () => {
-    setSiderWidth(collapsed ? 280 : 80)
+    setSiderWidth(collapsed ? 200 : 80)
     setCollapsed(!collapsed)
   }
 
@@ -138,7 +138,7 @@ export default function MenuSider() {
   }, [hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]])
 
   return (
-      <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={280} style={SiderStyle} theme='light' trigger={null}>
+      <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} theme='light' trigger={null}>
       <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/>财政后台系统</div>}</div>
       <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={MenuStyle}>
         {renderMenu(menuList)}
