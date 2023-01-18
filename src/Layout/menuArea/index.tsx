@@ -56,8 +56,14 @@ export default function MenuSider() {
 
   const MenuStyle = {
     borderTop: `1px solid ${colorBorderSecondary}`,
+    borderRight: 0,
     marginTop: -1,
-    borderRight: 0
+  }
+
+  const MenuInStyle = {
+    borderTop: `1px solid ${colorBorderSecondary}`,
+    borderRight: `1px solid ${colorBorderSecondary}`,
+    marginTop: -1,
   }
 
   const TriggerStyle: any = {
@@ -140,7 +146,7 @@ export default function MenuSider() {
   return (
       <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} theme='light' trigger={null}>
       <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/>财政后台系统</div>}</div>
-      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={MenuStyle}>
+      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle}>
         {renderMenu(menuList)}
       </Menu>
       <div style={TriggerStyle} onClick={onCollapse}>{collapsed ? <RightOutlined /> : <LeftOutlined />}</div>

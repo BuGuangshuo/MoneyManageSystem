@@ -1,4 +1,5 @@
 .userList-wrap {
+    position: relative;
     & .header-wrap {
       display: flex;
       justify-content: space-between;
@@ -24,5 +25,15 @@
     & .userTable-wrap {
         padding: 0 24px;
         height: calc(100vh - 344px);
+
+        & .del-icon {
+          font-size: 18px;
+          cursor: pointer;
+
+          &:hover {
+            color: #ff4d4f;
+            transition: all .5s;
+          }
+        }
     }
 }

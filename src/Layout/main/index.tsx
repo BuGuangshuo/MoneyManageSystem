@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { navigate, Redirect, Router } from '@reach/router'
 import { Layout, ConfigProvider, theme } from 'antd';
+import Loading from '../../components/loading/index'
 
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
@@ -34,12 +35,14 @@ export default function MainLayout({ children }: any) {
   }
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])
+  const [loading, setLoading] = useState<boolean>(false)
   
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {
+    setLoading(true)
     if (!localStorage.getItem('token')) {
       navigate("/login")
     }
@@ -54,6 +57,7 @@ export default function MainLayout({ children }: any) {
           setRolesMenu(data.menu)
         }
       }
+      setLoading(false)
     }
     rolesList()
   }, [])
@@ -64,8 +68,13 @@ export default function MainLayout({ children }: any) {
       <Layout className="site-layout">
         <HeaderArea />
         <Content>
-          <div style={{ height: '100%', background: colorBgContainer }}>
-            <Router>
+          <div style={{ height: '100%', background: colorBgContainer, position: 'relative' }}>
+            {
+              loading ? <Loading/> : null
+            }
+
+            {
+              loading ? null : <Router>
               {
                 rolesMenu.map((item: any) => localList[item])
               }
@@ -74,6 +83,7 @@ export default function MainLayout({ children }: any) {
                 default
               />
             </Router>
+            } 
           </div> 
         </Content>
       </Layout>

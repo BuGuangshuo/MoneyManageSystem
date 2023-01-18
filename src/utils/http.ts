@@ -56,3 +56,7 @@ export const getRolesList = (params:string): Promise<any> => {
 export const userListQuery = (params: any): Promise<any> => {
   return axios.post(`/userManage/user/query`, params)
 }
+
+export const userListDelete = (params: any): Promise<any> => {
+  return axios.post(`/userManage/user/delete`, params)
+}
