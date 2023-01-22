@@ -88,10 +88,9 @@ export default function UserList() {
     {
       title: '操作',
       key: 'action',
-      render: (_: any, record: any) => (
-        // <Button danger type="primary">删除</Button>
-        <IconFont type='icon-shanchu' className={styles['del-icon']} onClick={() => showModal(record)}/>
-      ),
+      render: (_: any, record: any) => {
+        return !record.level ? null : <IconFont type='icon-shanchu' className={styles['del-icon']} onClick={() => showModal(record)}/>
+      }
     },
   ]
 

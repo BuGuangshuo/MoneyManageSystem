@@ -52,6 +52,7 @@ export default function RightArea() {
       if(code === 200) {
         localStorage.setItem('token', "Acess")
         sessionStorage.setItem('user', JSON.stringify(data))
+        sessionStorage.setItem('userId', data.id)
         message.success(msg)
         navigate('/home')
       } else if(code === 201) {

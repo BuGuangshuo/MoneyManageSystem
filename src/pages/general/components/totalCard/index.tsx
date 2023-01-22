@@ -105,7 +105,7 @@ export default function TotalCard() {
                 <div className={styles['card-content-bottom']}>
                   <div className={styles['card-content-bottom-field']}>
                     <span className={styles['card-content-bottom-field-label']}>本次目标</span>
-                    <span className={styles['card-content-bottom-field-number']}>天津买房</span>
+                    <span className={styles['card-content-bottom-field-number']}>买房</span>
                   </div>
                 </div>
               </div>

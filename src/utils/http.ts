@@ -60,3 +60,7 @@ export const userListQuery = (params: any): Promise<any> => {
 export const userListDelete = (params: any): Promise<any> => {
   return axios.post(`/userManage/user/delete`, params)
 }
+
+export const familyCreate = (params: any): Promise<any> => {
+  return axios.post(`/family/create`, params)
+}
