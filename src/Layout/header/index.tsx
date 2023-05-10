@@ -1,9 +1,17 @@
+/*
+ * @Author: 卜广硕 guangshuo.bu@datatist.com
+ * @Date: 2022-11-15 14:31:52
+ * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
+ * @LastEditTime: 2023-05-10 15:55:55
+ * @FilePath: \MoneyManageSystem\src\Layout\header\index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import React, { useEffect, useState } from 'react'
 
 import { navigate, Link } from '@reach/router'
-import { Button, message, Layout, Avatar, Dropdown, Menu, theme } from 'antd'
+import { Button, message, Layout, Avatar, Dropdown, Menu, theme, Input } from 'antd'
 
-import { UserOutlined, SettingOutlined, createFromIconfontCN } from '@ant-design/icons'
+import { UserOutlined, SearchOutlined, createFromIconfontCN } from '@ant-design/icons'
 
 import { useThemeModel } from '../../models/theme'
 
@@ -20,7 +28,7 @@ export default function HeaderArea() {
   const { setThemeType } = useThemeModel();
 
   const {
-    token: { colorBgElevated, colorText, colorBorderSecondary, colorErrorTextHover },
+    token: { colorBgElevated, colorText, colorBorderSecondary, colorErrorTextHover, colorPrimary },
   } = theme.useToken();
 
   const handleLogout = () => {
@@ -48,14 +56,17 @@ export default function HeaderArea() {
   ]
 
   return (
-    <Header className="site-layout-background" style={{ padding: 0, background: colorBgElevated, borderBottom: `1px solid ${colorBorderSecondary}` }}>
+    <Header className="site-layout-background" style={{ padding: 0, background: colorBgElevated, borderBottom: `1px solid ${colorBorderSecondary}`, display: 'flex', justifyContent: 'space-between'}}>
+      <div className={styles['header-search']}>
+        <Input placeholder='Search something...' className={styles['header-input']} size='middle' bordered={false} prefix={<SearchOutlined />}/>
+      </div>
       <div className={styles['header-wrap']}>
         <div className={styles['theme-wrap']}><IconFont type={localStorage.getItem('theme') === 'light' ? 'icon-taiyang' : 'icon-yueliang'} className={styles['icon-theme']} style={{color: colorText}} onClick={onThemeClick}/></div>
         
         <div className={styles['avatar-wrap']}>
         <span>{JSON.parse(sessionStorage.getItem('user')||"null").infoname}</span>
           <Dropdown menu={{items}} placement="bottomCenter" overlayClassName={styles['logout-wrap']} className="c-ml-8">
-            <Avatar icon={<UserOutlined />} size={{ xs: 12, sm: 24, md: 18, lg: 24, xl: 28, xxl: 36 }} style={{ backgroundColor: '#536DFE' }} />
+            <Avatar icon={<UserOutlined />} size={{ xs: 12, sm: 24, md: 18, lg: 24, xl: 28, xxl: 36 }} style={{ backgroundColor: colorPrimary }} />
           </Dropdown>
         </div>
       </div>

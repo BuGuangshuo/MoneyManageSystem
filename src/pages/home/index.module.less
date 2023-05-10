@@ -12,6 +12,7 @@
         & .card-wrap {
             height: 45%;
             border-bottom: 1px solid #ccc;
+            display: flex;
 
             & .title {
               font-size: 20px;
@@ -19,102 +20,29 @@
               margin-bottom: 24px;
             }
 
-            & .card-content {
-                display: flex;
-
-                & .card-item {
-
-                    &:nth-of-type(1) {
-                        background-color: #fcd0bb;
-                        background-image: linear-gradient(0deg, #fcd0bb 0%, #fef6f1 100%);
-
-
-                    }
-
-                    &:nth-of-type(2) {
-                        background-color: #bcc4f3;
-                        background-image: linear-gradient(0deg, #bcc4f3 0%, #e7f5fe 100%);
-
-                    }
-
-                    &:nth-of-type(3) {
-                        background-color: #bce8f3;
-                        background-image: linear-gradient(0deg, #bce8f3 0%, #e7f5fe 100%);
-                        
-
-                    }
-                    width: 170px;
-                    background: red;
-                    height: 200px;
-                    margin-right: 48px;
-                    border-radius: 18px;
-
-                    & .avanter {
-                        border-radius: 50%;
-                        height: 70px;
-                        width: 70px;
-                        margin: 0 auto;
-                        margin-top: 24px;
-                        margin-bottom: 8px;
-                    }
-                    
-                    & .ava-title {
-                        font-weight: 600;
-                        font-size: 16px;
-                        text-align: center;
-                        margin-bottom: 8px;
-                        color: #1E175E;
-                    }
-
-                    & .desc {
-                        color: #A1A1AE;
-                        text-align: center;
-                        margin-bottom: 12px;
-                    }
-
-                    & .view-btn {
-                        margin-left: 26px;
-
-                        & .card-btn {
-                            width: 8em;
-                            height: 2em;
-                            border-radius: 30em;
-                            font-size: 15px;
-                            font-family: inherit;
-                            cursor: pointer;
-                            background: #fff;
-                            border: none;
-                            position: relative;
-                            overflow: hidden;
-                            transition: .5s ease;
-                            z-index: 1;
-
-                            &:hover {
-                                color: #fff;
-                            }
-
-                            &::before {
-                                content: '';
-                                width: 0;
-                                height: 2em;
-                                border-radius: 30em;
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                background-color: #4bcefc;
-                                background-image: linear-gradient(90deg, #4bcefc 0%, #01fff1 100%);
-
-                                transition: .5s ease;
-                                display: block;
-                                z-index: -1;
-                            }
-
-                            &:hover::before {
-                                width: 8em;
-                            }
-                        }
-                    }
+            & .welcome-wrap {
+                width: 240px;
+                margin: 60px 0 0 24px;
+                & .welcome-title, & .welcome-user-title {
+                    font-size: 36px;
+                    font-weight: 600;
                 }
+    
+                & .welcome-title {
+                    margin-bottom: 12px;
+                }
+
+                & .welcome-desc {
+                    margin: 24px 0;
+                    font-size: 12px;   
+                    line-height: 20px;             
+                }
+            }
+
+            & .welcome-img {
+                height: 125px;
+                margin-left: 16px;
+                margin-top: 100px;
             }
         }
     }
@@ -123,3 +51,4 @@
         flex: auto;
     }
 }
+
