@@ -176,7 +176,7 @@ export default function UserList() {
         <Table columns={column} dataSource={dataSource} rowKey="id" style={TableStyle} pagination={pagination} onChange={onUserListChange} loading={loading ? { indicator: <Loading/> } : false}/>
       </div>
       {contextHolder}
-      <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} title='删除用户' okText="删除" okType='danger' cancelText="取消" width={445} confirmLoading={delLoading}>
+      <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} title='删除用户' okText="删除" okType='danger' cancelText="取消" width={445} confirmLoading={delLoading} okButtonProps={{type: 'primary'}}>
         <p style={{ color: colorText }}>此操作会清除该用户下所有信息，不可撤回，确认要删除吗？</p>
       </Modal>
     </div>

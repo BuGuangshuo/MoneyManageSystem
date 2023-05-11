@@ -4,15 +4,19 @@
     height: calc(100vh - 64px);
 
     & .left {
-        width: 53%;
-        border-right: 1px solid #ccc;
+        width: 60%;
         display: flex;
         flex-direction: column;
 
         & .card-wrap {
-            height: 45%;
-            border-bottom: 1px solid #ccc;
+            border-radius: 8px;
+            // border-bottom-left-radius: 0;
+            // border-top-left-radius: 0;
+            height: 47%;
             display: flex;
+            position: relative;
+            background: url('@/assets/img/557d0afeb6372746656c8f48b90c4dcd.webp') no-repeat;
+
 
             & .title {
               font-size: 20px;
@@ -22,33 +26,333 @@
 
             & .welcome-wrap {
                 width: 240px;
-                margin: 60px 0 0 24px;
+                margin: 42px 0 0 24px;
+                position: relative;
+
                 & .welcome-title, & .welcome-user-title {
                     font-size: 36px;
                     font-weight: 600;
                 }
     
                 & .welcome-title {
-                    margin-bottom: 12px;
+                    margin-bottom: 24px;
                 }
 
                 & .welcome-desc {
                     margin: 24px 0;
                     font-size: 12px;   
+                    font-weight: 600;
                     line-height: 20px;             
+                }
+
+                & .card-btn {
+                    position: absolute;
+                    bottom: 24px;
                 }
             }
 
+            & .welcome-animition {
+                display: flex;
+                align-items: center;
+                position: absolute;
+                right: 110px;
+                top: 160px;
+            }
+
+            .boxes {
+                --size: 32px;
+                --duration: 800ms;
+                height: calc(var(--size) * 2);
+                width: calc(var(--size) * 3);
+                position: relative;
+                transform-style: preserve-3d;
+                transform-origin: 50% 50%;
+                margin-top: calc(var(--size) * 1.5 * -1);
+                transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+              }
+              
+              .boxes .box {
+                width: var(--size);
+                height: var(--size);
+                top: 0;
+                left: 0;
+                position: absolute;
+                transform-style: preserve-3d;
+              }
+              
+              .boxes .box:nth-child(1) {
+                transform: translate(100%, 0);
+                -webkit-animation: box1 var(--duration) linear infinite;
+                animation: box1 var(--duration) linear infinite;
+              }
+              
+              .boxes .box:nth-child(2) {
+                transform: translate(0, 100%);
+                -webkit-animation: box2 var(--duration) linear infinite;
+                animation: box2 var(--duration) linear infinite;
+              }
+              
+              .boxes .box:nth-child(3) {
+                transform: translate(100%, 100%);
+                -webkit-animation: box3 var(--duration) linear infinite;
+                animation: box3 var(--duration) linear infinite;
+              }
+              
+              .boxes .box:nth-child(4) {
+                transform: translate(200%, 0);
+                -webkit-animation: box4 var(--duration) linear infinite;
+                animation: box4 var(--duration) linear infinite;
+              }
+              
+              .boxes .box > div {
+                --background: #5C8DF6;
+                --top: auto;
+                --right: auto;
+                --bottom: auto;
+                --left: auto;
+                --translateZ: calc(var(--size) / 2);
+                --rotateY: 0deg;
+                --rotateX: 0deg;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: var(--background);
+                top: var(--top);
+                right: var(--right);
+                bottom: var(--bottom);
+                left: var(--left);
+                transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+              }
+              
+              .boxes .box > div:nth-child(1) {
+                --top: 0;
+                --left: 0;
+              }
+              
+              .boxes .box > div:nth-child(2) {
+                --background: #145af2;
+                --right: 0;
+                --rotateY: 90deg;
+              }
+              
+              .boxes .box > div:nth-child(3) {
+                --background: #447cf5;
+                --rotateX: -90deg;
+              }
+              
+              .boxes .box > div:nth-child(4) {
+                --background: #dbe3f424;
+                --top: 0;
+                --left: 0;
+                --translateZ: calc(var(--size) * 3 * -1);
+              }
+              
+              @-webkit-keyframes box1 {
+                0%, 50% {
+                  transform: translate(100%, 0);
+                }
+              
+                100% {
+                  transform: translate(200%, 0);
+                }
+              }
+              
+              @keyframes box1 {
+                0%, 50% {
+                  transform: translate(100%, 0);
+                }
+              
+                100% {
+                  transform: translate(200%, 0);
+                }
+              }
+              
+              @-webkit-keyframes box2 {
+                0% {
+                  transform: translate(0, 100%);
+                }
+              
+                50% {
+                  transform: translate(0, 0);
+                }
+              
+                100% {
+                  transform: translate(100%, 0);
+                }
+              }
+              
+              @keyframes box2 {
+                0% {
+                  transform: translate(0, 100%);
+                }
+              
+                50% {
+                  transform: translate(0, 0);
+                }
+              
+                100% {
+                  transform: translate(100%, 0);
+                }
+              }
+              
+              @-webkit-keyframes box3 {
+                0%, 50% {
+                  transform: translate(100%, 100%);
+                }
+              
+                100% {
+                  transform: translate(0, 100%);
+                }
+              }
+              
+              @keyframes box3 {
+                0%, 50% {
+                  transform: translate(100%, 100%);
+                }
+              
+                100% {
+                  transform: translate(0, 100%);
+                }
+              }
+              
+              @-webkit-keyframes box4 {
+                0% {
+                  transform: translate(200%, 0);
+                }
+              
+                50% {
+                  transform: translate(200%, 100%);
+                }
+              
+                100% {
+                  transform: translate(100%, 100%);
+                }
+              }
+              
+              @keyframes box4 {
+                0% {
+                  transform: translate(200%, 0);
+                }
+              
+                50% {
+                  transform: translate(200%, 100%);
+                }
+              
+                100% {
+                  transform: translate(100%, 100%);
+                }
+              }
             & .welcome-img {
                 height: 125px;
                 margin-left: 16px;
                 margin-top: 100px;
             }
         }
+
+        & .family-info {
+            flex: 1;
+
+            & .family-wrap {
+                display: flex;
+                height: calc(100% - 20px);
+
+                & .info-left {
+                    width: 600px;
+                }
+
+                & .info-right {
+                    flex: 1
+                }
+            }
+
+            & .family-primary-person {
+                display: flex;
+            }
+
+            & .family-title {
+                font-size: 18px;
+                font-weight: 600;
+                margin-top: 14px;
+            }
+
+            & .card {
+                // margin: 20px;
+                margin-top: 12px;
+                padding: 20px;
+                margin-right: 54px;
+                width: 246px;
+                min-height: 131px;
+                display: grid;
+                // grid-template-rows: 20px 50px 1fr 50px;
+                border-radius: 8px;
+                box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
+                transition: all 0.2s;
+              }
+              
+              .card:hover {
+                box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+                transform: scale(1.01);
+              }
+              
+              .card__link,
+              .card__exit,
+              .card__icon {
+                position: relative;
+                text-decoration: none;
+                color: rgba(255, 255, 255, 0.9);
+              }
+              
+              .card__link::after {
+                position: absolute;
+                top: 25px;
+                left: 0;
+                content: "";
+                width: 0%;
+                height: 3px;
+                background-color: rgba(255, 255, 255, 0.6);
+                transition: all 0.5s;
+              }
+              
+              .card__link:hover::after {
+                width: 100%;
+              }
+              
+              .text {
+                color: white;
+              }
+              
+              .card__exit {
+                grid-row: 1/2;
+                justify-self: end;
+              }
+              
+              .card__icon {
+                grid-row: 2/3;
+                font-size: 30px;
+              }
+              
+              .card__title {
+                grid-row: 3/4;
+                font-weight: 500;
+                color: #ffffff;
+              }
+              
+              .card__apply {
+                grid-row: 4/5;
+                align-self: center;
+              }
+              
+              @media (max-width: 1600px) {
+                .cards {
+                  justify-content: center;
+                }
+              }
+              
+        }
     }
 
     & .right {
-        flex: auto;
+        flex: 1;
     }
 }
 
