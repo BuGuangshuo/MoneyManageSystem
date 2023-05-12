@@ -21,7 +21,7 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: 'rgb(254, 146, 83)',
+          colorPrimary: 'rgb(83, 109, 254)',
           motionUnit: .17
         },
         algorithm: themeModel === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,
