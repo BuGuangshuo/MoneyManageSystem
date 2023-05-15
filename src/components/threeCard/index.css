@@ -1,6 +1,6 @@
 .cards {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   gap: 15px;
 }
 
@@ -23,7 +23,8 @@
   flex-direction: column;
   text-align: center;
   height: 100px;
-  width: 250px;
+  /* width: 200px; */
+  width: 100%;
   border-radius: 10px;
   color: white;
   cursor: pointer;
@@ -31,12 +32,21 @@
 }
 
 .cards .card p.tip {
-  font-size: 1em;
+  position: relative;
+  font-size: 16px;
   font-weight: 700;
 }
 
+.title-icon {
+  position: absolute;
+  z-index: 99;
+  font-size: 21px;
+  left: -25px;
+  top: -1px;
+}
+
 .cards .card p.second-text {
-  font-size: .7em;
+  font-size: 14px;
 }
 
 .cards .card:hover {

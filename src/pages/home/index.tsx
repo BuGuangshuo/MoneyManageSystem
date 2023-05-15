@@ -2,30 +2,29 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-12 18:21:46
+ * @LastEditTime: 2023-05-15 17:43:22
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- * @Author: 卜广硕 guangshuo.bu@datatist.com
- * @Date: 2023-02-17 14:27:30
- * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-12 18:07:10
- * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 首页欢迎界面
  */
 import React, { useEffect, useState } from 'react'
-import { Layout, Menu, Breadcrumb, Button, theme, Modal, message, Avatar, Progress, List, Skeleton } from 'antd'
+
+import { Layout, Menu, Breadcrumb, Button, theme, Modal, message, Avatar, Progress, List, Space } from 'antd'
+
+import { StarOutlined, LikeOutlined, MessageOutlined, createFromIconfontCN } from '@ant-design/icons';
 
 import { familyCreate } from '../../utils/http'
 
 import WelcomeUser from '@/assets/img/undraw_welcome_cats_thqn.svg'
 
-import PointCard from '../../components/pointCard';
+import ThreeCard from '../../components/threeCard';
 
 import styles from './index.module.less'
 
 import { navigate } from '@reach/router'
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_2880815_e6sdckc7orm.js',
+});
 
 const data = [
   {
@@ -53,6 +52,16 @@ const data = [
     desc: '圆蛤镇啤酒厂职员'
   },
 ];
+
+const data2 = Array.from({ length: 23 }).map((_, i) => ({
+  href: 'https://ant.design',
+  title: `ant design part ${i}`,
+  avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
+  description:
+    'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+  content:
+    'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+}));
 
 export default function Home() {
 
@@ -83,6 +92,13 @@ export default function Home() {
     const userId = sessionStorage.getItem('userId');
     await familyCreate({userId, familyName: 'testFamily'})
   }
+
+  const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+  );
 
   const {
     token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary },
@@ -155,7 +171,7 @@ export default function Home() {
               <div className={styles['family-primary-person']}>
               <div className={styles.card} style={{background: colorPrimaryText, color: colorWhite, fontWeight: 500}}>
                 <div className={styles['card-avatar-wrap']}>
-                  <div className={styles.avatar}><Avatar/></div>
+                  <div className={styles.avatar}><Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=44'/></div>
                   <div className={styles.userInfo}>
                     <div>恶搞之家</div>
                     <div>Peter Griffon</div>
@@ -207,8 +223,72 @@ export default function Home() {
         </div>
       </div>
       <div className={styles['right']}>
-        <div>
-            <PointCard theme={ colorPrimaryText }/>
+      <div className={styles['news-wrap-title']} style={{color: colorTextLabel}}>目标详情</div>
+        <div className={styles['target-list']}>
+        <div className={styles['target-info']}>
+                <div className={styles['target-item']}>
+                  <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>总目标数</div>
+                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                </div>
+                <div className={styles['target-item']}>
+                  <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>已完成目标</div>
+                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                </div>
+                <div className={styles['target-item']}>
+                  <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>总目标时间</div>
+                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                </div>
+
+                <div className={styles['target-item']}>
+                  <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>完成占比</div>
+                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>46%</div>
+                </div>
+
+                <div className={styles['target-item']}>
+                  <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>完成占比</div>
+                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>46%</div>
+                </div>
+              </div>
+        </div>
+
+        <div className={styles['entry-card']}>
+          <ThreeCard />
+        </div>
+        
+        <div className={styles['news-wrap-title']} style={{color: colorTextLabel, marginTop: 24}}>最新文章</div>
+        <div className={styles['news-list']}>
+          <List
+            itemLayout="vertical"
+            // size="large"
+            dataSource={data2}
+            renderItem={(item) => (
+              <List.Item
+                key={item.title}
+                actions={[
+                  <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+                  <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                  <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                ]}
+                extra={
+                  <img
+                    width={272}
+                    alt="logo"
+                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                  />
+                }
+              >
+                <List.Item.Meta
+                  avatar={<Avatar src={item.avatar} />}
+                  title={<a href={item.href} className={styles['news-title']}>{item.title}</a>}
+                  description={item.description}
+                />
+                <div className={styles['news-content']}>
+                  {item.content}
+                </div>
+                
+              </List.Item>
+            )}
+          />
         </div>
       </div>
     </div>

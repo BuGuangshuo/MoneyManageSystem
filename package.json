@@ -28,6 +28,7 @@
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@antv/g6": "^4.8.13",
     "@types/lodash": "^4.14.175",
     "@types/md5": "^2.3.1",
     "@types/node": "^16.11.1",
