@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-15 17:43:22
+ * @LastEditTime: 2023-05-15 18:44:39
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -101,7 +101,7 @@ export default function Home() {
   );
 
   const {
-    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary },
+    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary, colorError, colorInfo, colorSuccess },
   } = theme.useToken();
 
   const TitleStyle = {
@@ -252,7 +252,7 @@ export default function Home() {
         </div>
 
         <div className={styles['entry-card']}>
-          <ThreeCard />
+          <ThreeCard theme1={colorError} theme2={colorInfo} theme3={colorSuccess}/>
         </div>
         
         <div className={styles['news-wrap-title']} style={{color: colorTextLabel, marginTop: 24}}>最新文章</div>

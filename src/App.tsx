@@ -22,6 +22,9 @@ function App() {
       theme={{
         token: {
           colorPrimary: 'rgb(83, 109, 254)',
+          colorError: '#f43f5e',
+          colorInfo: '#3b82f6',
+          colorSuccess: '#22c55e',
           motionUnit: .17
         },
         algorithm: themeModel === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,

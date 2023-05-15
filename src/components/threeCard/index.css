@@ -4,7 +4,7 @@
   gap: 15px;
 }
 
-.cards .red {
+/* .cards .red {
   background-color: #f43f5e;
 }
 
@@ -14,7 +14,7 @@
 
 .cards .green {
   background-color: #22c55e;
-}
+} */
 
 .cards .card {
   display: flex;
