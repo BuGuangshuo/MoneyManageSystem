@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-23 17:11:12
+ * @LastEditTime: 2023-05-23 18:28:41
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -101,7 +101,7 @@ export default function Home() {
   );
 
   const {
-    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary, colorError, colorInfo, colorSuccess },
+    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary, colorError, colorInfo, colorSuccess, colorPrimary },
   } = theme.useToken();
 
   const TitleStyle = {
@@ -124,7 +124,7 @@ export default function Home() {
               {getTimeState()}，
             </div>  
             <div className='DingDing' style={{color: colorPrimaryText, fontSize: 46, marginTop: 8}}>{JSON.parse(userInfo).infoname}</div>
-            <div className={styles['welcome-desc']} style={{color: colorTextSecondary}}>
+            <div className='AiliFont' style={{color: colorTextSecondary, margin: '24px 0', fontSize: 12 , lineHeight: '20px'}}>
               欢迎进入财政管理系统，您可以查看您团队财政的详细概览、团队组成等基础信息。
             </div>
             <div className={styles['card-btn']}>
@@ -169,7 +169,7 @@ export default function Home() {
           <div className={styles['family-wrap']}>
             <div className={styles['info-left']}>
               <div className={styles['family-primary-person']}>
-              <div className={styles.card} style={{background: colorPrimaryText, color: colorWhite, fontWeight: 500}}>
+              <div className={styles.card} style={{background: colorPrimary, color: colorWhite, fontWeight: 500}}>
                 <div className={styles['card-avatar-wrap']}>
                   <div className={styles.avatar}><Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=44'/></div>
                   <div className={styles.userInfo}>
@@ -182,7 +182,7 @@ export default function Home() {
               </div>
 
             <div className={styles['process-card']}>
-              <div className={styles.card} style={{ fontWeight: 500, width: 320, marginLeft: 38, background: colorInfoBorderHover, color: colorWhite}}>
+              <div className={styles.card} style={{ fontWeight: 500, width: 320, marginLeft: 38, background: colorPrimary, color: colorWhite}}>
                   <div className={styles['team-process-title']} style={{color: colorWhite}}>团队进度</div>
                   
                   <div className={styles["team-process-wrap"]}>
@@ -228,25 +228,25 @@ export default function Home() {
         <div className={styles['target-info']}>
                 <div className={styles['target-item']}>
                   <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>总目标数</div>
-                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                  <div className='AiliFont' style={{color: colorPrimaryText, fontSize: 34, fontWeight: 600}}>114</div>
                 </div>
                 <div className={styles['target-item']}>
                   <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>已完成目标</div>
-                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                  <div className='AiliFont' style={{color: colorPrimaryText, fontSize: 34, fontWeight: 600}}>114</div>
                 </div>
                 <div className={styles['target-item']}>
                   <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>总目标时间</div>
-                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>114</div>
+                  <div className='AiliFont' style={{color: colorPrimaryText, fontSize: 34, fontWeight: 600}}>114</div>
                 </div>
 
                 <div className={styles['target-item']}>
                   <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>完成占比</div>
-                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>46%</div>
+                  <div className='AiliFont' style={{color: colorPrimaryText, fontSize: 34, fontWeight: 600}}>46%</div>
                 </div>
 
                 <div className={styles['target-item']}>
                   <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>完成占比</div>
-                  <div className={styles['target-item-value']} style={{color: colorPrimaryText}}>46%</div>
+                  <div className='AiliFont' style={{color: colorPrimaryText, fontSize: 34, fontWeight: 600}}>46%</div>
                 </div>
               </div>
         </div>
