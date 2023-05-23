@@ -94,13 +94,13 @@ export default function MenuSider() {
     return rolesList.includes(item.menu_key)
   }
 
-  const renderMenu = (menuData: any,title?:string, hasChildren: boolean) => {
+  const renderMenu = (menuData: any, hasChildren?: boolean, title?:string) => {
     return menuData.map((menuItem:any) => {
       if(menuItem.childrens?.length && checkPermission(menuItem)) {
         return (
           <SubMenu title={menuItem.title} key={menuItem.menu_key} icon={iconList[menuItem.menu_key]}>
             {
-              renderMenu(menuItem.childrens,menuItem.title,true)
+              renderMenu(menuItem.childrens, true, menuItem.title)
             }
           </SubMenu>
         )
@@ -145,7 +145,7 @@ export default function MenuSider() {
 
   return (
       <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} theme='light' trigger={null}>
-      <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/>财政后台系统</div>}</div>
+      <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/><span className='DingDing'>财政管理系统</span></div>}</div>
       <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle}>
         {renderMenu(menuList)}
       </Menu>

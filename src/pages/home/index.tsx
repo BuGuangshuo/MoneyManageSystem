@@ -2,13 +2,13 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-16 09:49:40
+ * @LastEditTime: 2023-05-23 17:11:12
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
 import React, { useEffect, useState } from 'react'
 
-import { Layout, Menu, Breadcrumb, Button, theme, Modal, message, Avatar, Progress, List, Space } from 'antd'
+import { Layout, Menu, Breadcrumb, Button, theme, Modal, message, Avatar, Progress, List, Space, ColorPicker } from 'antd'
 
 import { StarOutlined, LikeOutlined, MessageOutlined, createFromIconfontCN } from '@ant-design/icons';
 
@@ -120,10 +120,10 @@ export default function Home() {
         <div className={styles['card-wrap']} style={{borderBottom: `1px solid ${colorBorderSecondary}`}}>
           {/* <div className={styles['title']} style={TitleStyle}>首页概览</div> */}
           <div className={styles['welcome-wrap']}>
-            <div className={styles['welcome-title']} style={{color: colorPrimaryText}}>
+            <div className='DingDing' style={{color: colorPrimaryText, fontSize: 46}}>
               {getTimeState()}，
             </div>  
-            <div className={styles['welcome-user-title']} style={{color: colorPrimaryText}}>{JSON.parse(userInfo).infoname}</div>
+            <div className='DingDing' style={{color: colorPrimaryText, fontSize: 46, marginTop: 8}}>{JSON.parse(userInfo).infoname}</div>
             <div className={styles['welcome-desc']} style={{color: colorTextSecondary}}>
               欢迎进入财政管理系统，您可以查看您团队财政的详细概览、团队组成等基础信息。
             </div>

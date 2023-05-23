@@ -14,6 +14,7 @@ import Daybook from '../../pages/analysis/daybook'
 import Target from '../../pages/analysis/target'
 import UserCenter from '../../pages/userCenter'
 import NotFound from '../../pages/NotFound'
+import SystemSettings from '../../pages/systemSettings';
 
 const { Content } = Layout
 
@@ -31,7 +32,9 @@ export default function MainLayout({ children }: any) {
     //@ts-ignore
     "/analysis/target": <Target path="/analysis/target" key="/analysis/target" />,
     //@ts-ignore
-    "/usercenter": <UserCenter path="/usercenter" key="/usercenter" />
+    "/usercenter": <UserCenter path="/usercenter" key="/usercenter" />,
+    //@ts-ignore
+    "/systemSettings": <SystemSettings path="/systemSettings" key="/systemSettings" />
   }
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])
