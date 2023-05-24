@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-23 18:28:41
+ * @LastEditTime: 2023-05-24 16:09:18
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -190,10 +190,7 @@ export default function Home() {
                     <div className={styles['team-process-now']}>当前：123500￥</div>
                   </div>
                   
-                  <div className={styles['team-process-bar']}><Progress percent={50} status="active" strokeColor={{
-                    '0%': '#5597ef',
-                    '100%': '#657cff',
-                  }}/></div>
+                  <div className={styles['team-process-bar']}><Progress percent={50} status="active" strokeColor='#fff'/></div>
                 </div>
             </div>
               

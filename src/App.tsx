@@ -1,6 +1,7 @@
 import react, { useState, useEffect } from 'react'
 import { ConfigProvider, theme } from 'antd';
 import { useThemeModel } from './models/theme'
+import { useThemeColorModel } from './models/themeColor'
 
 import Routes from './routes'
 
@@ -12,6 +13,7 @@ function App() {
   const loc = localStorage.getItem('theme') || 'light'
 
   const { themeType } = useThemeModel();
+  const { themeColor } = useThemeColorModel();
 
   useEffect(() => {
     setThemeModel(loc);
@@ -21,7 +23,7 @@ function App() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: 'rgb(83, 109, 254)',
+          colorPrimary: themeColor,
           colorError: '#f43f5e',
           colorInfo: '#3b82f6',
           colorSuccess: '#22c55e',

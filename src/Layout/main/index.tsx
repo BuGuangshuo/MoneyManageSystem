@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import { navigate, Redirect, Router } from '@reach/router'
-import { Layout, ConfigProvider, theme } from 'antd';
+import { Layout, theme } from 'antd';
+
 import Loading from '../../components/loading/index'
+import { useLayoutModel } from '../../models/layout';
 
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
@@ -16,10 +18,10 @@ import UserCenter from '../../pages/userCenter'
 import NotFound from '../../pages/NotFound'
 import SystemSettings from '../../pages/systemSettings';
 
-const { Content } = Layout
+const { Header, Content } = Layout
 
 export default function MainLayout({ children }: any) {
-
+  
   const localList: any = {
     //@ts-ignore
     "/home": <Home path="/home" key="/home" />,
@@ -39,6 +41,8 @@ export default function MainLayout({ children }: any) {
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])
   const [loading, setLoading] = useState<boolean>(false)
+
+  const { layoutType } = useLayoutModel();
   
   const {
     token: { colorBgContainer },
@@ -66,8 +70,31 @@ export default function MainLayout({ children }: any) {
   }, [])
 
   return (
+    layoutType === 'up' ? 
     <Layout style={{ minHeight: '100vh' }}>
-      <MenuSider />
+      <HeaderArea />
+      <Content>
+          <div style={{ height: '100%', background: colorBgContainer, position: 'relative' }}>
+            {
+              loading ? <Loading/> : null
+            }
+
+            {
+              loading ? null : <Router>
+              {
+                rolesMenu.map((item: any) => localList[item])
+              }
+              <NotFound 
+                //@ts-ignore
+                default
+              />
+            </Router>
+            } 
+          </div> 
+        </Content>
+    </Layout> : 
+    <Layout style={{ minHeight: '100vh' }}>
+      <MenuSider mode="inline"/>
       <Layout className="site-layout">
         <HeaderArea />
         <Content>

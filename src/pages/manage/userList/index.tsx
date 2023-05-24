@@ -160,8 +160,8 @@ export default function UserList() {
   return (
     <div className={styles['userList-wrap']}>
        {/* { loading ? <Loading/> : null } */}
-      <div className={styles['header-wrap']}>
-        <div className={styles['title']} style={{ color: colorTextSecondary }}>用户管理</div>
+      <div className={styles['header-wrap']} style={{borderBottom: `1px solid ${colorBorderSecondary}`}}>
+        <div className={styles['title']} style={{ color: colorTextSecondary}}>用户管理</div>
       </div>
 
       <div className={styles['preview-wrap']}>

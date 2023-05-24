@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2022-11-15 14:31:52
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-23 16:16:05
+ * @LastEditTime: 2023-05-24 18:28:38
  * @FilePath: \MoneyManageSystem\src\Layout\header\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,8 +14,10 @@ import { Button, message, Layout, Avatar, Dropdown, Menu, theme, Input } from 'a
 import { UserOutlined, SearchOutlined, createFromIconfontCN, SettingOutlined } from '@ant-design/icons'
 
 import { useThemeModel } from '../../models/theme'
+import { useLayoutModel } from '../../models/layout';
 
 import styles from './index.module.less'
+import MenuSider from '../menuArea'
 
 const { Header } = Layout
 
@@ -26,6 +28,7 @@ const IconFont = createFromIconfontCN({
 export default function HeaderArea() {
 
   const { setThemeType } = useThemeModel();
+  const { layoutType } = useLayoutModel();
 
   const {
     token: { colorBgElevated, colorText, colorBorderSecondary, colorErrorTextHover, colorPrimary },
@@ -61,8 +64,12 @@ export default function HeaderArea() {
 
   return (
     <Header className="site-layout-background" style={{ padding: 0, background: colorBgElevated, borderBottom: `1px solid ${colorBorderSecondary}`, display: 'flex', justifyContent: 'space-between'}}>
+      {
+        layoutType !== 'up' ? null : <MenuSider mode={layoutType === 'up' ? 'horizontal' : 'inline'}/>
+      }
+      
       <div className={styles['header-search']}>
-        <Input placeholder='Search something...' className={styles['header-input']} size='middle' bordered={false} prefix={<SearchOutlined />}/>
+        <Input placeholder='Search something...' className={styles['header-input']} size='middle' bordered={false} prefix={<SearchOutlined style={{color: colorText}}/>}/>
       </div>
       <div className={styles['header-wrap']}>
         <div className={styles['theme-wrap']}><IconFont type={localStorage.getItem('theme') === 'light' ? 'icon-taiyang' : 'icon-yueliang'} className={styles['icon-theme']} style={{color: colorText}} onClick={onThemeClick}/></div>
@@ -74,7 +81,6 @@ export default function HeaderArea() {
           </Dropdown>
         </div>
       </div>
-      
     </Header>
   )
 }

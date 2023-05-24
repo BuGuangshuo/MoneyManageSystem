@@ -27,7 +27,7 @@ const IconFont = createFromIconfontCN({
 
 const iconList: any = {"/home" : <TeamOutlined/>,"/manage/userlist": <UserOutlined/>,'/general': <PieChartOutlined/>};
 
-export default function MenuSider() {
+export default function MenuSider({ mode }: any) {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [siderWidth, setSiderWidth] = useState<number>(200)
   const [rolesList,setRolesList] = useState<string []>([])
@@ -38,7 +38,7 @@ export default function MenuSider() {
   const hrefPath = window.location.href
 
   const {
-    token: { colorBgContainer, colorBorderSecondary, colorText, colorPrimaryText },
+    token: { colorBgContainer, colorBorderSecondary, colorText, colorBgElevated },
   } = theme.useToken();
 
   const SiderStyle: any = {
@@ -64,6 +64,12 @@ export default function MenuSider() {
     borderTop: `1px solid ${colorBorderSecondary}`,
     borderRight: `1px solid ${colorBorderSecondary}`,
     marginTop: -1,
+  }
+
+  const MenuHorizontalStyle = {
+    // borderBottom: `1px solid ${colorBorderSecondary}`,
+    paddingLeft: 42,
+    background: colorBgElevated
   }
 
   const TriggerStyle: any = {
@@ -94,7 +100,34 @@ export default function MenuSider() {
     return rolesList.includes(item.menu_key)
   }
 
-  const renderMenu = (menuData: any, hasChildren?: boolean, title?:string) => {
+  const renderMenu = (menuData: any, hasChildren?: boolean, title?: string) => {
+    let menuList = [];
+    menuList =  menuData.map((menuItem: any) => {
+      if(checkPermission(menuItem)) {
+        if(menuItem.childrens?.length && checkPermission(menuItem)) {
+          return {
+            label: <span>{menuItem.title}</span>,
+            key: menuItem.menu_key,
+            icon: hasChildren ? null : iconList[menuItem.menu_key],
+            children: menuItem.childrens?.length ? renderMenu(menuItem.childrens, true, menuItem.title) : []
+          }
+        }
+        
+        return {
+          label: <span onClick={()=>{
+            setMenuSelectKeys(menuItem.menu_key)
+            navigate(menuItem.menu_key)
+          }}>{menuItem.title}</span>,
+          key: menuItem.menu_key,
+          icon: hasChildren ? null : iconList[menuItem.menu_key]
+        }
+      }
+    });
+
+    return menuList;
+  }
+
+  const renderLeftMenu = (menuData: any, hasChildren?: boolean, title?:string) => {
     return menuData.map((menuItem:any) => {
       if(menuItem.childrens?.length && checkPermission(menuItem)) {
         return (
@@ -106,7 +139,8 @@ export default function MenuSider() {
         )
       }
 
-      return checkPermission(menuItem) && <Menu.Item key={menuItem.menu_key} onClick={()=>{
+      return checkPermission(menuItem) && 
+      <Menu.Item key={menuItem.menu_key} onClick={()=>{
         setMenuSelectKeys(menuItem.menu_key)
         navigate(menuItem.menu_key)
       }} icon={hasChildren ? null : iconList[menuItem.menu_key]}>
@@ -144,12 +178,15 @@ export default function MenuSider() {
   }, [hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1]])
 
   return (
-      <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} theme='light' trigger={null}>
+    mode === 'inline' ? 
+      <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} trigger={null}>
       <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/><span className='DingDing'>财政管理系统</span></div>}</div>
-      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle}>
-        {renderMenu(menuList)}
-      </Menu>
+      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle} items={renderMenu(menuList)}/>
       <div style={TriggerStyle} onClick={onCollapse}>{collapsed ? <RightOutlined /> : <LeftOutlined />}</div>
-    </Sider> 
+    </Sider> :
+    <div style={{display: 'flex'}}>
+      <span style={{marginRight: 12, marginLeft: 42, paddingTop: 3}}><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/><span className='DingDing'>财政管理系统</span></span>
+      <Menu selectedKeys={menuSelectKeys} mode='horizontal' onOpenChange={onOpenChange} style={MenuHorizontalStyle} items={renderMenu(menuList)} />
+    </div>
   )
 }
