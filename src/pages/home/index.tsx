@@ -182,7 +182,7 @@ export default function Home() {
               </div>
 
             <div className={styles['process-card']}>
-              <div className={styles.card} style={{ fontWeight: 500, width: 320, marginLeft: 38, background: colorPrimary, color: colorWhite}}>
+              <div className={styles.card} style={{ fontWeight: 500, width: '93%', marginLeft: 38, background: colorPrimary, color: colorWhite}}>
                   <div className={styles['team-process-title']} style={{color: colorWhite}}>团队进度</div>
                   
                   <div className={styles["team-process-wrap"]}>
