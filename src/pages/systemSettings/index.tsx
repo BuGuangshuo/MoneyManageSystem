@@ -2,30 +2,35 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-05-23 16:12:39
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-24 18:27:27
+ * @LastEditTime: 2023-05-25 18:01:14
  * @FilePath: \MoneyManageSystem\src\pages\systemSettings\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { theme, ColorPicker, Radio, Space } from 'antd';
 
 import { useThemeColorModel } from '../../models/themeColor'
 import { useThemeModel } from '../../models/theme'
 import { useLayoutModel } from '../../models/layout'
 
+import { createFromIconfontCN } from '@ant-design/icons';
+
 import './index.less';
+
+const IconFont = createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/c/font_2880815_ksorgwvsizk.js',
+  });
 
 export default function SystemSettings() {
     const {
-        token: { colorTextLabel, colorBorderSecondary, colorPrimary },
+        token: { colorTextLabel, colorBorderSecondary, colorPrimary, colorBgContainer },
     } = theme.useToken();
 
     const [color, setColor] = useState<string>(colorPrimary);
-    const [layoutVal, setLayoutVal] = useState<string>('up');
 
     const { setThemeColor } = useThemeColorModel();
     const { setThemeType } = useThemeModel();
-    const { setLayoutType } = useLayoutModel();
+    const { layoutType ,setLayoutType } = useLayoutModel();
 
     const onThemeChange = (value: any, hex: string) => {
         setThemeColor(hex);
@@ -39,14 +44,13 @@ export default function SystemSettings() {
     }
 
     const onLayoutTypeChange = (type: string) => {
-        setLayoutType(type)
-        setLayoutVal(type)
+        localStorage.setItem('layout', type);
+        setLayoutType(type);
     }   
 
     return (
         <div className="setting-wrap">
             <div className="setting-title" style={{ color: colorTextLabel, borderColor: colorBorderSecondary }}>系统设置</div>
-
             <div className="setting-content">
                 <div className="LightDark-title" style={{ color: colorTextLabel }}>系统主题色</div>
                 <ColorPicker
@@ -85,9 +89,17 @@ export default function SystemSettings() {
                 </div>
 
                 <div className="LightDark-title" style={{ color: colorTextLabel }}>布局模式</div>
-                <div>
-                    <Radio onClick={() => onLayoutTypeChange('left')}>侧边菜单布局</Radio>
-                    <Radio onClick={() => onLayoutTypeChange('up')}>顶部菜单布局</Radio>
+                <div className='layout-type-wrap'>
+                    <div className="layout-icon" onClick={() => onLayoutTypeChange('up')}>
+                        <div className='layout-header' style={{background: colorPrimary}}/>
+                        <IconFont type='icon-checkbox_sel' className='layout-checked-icon' style={layoutType === 'left' ? {display: 'none'} : {display: 'block'}}/>
+                    </div>
+
+                    <div className="layout-icon-slider" onClick={() => onLayoutTypeChange('left')}>
+                        <div className='layout-header' style={{background: '#fff'}}/>
+                        <div className='layout-slider' style={{background: colorPrimary}}/>
+                        <IconFont type='icon-checkbox_sel' className='layout-checked-icon' style={layoutType === 'up' ? {display: 'none'} : {display: 'block'}}/>
+                    </div>
                 </div>
             </div>
         </div>

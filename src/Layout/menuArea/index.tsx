@@ -127,28 +127,6 @@ export default function MenuSider({ mode }: any) {
     return menuList;
   }
 
-  const renderLeftMenu = (menuData: any, hasChildren?: boolean, title?:string) => {
-    return menuData.map((menuItem:any) => {
-      if(menuItem.childrens?.length && checkPermission(menuItem)) {
-        return (
-          <SubMenu title={menuItem.title} key={menuItem.menu_key} icon={iconList[menuItem.menu_key]}>
-            {
-              renderMenu(menuItem.childrens, true, menuItem.title)
-            }
-          </SubMenu>
-        )
-      }
-
-      return checkPermission(menuItem) && 
-      <Menu.Item key={menuItem.menu_key} onClick={()=>{
-        setMenuSelectKeys(menuItem.menu_key)
-        navigate(menuItem.menu_key)
-      }} icon={hasChildren ? null : iconList[menuItem.menu_key]}>
-        {menuItem.title}
-      </Menu.Item>
-    })
-  }
-
   useEffect(() => {
     const { username } = JSON.parse(sessionStorage.getItem('user') || "")
     const currentPathName = hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1].split(':')[0]
@@ -181,12 +159,12 @@ export default function MenuSider({ mode }: any) {
     mode === 'inline' ? 
       <Sider collapsible collapsed={collapsed} className={styles['menu-side']} width={200} style={SiderStyle} trigger={null}>
       <div className="logo" style={LogoStyle}>{collapsed ? <IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4}}/> : <div><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/><span className='DingDing'>财政管理系统</span></div>}</div>
-      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle} items={renderMenu(menuList)}/>
+      <Menu selectedKeys={menuSelectKeys} mode="inline" openKeys={menuOpenKeys} onOpenChange={onOpenChange} style={collapsed ? MenuInStyle : MenuStyle} items={renderMenu(menuList)} onClick={(e: any) => navigate(e.key)}/>
       <div style={TriggerStyle} onClick={onCollapse}>{collapsed ? <RightOutlined /> : <LeftOutlined />}</div>
     </Sider> :
     <div style={{display: 'flex'}}>
       <span style={{marginRight: 12, marginLeft: 42, paddingTop: 3}}><IconFont type="icon-jinqian" style={{color: colorText, fontSize: 32, position: 'relative', top: 4, right: 12}}/><span className='DingDing'>财政管理系统</span></span>
-      <Menu selectedKeys={menuSelectKeys} mode='horizontal' onOpenChange={onOpenChange} style={MenuHorizontalStyle} items={renderMenu(menuList)} />
+      <Menu selectedKeys={menuSelectKeys} mode='horizontal' onOpenChange={onOpenChange} style={MenuHorizontalStyle} items={renderMenu(menuList)} onClick={(e: any) => navigate(e.key)}/>
     </div>
   )
 }

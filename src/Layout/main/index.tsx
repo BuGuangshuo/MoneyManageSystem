@@ -5,6 +5,7 @@ import { Layout, theme } from 'antd';
 
 import Loading from '../../components/loading/index'
 import { useLayoutModel } from '../../models/layout';
+import { useThemeColorModel } from '../../models/themeColor';
 
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
@@ -42,7 +43,8 @@ export default function MainLayout({ children }: any) {
   const [rolesMenu, setRolesMenu] = useState<string []>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const { layoutType } = useLayoutModel();
+  const { layoutType, setLayoutType } = useLayoutModel();
+  const { setThemeColor } = useThemeColorModel();
   
   const {
     token: { colorBgContainer },
@@ -54,8 +56,13 @@ export default function MainLayout({ children }: any) {
       navigate("/login")
     }
 
-    const { username } = JSON.parse(sessionStorage.getItem('user') || "")
+    const { username, themeColor, layout } = JSON.parse(sessionStorage.getItem('user') || "")
 
+    setThemeColor(themeColor);
+    setLayoutType(layout);
+    localStorage.setItem('themeColor', themeColor);
+    localStorage.setItem('layout', layout)
+    
     const rolesList = async () => {
       const res = await getRolesList(username)
       if (res) {

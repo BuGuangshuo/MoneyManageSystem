@@ -1,7 +1,7 @@
 import react, { useState, useEffect } from 'react'
 import { ConfigProvider, theme } from 'antd';
 import { useThemeModel } from './models/theme'
-import { useThemeColorModel } from './models/themeColor'
+import { useThemeColorModel } from './models/themeColor';
 
 import Routes from './routes'
 

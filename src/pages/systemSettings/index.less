@@ -15,6 +15,63 @@
             margin-bottom: 12px;
         }
 
+        & .layout-type-wrap {
+            display: flex;
+            gap: 32px;
+        }
+
+        & .layout-icon {
+            background-color: #f0f2f5;
+            border-radius: 8px;
+            width: 100px;
+            height: 68px;
+            box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.18);
+            cursor: pointer;
+
+            & .layout-header {
+                height: 20px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            & .layout-checked-icon {
+                font-size: 21px;
+                margin-top: 13px;
+            }
+        }
+
+        & .layout-icon-slider {
+            position: relative;
+            background-color: #f0f2f5;
+            border-radius: 8px;
+            width: 100px;
+            height: 68px;
+            box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.18);
+            cursor: pointer;
+
+            & .layout-checked-icon {
+                font-size: 21px;
+                margin-left: 12px;
+                margin-top: 13px;
+            }
+
+            & .layout-header {
+                height: 20px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            & .layout-slider {
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+                top: 0;
+                height: 68px;
+                z-index: 2;
+                position: absolute;
+                width: 20px;
+            }
+        }
+
         & .LightDark-switch {
             height: 80px;
 
