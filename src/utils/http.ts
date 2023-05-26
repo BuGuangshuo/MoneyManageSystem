@@ -64,3 +64,8 @@ export const userListDelete = (params: any): Promise<any> => {
 export const familyCreate = (params: any): Promise<any> => {
   return axios.post(`/family/create`, params)
 }
+
+export const systemSettingUpdate = (params: any): Promise<any> => {
+  console.log(params)
+  return axios.post(`/systemSetting/systemSetting`, params)
+}

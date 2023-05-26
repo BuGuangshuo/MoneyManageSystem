@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { navigate, Redirect, Router } from '@reach/router'
-import { Layout, theme } from 'antd';
+import { Layout, theme, message } from 'antd';
 
 import Loading from '../../components/loading/index'
 import { useLayoutModel } from '../../models/layout';
@@ -53,18 +53,19 @@ export default function MainLayout({ children }: any) {
   useEffect(() => {
     setLoading(true)
     if (!localStorage.getItem('token')) {
+      message.warning('信息已过期,请重新登录')
       navigate("/login")
     }
 
-    const { username, themeColor, layout } = JSON.parse(sessionStorage.getItem('user') || "")
+    const userInfo = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || "") : null;
 
-    setThemeColor(themeColor);
-    setLayoutType(layout);
-    localStorage.setItem('themeColor', themeColor);
-    localStorage.setItem('layout', layout)
-    
+    setThemeColor(userInfo?.themeColor || '#536DFE');
+    setLayoutType(userInfo?.layout || 'left');
+    localStorage.setItem('themeColor', userInfo?.themeColor || '#536DFE');
+    localStorage.setItem('layout', userInfo?.layout || 'left');
+
     const rolesList = async () => {
-      const res = await getRolesList(username)
+      const res = await getRolesList(userInfo?.username || '')
       if (res) {
         const { code, data = [] } = res
         if (code === 200) {

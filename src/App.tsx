@@ -8,16 +8,18 @@ import Routes from './routes'
 import './App.css'
 
 function App() {
-  const [themeModel, setThemeModel] = useState('light');
+  // const [themeModel, setThemeModel] = useState('light');
 
-  const loc = localStorage.getItem('theme') || 'light'
+  const loc = localStorage.getItem('theme');
 
   const { themeType } = useThemeModel();
   const { themeColor } = useThemeColorModel();
 
   useEffect(() => {
-    setThemeModel(loc);
-  },[loc]);
+    if(!loc) {
+      localStorage.setItem('theme', themeType)
+    }
+  },[]);
 
   return (
     <ConfigProvider
@@ -29,7 +31,7 @@ function App() {
           colorSuccess: '#22c55e',
           motionUnit: .17
         },
-        algorithm: themeModel === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,
+        algorithm: loc === 'light' || !loc ? theme.defaultAlgorithm : theme.darkAlgorithm,
       }}
     >
     <Routes/> 

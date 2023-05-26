@@ -128,12 +128,12 @@ export default function MenuSider({ mode }: any) {
   }
 
   useEffect(() => {
-    const { username } = JSON.parse(sessionStorage.getItem('user') || "")
+    const userInfo = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || '') : null;
     const currentPathName = hrefPath.split(/\d/)[hrefPath.split(/\d/).length - 1].split(':')[0]
     setMenuSelectKeys([currentPathName])
     // setMenuOpenKeys([currentPathName])
     const rolesList = async () => {
-      const res = await getRolesList(username)
+      const res = await getRolesList(userInfo?.username || '')
       if (res) {
         const { code, data = [] } = res
         if (code === 200) {
