@@ -22,12 +22,12 @@
     box-shadow: -1px 0px 6px 1px #ffffff, 1px 4px 16px 0px rgb(95 157 231 / 48%);
    }
    
-   button:hover {
+   .exploreBtn:hover {
     color: #516d91;
     background-color: #E5EDF5;
     box-shadow: -2px -1px 8px 0px #ffffff, 2px 1px 8px 0px rgb(95 157 231 / 48%);
    }
    
-   button:active {
+   .exploreBtn:active {
     box-shadow: none;
    }

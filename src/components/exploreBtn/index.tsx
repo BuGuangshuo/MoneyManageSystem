@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-05-29 18:04:08
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-29 18:19:32
+ * @LastEditTime: 2023-05-30 15:33:06
  * @FilePath: \MoneyManageSystem\src\components\exploreBtn\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,7 +13,11 @@ import './index.css'
 export default function ExploreBtn({name}: {name: string}) {
   return (
     <button className='exploreBtn'>
-        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" className="css-i6dzq1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>{name}
+      {
+        name === '创建团队' ? 
+        <svg className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6956" xmlnsXlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M852.288 891.52H167.36A39.36 39.36 0 0 1 128 852.16V331.008c0-10.752 4.352-20.992 12.16-28.352l83.456-80.128 86.848-83.456a39.296 39.296 0 0 1 27.264-11.008L852.288 128c21.76 0 39.36 17.664 39.36 39.36v684.928a39.36 39.36 0 0 1-39.36 39.168zM193.28 832.128L833.408 832V192.448l-479.808 0.064-79.488 76.16L193.28 347.648v484.48z" fill="#515151" p-id="6957"></path><path d="M512 320.96c14.464 0 28.928 10.624 31.68 29.568l0.448 6.592v123.648h123.712c23.04 0 36.16 16.128 36.16 32.192 0 14.4-10.624 28.928-29.568 31.68l-6.592 0.448-123.712-0.064v123.776c0 23.04-16.064 36.16-32.128 36.16-16 0-32.128-13.184-32.128-36.16l-0.064-123.776-123.648 0.064c-23.04 0-36.16-16.064-36.16-32.128 0-16 13.12-32.192 36.16-32.192h123.648V357.12c0-23.04 16.128-36.16 32.192-36.16z" fill="#515151" p-id="6958"></path></svg> : <svg className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8896" width="200" height="200"><path d="M452.14 572.8A230.28 230.28 0 0 0 616.78 504a236.42 236.42 0 0 0 0-332.18 231.48 231.48 0 0 0-329.29 0 236.44 236.44 0 0 0 0 332.18 230.28 230.28 0 0 0 164.65 68.8z m0-397.54c88.91 0 161.24 73 161.24 162.67s-72.33 162.68-161.24 162.68-161.25-73-161.25-162.68 72.34-162.67 161.25-162.67z m429.99 563.87H735.69l75.7-76.33-50.59-51.08-162.07 163.5L760.8 938.73l50.59-51.08-75.7-76.33h146.44v-72.19zM452.06 619.75c-83.24 0-161.49 32.74-220.33 92.13a314 314 0 0 0-91.19 218v0.61h71.58V930a243.46 243.46 0 0 1 13.69-76.53 240.28 240.28 0 0 1 89.15-118 237.73 237.73 0 0 1 211.58-31.48l0.79 0.25V629l-0.46-0.12a310.06 310.06 0 0 0-74.81-9.13z" p-id="8897" fill="#515151"></path></svg>
+      }
+        {name}
     </button>
   )
 }
