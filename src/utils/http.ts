@@ -66,6 +66,13 @@ export const familyCreate = (params: any): Promise<any> => {
 }
 
 export const systemSettingUpdate = (params: any): Promise<any> => {
-  console.log(params)
   return axios.post(`/systemSetting/systemSetting`, params)
+}
+
+export const groupCreate = (params: any): Promise<any> => {
+  return axios.post(`/group/create`, params)
+}
+
+export const groupValidate = (params: any): Promise<any> => {
+  return axios.post(`/group/validate`, params)
 }

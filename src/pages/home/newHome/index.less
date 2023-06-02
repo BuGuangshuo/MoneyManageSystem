@@ -58,3 +58,43 @@
         width: 300px;
     }
 }
+
+.createModal {
+    & .createModalContent {
+        & .avant-wrap {
+            & .ant-upload {
+                overflow: hidden;
+            }
+            
+            & .ant-upload-wrapper {
+                display: flex;
+                justify-content: center;
+            }
+
+            & .upload-desc {
+                text-align: center;
+                font-size: 12px;
+            }
+        }
+
+        & .form-wrap {
+            & .isPublic-wrap {
+                display: flex;
+
+                & .isPublic-icon {
+                    font-size: 24px;
+                    display: flex;
+                    align-self: center;
+                    margin-left: 12px;
+                    margin-right: 12px;
+                }
+
+                & .isPublic-content {
+                    & .isPublic-desc {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+}

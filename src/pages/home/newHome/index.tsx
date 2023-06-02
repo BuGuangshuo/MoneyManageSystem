@@ -1,26 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-import { Button, theme, Tour, Popover, Input } from 'antd'
+import { Button, theme, Modal, Popover, Input, Upload, message, Form, Radio, Space } from 'antd'
+
+import type { UploadChangeParam } from 'antd/es/upload';
+
+import type { RadioChangeEvent } from 'antd';
+
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+
+import { LoadingOutlined, PlusOutlined, createFromIconfontCN } from '@ant-design/icons';
+
+import { groupCreate, groupValidate } from '../../../utils/http'
 
 import type { TourProps } from 'antd';
 
 import ExploreBtn from '../../../components/exploreBtn'
 
 import Img from '../../../assets/img/undraw_experience_design_re_dmqq.svg'
+
 import NewWelcomeSvg from '../../../components/themeSvg/newWelcome'
 
 import './index.less'
 
+const { TextArea } = Input;
+
+const IconFont = createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/c/font_2880815_y8q6l73swt.js',
+});
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+  };
+  
+  const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
 export default function NewHomePage() {
 
     const [addPopOpen, setAddPopOpen] = useState<boolean>(false);
+    const [createOpen, setCreateOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>();
+    const [isPublic, setIsPublic] = useState('public');
 
     const ref1 = useRef(null);
     const ref2 = useRef(null);
 
+    const [form] = Form.useForm();
+
     const {
-        token: { colorTextSecondary, colorPrimary },
+        token: { colorTextSecondary, colorPrimary, colorTextTertiary },
       } = theme.useToken();
+
+      const onIsPublicChange = (e: RadioChangeEvent) => {
+        setIsPublic(e.target.value);
+      };
 
     const hide = () => {
         setAddPopOpen(false);
@@ -29,6 +74,176 @@ export default function NewHomePage() {
     const handleOpenChange = (newOpen: boolean) => {
         setAddPopOpen(newOpen);
     };
+
+    const showCreateModal = () => {
+        form.setFieldsValue({
+            name: null,
+            id: null,
+            isPublic: 'public',
+            memo: '',
+        });
+
+        setImageUrl('');
+        setCreateOpen(true);
+      };
+    
+      const hideCreateModal = async () => {
+        let params;
+        try {
+            const formInfo = await form.validateFields();
+            console.log(formInfo)
+            let { name, id, isPublic, memo } = formInfo;
+            params = {
+                groupName: name,
+                groupId: id,
+                isPublic,
+                memo,
+                imageUrl
+            };
+            await groupCreate(params);
+            message.success('团队创建成功')
+            setCreateOpen(false);
+          } catch (err) {
+            // setCreateOpen(false);
+          }
+      };
+
+      const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
+        getBase64(info.file.originFileObj as RcFile, (url) => {
+            setImageUrl(url);
+          });
+      };
+    
+      const uploadButton = (
+        <div>
+          {loading ? <LoadingOutlined /> : <PlusOutlined />}
+          <div style={{ marginTop: 8 }}>团队头像</div>
+        </div>
+      );
+
+      
+    const getCreateGroupContent = () => {
+        return (
+            <div className="createModalContent">
+                <div className="avant-wrap">
+                        <Upload
+                            name="avatar"
+                            listType="picture-circle"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            beforeUpload={beforeUpload}
+                            onChange={handleChange}
+                        >
+                            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                        </Upload>
+
+                        <div className="upload-desc" style={{ color: colorTextTertiary }}>上传图片格式JPG/PNG</div>
+                </div>
+
+                <div className="form-wrap">
+                    <Form
+                        layout='vertical'
+                        form={form}
+                        initialValues={{
+                            isPublic: "public"
+                        }}
+                        // onValuesChange={onFormLayoutChange}
+                        >
+                        <Form.Item 
+                            label="团队名称" 
+                            name='name'
+                            rules={[
+                                {
+                                  required: true,
+                                  message: '请输入团队名称',
+                                },
+                                {
+                                    validator: async (_: any, inputValue: any) => {
+                                      try {
+                                        const res = await groupValidate({ groupName: inputValue, type: 'groupName'});
+
+                                        if(!res) {
+                                            return Promise.reject(new Error('验证失败'));
+                                        }
+
+                                        if (res.code === 201) {
+                                          return Promise.reject(new Error('团队名称已存在'));
+                                        } else {
+                                          return Promise.resolve();
+                                        }
+                                      } catch (error) {
+                                        return Promise.reject(new Error('请求错误'));
+                                      }
+                                    }
+                                  },
+                              ]}
+                        >
+                            <Input placeholder="请输入团队名称" />
+                        </Form.Item>
+                        <Form.Item 
+                            label="团队号" 
+                            name='id'
+                            rules={[
+                                {
+                                  required: true,
+                                  message: '请输入团队编号',
+                                },
+                                {
+                                    validator: async (_: any, inputValue: any) => {
+                                      try {
+                                        const res = await groupValidate({ groupId: inputValue, type: 'groupId'});
+
+                                        if(!res) {
+                                            return Promise.reject(new Error('验证失败'));
+                                        }
+
+                                        if (res.code === 201) {
+                                          return Promise.reject(new Error('团队编号已存在'));
+                                        } else {
+                                          return Promise.resolve();
+                                        }
+                                      } catch (error) {
+                                        return Promise.reject(new Error('请求错误'));
+                                      }
+                                    }
+                                  },
+                              ]}
+                            >
+                            <Input placeholder="请设置团队唯一号码" />
+                        </Form.Item>
+                        <Form.Item name="isPublic">
+                            <Radio.Group onChange={onIsPublicChange} value={isPublic}>
+                                <Space direction="vertical">
+                                    <Radio value='public'>
+                                        <div className='isPublic-wrap'>
+                                            <div className='isPublic-icon'><IconFont type='icon-gonggongchuangxinpingtai' style={{color: colorTextTertiary }}/></div>
+                                            <div className='isPublic-content'>
+                                                <div className='isPublic-title'>公开</div>
+                                                <div className='isPublic-desc' style={{color: colorTextTertiary }}>所有人都可以通过搜索团队号直接加入</div>
+                                            </div>
+                                        </div>
+                                    </Radio>
+                                    <Radio value='private'>
+                                            <div className='isPublic-wrap'>
+                                                <div className='isPublic-icon'><IconFont type='icon-suoding' style={{color: colorTextTertiary }}/></div>
+                                                <div className='isPublic-content'>
+                                                <div className='isPublic-title'>私有</div>
+                                                <div className='isPublic-desc' style={{color: colorTextTertiary }}>需经过管理者审核通过加入团队</div>
+                                            </div>
+                                        </div>
+                                    </Radio>
+                                </Space>
+                            </Radio.Group>
+                        </Form.Item>
+
+                        <Form.Item label="团队描述" name="memo">
+                            <TextArea placeholder="请输入团队描述" />
+                        </Form.Item>
+                    </Form>
+                </div>
+            </div>
+        )
+    }
 
     const getAddPopContent = () => {
         return (
@@ -47,7 +262,7 @@ export default function NewHomePage() {
             <div className="newHome-desc DingDing" style={{color: colorTextSecondary}}>首先您可以创建您的团队或加入已有团队。</div>
 
             <div className="newHome-btn-wrap">
-                <div ref={ref1}><ExploreBtn name="创建团队"/></div>
+                <div ref={ref1} onClick={showCreateModal}><ExploreBtn name="创建团队"/></div>
                 <Popover
                     content={getAddPopContent()}
                     overlayClassName="addGroupPop"
@@ -67,6 +282,20 @@ export default function NewHomePage() {
                 <NewWelcomeSvg theme={colorPrimary}/>
             </div>
         </div>
+
+        <Modal
+            title="创建团队"
+            open={createOpen}
+            onOk={hideCreateModal}
+            className='createModal'
+            onCancel={() => setCreateOpen(false)}
+            okText="创建"
+            cancelText="取消"
+            width={535}
+            destroyOnClose={true}
+        >
+            {getCreateGroupContent()}
+        </Modal>
     </div>
   )
 }
