@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-06-05 17:09:50
+ * @LastEditTime: 2023-06-05 18:23:15
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -70,6 +70,7 @@ export default function Home() {
   const [userInfo, setUserInfo] = useState<string>(sessionStorage.getItem('user') || '');
   const [memberInfo, setMemberInfo] = useState<any>();
   const [reflash, setReflash] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   let getTimeState = () => {
     // 获取当前时间
@@ -114,10 +115,12 @@ export default function Home() {
 
   useEffect(() => {
     const getMember = async () => {
+      setLoading(true)
       const { username } = JSON.parse(userInfo);
       const res = await getMemberInfo({username});
       if(res) {
         setMemberInfo(res.data);
+        setLoading(false)
       }
     }
     getMember();
@@ -134,6 +137,7 @@ export default function Home() {
   return (
     <>
       {
+        loading ? null : 
         memberInfo ? <div className={styles['dashboard-wrap']}>
         <div className={styles['left']} style={{borderRight: `1px solid ${colorBorderSecondary}`}}>
           {/* <div className={styles['card-wrap']} style={{backgroundColor: 'rgb(83, 109, 254)', backgroundImage: `linear-gradient(23deg, rgb(83, 109, 254) 0%, #fafafa 100%)`}}> */}
