@@ -76,3 +76,7 @@ export const groupCreate = (params: any): Promise<any> => {
 export const groupValidate = (params: any): Promise<any> => {
   return axios.post(`/group/validate`, params)
 }
+
+export const getMemberInfo = (params: any): Promise<any> => {
+  return axios.post(`/member/get`, params)
+}

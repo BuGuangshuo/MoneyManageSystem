@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2022-11-15 14:31:52
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-26 10:20:08
+ * @LastEditTime: 2023-06-05 10:20:27
  * @FilePath: \MoneyManageSystem\src\Layout\header\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -72,7 +72,11 @@ export default function HeaderArea() {
         <Input placeholder='Search something...' className={styles['header-input']} size='middle' bordered={false} prefix={<SearchOutlined style={{color: colorText}}/>}/>
       </div>
       <div className={styles['header-wrap']}>
-        <div className={styles['theme-wrap']}><IconFont type={localStorage.getItem('theme') === 'light' ? 'icon-taiyang' : 'icon-yueliang'} className={styles['icon-theme']} style={{color: colorText}} onClick={onThemeClick}/></div>
+        <div className={styles['theme-wrap']} onClick={onThemeClick}>
+          <svg className='icon' aria-hidden="true" style={{color: colorText}}>
+            <use xlinkHref={localStorage.getItem('theme') === 'light' ? '#icon-taiyang' : '#icon-yueliang'}></use>
+          </svg>
+        </div>
         
         <div className={styles['avatar-wrap']}>
         <span>{sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || 'null').infoname : null}</span>

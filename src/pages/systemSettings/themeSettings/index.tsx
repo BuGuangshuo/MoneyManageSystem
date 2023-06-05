@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-05-23 16:12:39
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-05-26 16:38:02
+ * @LastEditTime: 2023-06-05 10:26:14
  * @FilePath: \MoneyManageSystem\src\pages\systemSettings\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -118,11 +118,11 @@ export default function SystemSettings() {
                     <div className="layout-icon-slider" onClick={() => onLayoutTypeChange('left')}>
                         <div className='layout-header' style={{background: '#fff'}}/>
                         <div className='layout-slider' style={{background: colorPrimary}}/>
-                        <IconFont type='icon-checkbox_sel' className='layout-checked-icon' style={layoutType === 'up' ? {display: 'none'} : {display: 'block'}}/>
+                        <svg className="icon layout-checked-icon" aria-hidden="true" style={layoutType === 'up' ? {display: 'none'} : {display: 'block'}}><use xlinkHref="#icon-checkbox_sel"></use></svg>
                     </div>
                     <div className="layout-icon" onClick={() => onLayoutTypeChange('up')}>
                         <div className='layout-header' style={{background: colorPrimary}}/>
-                        <IconFont type='icon-checkbox_sel' className='layout-checked-icon' style={layoutType === 'left' ? {display: 'none'} : {display: 'block'}}/>
+                        <svg className="icon layout-checked-icon" aria-hidden="true" style={layoutType === 'left' ? {display: 'none'} : {display: 'block'}}><use xlinkHref="#icon-checkbox_sel"></use></svg>
                     </div>
                 </div>
             </div>

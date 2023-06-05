@@ -1,8 +1,8 @@
 /*
  * @Author: D.Y
  * @Date: 2021-05-31 10:54:48
- * @LastEditTime: 2021-06-03 17:16:22
- * @LastEditors: D.Y
+ * @LastEditTime: 2023-06-05 17:17:45
+ * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
  * @FilePath: /laiye-chatbot-web/src/routes/data.tsx
  * @Description:
  */
@@ -26,5 +26,5 @@ export const routeMap: Record<
   (props: RouteComponentProps<Record<string, unknown>>) => JSX.Element
 > = {
   // 登陆
-  '/login': asyncRoute(lazy(() => import('../pages/login'))),
+  '/login': asyncRoute(lazy(() => import('../pages/login')))
 }

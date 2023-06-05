@@ -16,6 +16,8 @@ import type { TourProps } from 'antd';
 
 import ExploreBtn from '../../../components/exploreBtn'
 
+import { MyIcon } from '../../../utils/icon'
+
 import Img from '../../../assets/img/undraw_experience_design_re_dmqq.svg'
 
 import NewWelcomeSvg from '../../../components/themeSvg/newWelcome'
@@ -25,7 +27,7 @@ import './index.less'
 const { TextArea } = Input;
 
 const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/c/font_2880815_y8q6l73swt.js',
+    scriptUrl: '//at.alicdn.com/t/c/font_2880815_dxlingdpb1b.js',
 });
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -46,8 +48,7 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     return isJpgOrPng && isLt2M;
   };
 
-export default function NewHomePage() {
-
+export default function NewHomePage(props) {
     const [addPopOpen, setAddPopOpen] = useState<boolean>(false);
     const [createOpen, setCreateOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
@@ -59,6 +60,7 @@ export default function NewHomePage() {
 
     const [form] = Form.useForm();
 
+    const { reload } = props;
     const {
         token: { colorTextSecondary, colorPrimary, colorTextTertiary },
       } = theme.useToken();
@@ -87,26 +89,28 @@ export default function NewHomePage() {
         setCreateOpen(true);
       };
     
-      const hideCreateModal = async () => {
+    const submit = async () => {
         let params;
+        const userInfo: any = JSON.parse(sessionStorage.getItem('user') || '');
         try {
             const formInfo = await form.validateFields();
-            console.log(formInfo)
             let { name, id, isPublic, memo } = formInfo;
             params = {
                 groupName: name,
                 groupId: id,
                 isPublic,
                 memo,
-                imageUrl
+                imageUrl,
+                createUserName: userInfo.username
             };
             await groupCreate(params);
             message.success('团队创建成功')
+            reload()
             setCreateOpen(false);
           } catch (err) {
-            // setCreateOpen(false);
+            console.error(err);
           }
-      };
+    };
 
       const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
         getBase64(info.file.originFileObj as RcFile, (url) => {
@@ -216,7 +220,9 @@ export default function NewHomePage() {
                                 <Space direction="vertical">
                                     <Radio value='public'>
                                         <div className='isPublic-wrap'>
-                                            <div className='isPublic-icon'><IconFont type='icon-gonggongchuangxinpingtai' style={{color: colorTextTertiary }}/></div>
+                                            <div className='isPublic-icon'><svg className="icon" aria-hidden="true" style={{color: colorTextTertiary }}>
+                                                    <use xlinkHref="#icon-gonggongchuangxinpingtai"></use>
+                                                </svg></div>
                                             <div className='isPublic-content'>
                                                 <div className='isPublic-title'>公开</div>
                                                 <div className='isPublic-desc' style={{color: colorTextTertiary }}>所有人都可以通过搜索团队号直接加入</div>
@@ -225,7 +231,12 @@ export default function NewHomePage() {
                                     </Radio>
                                     <Radio value='private'>
                                             <div className='isPublic-wrap'>
-                                                <div className='isPublic-icon'><IconFont type='icon-suoding' style={{color: colorTextTertiary }}/></div>
+                                                {/* <div className='isPublic-icon'><IconFont type='icon-suoding' style={{color: colorTextTertiary }}/></div> */}
+                                                <div className='isPublic-icon'>
+                                                <svg className="icon" aria-hidden="true" style={{color: colorTextTertiary }}>
+                                                    <use xlinkHref="#icon-suoding"></use>
+                                                </svg>
+                                                </div>
                                                 <div className='isPublic-content'>
                                                 <div className='isPublic-title'>私有</div>
                                                 <div className='isPublic-desc' style={{color: colorTextTertiary }}>需经过管理者审核通过加入团队</div>
@@ -286,7 +297,7 @@ export default function NewHomePage() {
         <Modal
             title="创建团队"
             open={createOpen}
-            onOk={hideCreateModal}
+            onOk={submit}
             className='createModal'
             onCancel={() => setCreateOpen(false)}
             okText="创建"
