@@ -30,6 +30,7 @@ function App() {
           colorError: '#f43f5e',
           colorInfo: '#3b82f6',
           colorSuccess: '#22c55e',
+          colorText: "rgba(0,0,0,.78)",
           motionUnit: .17
         },
         algorithm: loc === 'light' || !loc ? theme.defaultAlgorithm : theme.darkAlgorithm,

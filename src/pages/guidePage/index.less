@@ -1,0 +1,83 @@
+.guide-wrap {
+    & .guide-header {
+        height: 80px;
+        line-height: 68px;
+        border-bottom: 3px solid;
+        position: relative;
+        display: flex;
+
+        & .guide-step-bar {
+            height: 3px;
+            width: 25%;
+            transition: all 1s;
+            position: absolute;
+            bottom: -3px;
+        }
+
+        & .guide-logo {
+            margin-left: 100px;
+        }
+    }
+
+    & .guide-content {
+        display: flex;
+        justify-content: center;
+        height: calc(100vh - 80px);
+
+        & .guide-content-wrap {
+            margin-top: 160px;
+            width: 450px;
+
+            & .guide-step-icon {
+                font-size: 32px;
+                text-align: center;
+                margin-bottom: 24px;
+            }
+
+            & .content-title {
+                text-align: center;
+                font-size: 32px;
+                font-weight: 600;
+                margin-bottom: 24px;
+            }
+
+            & .content-desc {
+                font-size: 14px;
+                line-height: 24px;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 36px;
+            }
+
+            & .content-place {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 48px;
+            }
+
+            & .footer {
+                position: absolute;
+                bottom: 24px;
+                font-size: 12px;
+                font-weight: 600;
+                text-align: center;
+            }
+        }
+
+        & .left-img, & .right-img {
+            position: absolute;
+        }
+
+        & .left-img {
+            width: 538px;
+            left: -199px;
+            bottom: -75px;
+        }
+
+        & .right-img {
+            width: 610px;
+            right: -178px;
+            bottom: -51px;
+        }
+    }
+}
