@@ -10,7 +10,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { LoadingOutlined, PlusOutlined, createFromIconfontCN } from '@ant-design/icons';
 
-import { groupCreate, groupValidate } from '../../../utils/http'
+import { groupCreate, groupValidate, getUserInfo, saveMember } from '../../../utils/http'
 
 import type { TourProps } from 'antd';
 
@@ -48,7 +48,7 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     return isJpgOrPng && isLt2M;
   };
 
-export default function NewHomePage(props) {
+export default function NewHomePage(props: any) {
     const [addPopOpen, setAddPopOpen] = useState<boolean>(false);
     const [createOpen, setCreateOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
@@ -105,6 +105,12 @@ export default function NewHomePage(props) {
             };
             await groupCreate(params);
             message.success('团队创建成功')
+
+            const res = await getUserInfo({username: userInfo.username});
+            if(res.code === 200) {
+                const params = res.data;
+                await saveMember({ params })
+            }
             reload()
             setCreateOpen(false);
           } catch (err) {

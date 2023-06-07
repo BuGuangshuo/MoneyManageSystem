@@ -5,7 +5,7 @@ import { navigate } from '@reach/router'
 import sha256 from 'sha256'
 import { UserOutlined, LockOutlined, createFromIconfontCN  } from '@ant-design/icons';
 
-import { Userlogin, UserRegister } from '../../../../utils/http';
+import { Userlogin, UserRegister, getUserInfo } from '../../../../utils/http';
 import { useThemeModel } from '../../../../models/theme'
 
 import styles from '../index.module.less'
@@ -54,7 +54,14 @@ export default function RightArea() {
         sessionStorage.setItem('user', JSON.stringify(data))
         sessionStorage.setItem('userId', data.id)
         message.success(msg)
-        navigate('/home')
+
+        const res = await getUserInfo({username: data.username});
+        if(res.code === 201) {
+          navigate('/guidePage')
+        } else {
+          navigate('/home')
+        }
+        
       } else if(code === 201) {
         message.error(msg)
       } else {

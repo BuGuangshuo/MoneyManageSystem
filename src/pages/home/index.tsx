@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-06-05 18:23:15
+ * @LastEditTime: 2023-06-07 17:48:37
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -106,7 +106,7 @@ export default function Home() {
   );
 
   const {
-    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorInfoBorderHover, colorBorder, colorWhite, colorBorderSecondary, colorError, colorInfo, colorSuccess, colorPrimary },
+    token: { colorPrimaryText, colorTextLabel, colorTextSecondary, colorBorder, colorWhite, colorBorderSecondary, colorError, colorInfo, colorSuccess, colorPrimary },
   } = theme.useToken();
 
   const TitleStyle = {

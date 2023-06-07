@@ -80,3 +80,15 @@ export const groupValidate = (params: any): Promise<any> => {
 export const getMemberInfo = (params: any): Promise<any> => {
   return axios.post(`/member/get`, params)
 }
+
+export const getUserInfo = (params: any): Promise<any> => {
+  return axios.post(`/userInfo/get`, params)
+}
+
+export const saveUserInfo = (params: any): Promise<any> => {
+  return axios.post(`/userInfo/save`, params)
+}
+
+export const saveMember = (params: any): Promise<any> => {
+  return axios.post(`/member/save`, params)
+}

@@ -8,8 +8,7 @@
 
         & .guide-step-bar {
             height: 3px;
-            width: 25%;
-            transition: all 1s;
+            transition: all .6s;
             position: absolute;
             bottom: -3px;
         }
@@ -47,6 +46,58 @@
                 font-weight: 600;
                 text-align: center;
                 margin-bottom: 36px;
+            }
+
+            & .content-place-step2 {
+                display: flex;
+                justify-content: space-evenly;
+                margin-bottom: 48px;
+
+                & .student, & .work {
+                    display: flex;
+                    flex-direction: column;
+                    width: 130px;
+                    border: 2px solid;
+                    height: 100px;
+                    transition: all .4s;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    border-radius: 6px;
+                    text-align: center;
+                }
+
+                & .student {
+                    & .item-icon {
+                        margin-bottom: 12px;
+                    }
+                }
+
+                & .work {
+                    position: relative;
+                    
+                    & .item-icon {
+                        margin-bottom: 28px;
+                    }
+
+                    & .item-title {
+                       position: absolute;
+                       bottom: 20px;
+                    }
+                }
+            }
+
+            & .content-place-step3 {
+                display: flex;
+                justify-content: space-evenly;
+                margin-bottom: 48px;
+
+                & .salary-input {
+                    width: 200px;
+                    & .ant-input-number-input {
+                        text-align: center;
+                    }
+                }
             }
 
             & .content-place {
