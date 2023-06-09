@@ -73,6 +73,10 @@ export const groupCreate = (params: any): Promise<any> => {
   return axios.post(`/group/create`, params)
 }
 
+export const getGroup = (params?: any): Promise<any> => {
+  return axios.post(`/group/get`, params)
+}
+
 export const groupValidate = (params: any): Promise<any> => {
   return axios.post(`/group/validate`, params)
 }
@@ -91,4 +95,8 @@ export const saveUserInfo = (params: any): Promise<any> => {
 
 export const saveMember = (params: any): Promise<any> => {
   return axios.post(`/member/save`, params)
+}
+
+export const approveSend = (params: any): Promise<any> => {
+  return axios.post(`/group/approve`, params)
 }

@@ -5,7 +5,7 @@ import { Layout, Menu, theme } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
-  FileOutlined,
+  HomeOutlined,
   TeamOutlined,
   UserOutlined,
   LeftOutlined,
@@ -13,10 +13,11 @@ import {
   createFromIconfontCN
 } from '@ant-design/icons';
 
-import { getMenuList, getRolesList } from '../../utils/http';
+import { getGroup, getMenuList, getRolesList } from '../../utils/http';
 import { navigate } from '@reach/router';
 
 import styles from './index.module.less'
+import _ from 'lodash';
 
 const { SubMenu } = Menu
 const { Sider } = Layout
@@ -25,7 +26,7 @@ const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_2880815_uj0g9m3dg5g.js',
 });
 
-const iconList: any = {"/home" : <TeamOutlined/>,"/manage/userlist": <UserOutlined/>,'/general': <PieChartOutlined/>};
+const iconList: any = {"/home" : <HomeOutlined />,"/manage/userlist": <UserOutlined/>,'/general': <PieChartOutlined/>, '/groupManage/approveManage' : <TeamOutlined/>};
 
 export default function MenuSider({ mode }: any) {
   const [collapsed, setCollapsed] = useState<boolean>(false)
@@ -34,6 +35,7 @@ export default function MenuSider({ mode }: any) {
   const [menuList,setMenuList] = useState<any>([])
   const [menuSelectKeys,setMenuSelectKeys] = useState<string []>(['/home'])
   const [menuOpenKeys,setMenuOpenKeys] = useState<string []>(['/manage/userlist'])
+  const [groupData, setGroupData] = useState<string []>([])
 
   const hrefPath = window.location.href
 
@@ -86,6 +88,15 @@ export default function MenuSider({ mode }: any) {
     transition: "all .2s"
   }
 
+  useEffect(() => {
+    const getGroupManagePermission = async () => {
+      const res = await getGroup();
+      setGroupData(res.data)
+    }
+
+    getGroupManagePermission()
+  },[]);
+
   const onCollapse = () => {
     setSiderWidth(collapsed ? 200 : 80)
     setCollapsed(!collapsed)
@@ -101,7 +112,7 @@ export default function MenuSider({ mode }: any) {
   }
 
   const renderMenu = (menuData: any, hasChildren?: boolean, title?: string) => {
-    let menuList = [];
+    let menuList: any[] = [];
     menuList =  menuData.map((menuItem: any) => {
       if(checkPermission(menuItem)) {
         if(menuItem.childrens?.length && checkPermission(menuItem)) {

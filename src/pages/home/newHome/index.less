@@ -65,7 +65,7 @@
             & .ant-upload {
                 overflow: hidden;
             }
-            
+
             & .ant-upload-wrapper {
                 display: flex;
                 justify-content: center;
@@ -94,6 +94,37 @@
                         font-size: 12px;
                     }
                 }
+            }
+        }
+    }
+}
+
+.addModal {
+    & .addGroupWrap {
+        & .groupLogo-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 48px;
+            & .group-logo-img {
+                & .ant-avatar {
+                    width: 100px;
+                    height: 100px;
+                }
+                margin-bottom: 12px;
+            }
+
+            & .groupLogo-title {
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+
+        & .group-content {
+            margin-bottom: 24px;
+            
+            & .ant-descriptions-view {
+                margin-left: 35px;
             }
         }
     }

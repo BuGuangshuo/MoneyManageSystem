@@ -18,6 +18,7 @@ import Target from '../../pages/analysis/target'
 import UserCenter from '../../pages/userCenter'
 import NotFound from '../../pages/NotFound'
 import SystemSettings from '../../pages/systemSettings';
+import ApproveManage from '../../pages/groupManage/approveManage';
 
 const { Header, Content } = Layout
 
@@ -37,7 +38,9 @@ export default function MainLayout({ children }: any) {
     //@ts-ignore
     "/usercenter": <UserCenter path="/usercenter" key="/usercenter" />,
     //@ts-ignore
-    "/systemSettings": <SystemSettings path="/systemSettings" key="/systemSettings" />
+    "/systemSettings": <SystemSettings path="/systemSettings" key="/systemSettings" />,
+    //@ts-ignore
+    "/groupManage/approveManage": <ApproveManage path="/groupManage/approveManage" key="/groupManage/approveManage" />
   }
 
   const [rolesMenu, setRolesMenu] = useState<string []>([])

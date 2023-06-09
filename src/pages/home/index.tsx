@@ -2,7 +2,7 @@
  * @Author: 卜广硕 guangshuo.bu@datatist.com
  * @Date: 2023-02-17 14:27:30
  * @LastEditors: 卜广硕 guangshuo.bu@datatist.com
- * @LastEditTime: 2023-06-07 17:48:37
+ * @LastEditTime: 2023-06-08 12:02:30
  * @FilePath: \MoneyManageSystem\src\pages\home\index.tsx
  * @Description: 首页欢迎界面
  */
@@ -118,10 +118,13 @@ export default function Home() {
       setLoading(true)
       const { username } = JSON.parse(userInfo);
       const res = await getMemberInfo({username});
-      if(res) {
-        setMemberInfo(res.data);
-        setLoading(false)
+      
+      if(res && res.data) {
+        const { groupInfo, userInfo } = res.data;
+        setMemberInfo({ groupInfo, userInfo });
       }
+
+      setLoading(false)
     }
     getMember();
   },[reflash]);
@@ -167,14 +170,14 @@ export default function Home() {
                 <div className={styles['family-primary-person']}>
                 <div className={styles.card} style={{background: colorPrimary, color: colorWhite, fontWeight: 500}}>
                   <div className={styles['card-avatar-wrap']}>
-                    <div className={styles.avatar}><Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel&key=44'/></div>
+                    <div className={styles.avatar}><Avatar src={memberInfo.groupInfo?.group?.imageUrl}/></div>
                     <div className={styles.userInfo}>
-                      <div>恶搞之家</div>
-                      <div>Peter Griffon</div>
+                      <div>{memberInfo.groupInfo?.member?.groupName}</div>
+                      <div>{memberInfo.groupInfo?.group?.createUserName}</div>
                     </div>
                   </div>
   
-                  <div className={styles.userInCome}>成员数：6</div>
+                  <div className={styles.userInCome}>成员数：{memberInfo.groupInfo?.group?.memberCount}</div>
                 </div>
   
               <div className={styles['process-card']}>

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-import { Button, theme, Modal, Popover, Input, Upload, message, Form, Radio, Space } from 'antd'
+import { Button, theme, Modal, Popover, Input, Upload, message, Form, Radio, Space, Descriptions, Avatar } from 'antd'
 
 import type { UploadChangeParam } from 'antd/es/upload';
 
@@ -10,7 +10,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { LoadingOutlined, PlusOutlined, createFromIconfontCN } from '@ant-design/icons';
 
-import { groupCreate, groupValidate, getUserInfo, saveMember } from '../../../utils/http'
+import { groupCreate, groupValidate, getUserInfo, saveMember, getGroup, approveSend } from '../../../utils/http'
 
 import type { TourProps } from 'antd';
 
@@ -23,6 +23,8 @@ import Img from '../../../assets/img/undraw_experience_design_re_dmqq.svg'
 import NewWelcomeSvg from '../../../components/themeSvg/newWelcome'
 
 import './index.less'
+
+import dayjs from 'dayjs';
 
 const { TextArea } = Input;
 
@@ -51,9 +53,12 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 export default function NewHomePage(props: any) {
     const [addPopOpen, setAddPopOpen] = useState<boolean>(false);
     const [createOpen, setCreateOpen] = useState<boolean>(false);
+    const [addOpen, setAddopen] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>();
     const [isPublic, setIsPublic] = useState('public');
+    const [groupSearchVal, setGroupSearchVal] = useState('')
+    const [searchGroupData, setSearchGroupData] = useState<any>();
 
     const ref1 = useRef(null);
     const ref2 = useRef(null);
@@ -62,7 +67,7 @@ export default function NewHomePage(props: any) {
 
     const { reload } = props;
     const {
-        token: { colorTextSecondary, colorPrimary, colorTextTertiary },
+        token: { colorTextSecondary, colorPrimary, colorTextTertiary, colorText },
       } = theme.useToken();
 
       const onIsPublicChange = (e: RadioChangeEvent) => {
@@ -90,6 +95,7 @@ export default function NewHomePage(props: any) {
       };
     
     const submit = async () => {
+        setLoading(true)
         let params;
         const userInfo: any = JSON.parse(sessionStorage.getItem('user') || '');
         try {
@@ -103,17 +109,23 @@ export default function NewHomePage(props: any) {
                 imageUrl,
                 createUserName: userInfo.username
             };
-            await groupCreate(params);
+            const groupRes = await groupCreate(params);
             message.success('团队创建成功')
 
             const res = await getUserInfo({username: userInfo.username});
             if(res.code === 200) {
-                const params = res.data;
-                await saveMember({ params })
+                const memberParams = {
+                    ...res.data,
+                    groupName: groupRes.data.groupName,
+                    groupId: groupRes.data.groupId
+                };
+                await saveMember(memberParams)
             }
             reload()
             setCreateOpen(false);
+            setLoading(false)
           } catch (err) {
+            setLoading(false)
             console.error(err);
           }
     };
@@ -123,6 +135,25 @@ export default function NewHomePage(props: any) {
             setImageUrl(url);
           });
       };
+
+      const onGroupInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setGroupSearchVal(e.target.value);
+      }
+
+      const onSearchGroup = async () => {
+        setLoading(true)
+        const groupRes = await getGroup({groupId: groupSearchVal})
+        if(groupRes) {
+            if(groupRes.code === 201) {
+                message.error("未检索到团队")
+            } else if(groupRes.code === 200) {
+                setSearchGroupData(groupRes.data)
+                setAddPopOpen(false)
+                setAddopen(true)
+            }
+        }
+        setLoading(false)
+      }
     
       const uploadButton = (
         <div>
@@ -131,6 +162,21 @@ export default function NewHomePage(props: any) {
         </div>
       );
 
+      const onAddSumbit = async () => {
+        setLoading(true)
+        const userInfo: any = JSON.parse(sessionStorage.getItem('user') || '');
+        const { createUserName } = searchGroupData;
+        const res = await approveSend({userName: userInfo.username, approveStatus: 'RUNNING', approveUser: createUserName});
+        if(res) {
+            if(res.code === 200) {
+                message.success('入队申请已发送，等待管理者审批')
+            } else if(res.code === 201){
+                message.info('您已申请此团队，请等待管理员审批')
+            }
+        }
+        setAddopen(false)
+        setLoading(false)
+      }
       
     const getCreateGroupContent = () => {
         return (
@@ -262,11 +308,31 @@ export default function NewHomePage(props: any) {
         )
     }
 
+    const getAddGroupContent = () => {
+        return (
+            <div className='addGroupWrap'>
+                <div className='groupLogo-wrap'>
+                    <div className='group-logo-img'><Avatar src={searchGroupData?.imageUrl}/></div>
+                    <div className='groupLogo-title' style={{color: colorPrimary}}>{searchGroupData?.groupName}</div>
+                </div>
+
+                <div className='group-content'>
+                    <Descriptions column={2}>
+                        <Descriptions.Item label="团队创建者">{searchGroupData?.createUserName}</Descriptions.Item>
+                        <Descriptions.Item label='团队成员数'>{searchGroupData?.memberCount}</Descriptions.Item>
+                        <Descriptions.Item label="团队描述">{searchGroupData?.memo}</Descriptions.Item>
+                        <Descriptions.Item label="团队创建时间">{dayjs(searchGroupData?.createTime).format('YYYY年MM月DD日')}</Descriptions.Item>
+                    </Descriptions>
+                </div>
+            </div>
+        )
+    }
+
     const getAddPopContent = () => {
         return (
             <div>
-                <div className='addGroupInput'><Input placeholder="请输入团队编号"/></div>
-                <div className='addGroupBtn'><Button type='primary'>申请加入</Button></div>
+                <div className='addGroupInput'><Input placeholder="请输入团队编号" value={groupSearchVal} onChange={onGroupInputChange}/></div>
+                <div className='addGroupBtn'><Button type='primary' onClick={onSearchGroup} loading={loading}>搜索</Button></div>
             </div>
         )
     }
@@ -307,11 +373,27 @@ export default function NewHomePage(props: any) {
             className='createModal'
             onCancel={() => setCreateOpen(false)}
             okText="创建"
+            confirmLoading={loading}
             cancelText="取消"
             width={535}
             destroyOnClose={true}
         >
             {getCreateGroupContent()}
+        </Modal>
+
+        <Modal
+            title="团队信息"
+            open={addOpen}
+            onOk={onAddSumbit}
+            className='addModal'
+            onCancel={() => setAddopen(false)}
+            okText="申请加入"
+            confirmLoading={loading}
+            cancelText="取消"
+            width={535}
+            destroyOnClose={true}
+        >
+            {getAddGroupContent()}
         </Modal>
     </div>
   )
