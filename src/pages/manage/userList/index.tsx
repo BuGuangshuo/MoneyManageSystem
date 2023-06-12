@@ -25,9 +25,10 @@ let pagination: any = {
 
 export default function UserList() {
   const [dataSource, setDataSource] = useState<any>([])
-  const [params, setParams] = useState<{page: number, size: number, sorts: any}>({
+  const [params, setParams] = useState<{page: number, size: number, sorts: any, search: any []}>({
     page: 1,
     size: 5,
+    search: [],
     sorts: [{
         direction: 'desc',
         propetryName: 'createTime'
@@ -157,6 +158,7 @@ export default function UserList() {
     borderRadius: 8,
     color: colorTextSecondary
   }
+
   return (
     <div className={styles['userList-wrap']}>
        {/* { loading ? <Loading/> : null } */}

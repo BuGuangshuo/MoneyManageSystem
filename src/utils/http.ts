@@ -100,3 +100,7 @@ export const saveMember = (params: any): Promise<any> => {
 export const approveSend = (params: any): Promise<any> => {
   return axios.post(`/group/approve`, params)
 }
+
+export const getProcess = (params: any): Promise<any> => {
+  return axios.post(`/process/get`, params)
+}

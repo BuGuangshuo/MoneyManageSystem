@@ -6,5 +6,6 @@ export type SortType = {
 export type UserListParamsType = {
     page: Number,
     size: Number,
+    search: any[],
     sort: SortType
 }
