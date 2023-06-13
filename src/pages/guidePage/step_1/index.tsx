@@ -56,7 +56,7 @@ export default function Step1(props: any) {
 
     const onNextStep = (step: number) => {
         setGuideInfo({ ...guideInfo, step1: { privinceData, secondCity } })
-        setBarWidth('66.666%')
+        setBarWidth('50%')
         onStepChange(step)
     }
 

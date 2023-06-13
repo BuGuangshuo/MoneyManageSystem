@@ -20,17 +20,13 @@ export default function Step2(props: any) {
         token: { colorBorderSecondary, colorPrimary, colorText, colorTextSecondary, colorTextTertiary },
     } = theme.useToken();
 
-    useEffect(() => {
-        console.log(guideInfo)
-    }, [guideInfo]);
-
     const onPreStep = () => {
-        setBarWidth('33.3333%')
+        setBarWidth('25%')
         onStepChange(1)
     }
 
     const onNextStep = (step: number) => {
-        setBarWidth('100%')
+        setBarWidth('75%')
         setGuideInfo({ ...guideInfo, step2: { status } })
         onStepChange(step)
     }
