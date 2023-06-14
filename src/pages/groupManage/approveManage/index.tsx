@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
-import { theme, Button, Segmented, Table, Modal, message, Input, Select, Popover, Space, Avatar, Tooltip, Tag, Descriptions, Spin } from 'antd'
+import { theme, Button, Segmented, Table, Modal, message, Input, Select, Popover, Space, Avatar, Tooltip, Tag, Descriptions, Row, Col, Form, DatePicker } from 'antd'
 import { createFromIconfontCN, SearchOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs'
+import type { Dayjs } from 'dayjs';
 import _ from 'lodash'
 
 import { approveSend, getProcess } from '../../../utils/http'
@@ -10,8 +11,10 @@ import { initParams } from './config'
 import Loading from '../../../components/loading'
 
 import './index.less'
+import { uniqueAfterArr } from '../../../utils/uniqueParamsArr';
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 let pagination: any = {
     showTotal: (totals: any) => `共 ${totals} 条`
@@ -26,16 +29,18 @@ const userInfo = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getI
 export default function ApproveManage() {
   const [segmentValue, setSementValue] = useState<string | number>('RUNNING');
   const [dataSource, setDataSource] = useState<any>([]);
-  const [params, setParams] = useState(initParams);
-  const [total, setTotal] = useState<any>(0);
+  const [params, setParams] = useState<paramsTs>(initParams);
+  const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [rejectOpen, setRejectOpen] = useState<boolean>(false);
-  const [tableItem, setTableItem] = useState<any>({});
+  const [tableItem, setTableItem] = useState<TableItem>();
   const [rejectVal, setRejectVal] = useState<string>('');
 
   const {
     token: { colorError, colorBorderSecondary, colorText, colorPrimaryText, colorTextSecondary, colorTextLabel, colorWhite, colorSuccess },
   } = theme.useToken();
+
+  const [form] = Form.useForm();
 
   const TableStyle = {
     margin: 24,
@@ -159,12 +164,13 @@ export default function ApproveManage() {
 
     const onSementChange = (val: string | number) => {
         let _params = _.cloneDeep(params);
+        
         if(val === 'RUNNING') {
             _params.search = initParams.search
         } else if(val === 'DONE') {
             _params.search = [
                 { propetryName: 'approveName', operator: 'EQ', value: JSON.parse(sessionStorage.getItem('user') || '').username },
-                { propetryName: 'approveStatus', operator: 'IN', value: ['FINISH','REJECT'] }
+                { propetryName: 'approveType', operator: 'IN', value: ['FINISH','REJECT'] }
             ]
         } else {
             _params.search = [
@@ -198,7 +204,7 @@ export default function ApproveManage() {
     setRejectVal(e.target.value)
   }
 
-  const onSubmit = async (userName: string, approveStatus: string, rejectText?: string) => {
+  const onSubmit = async (userName: string = "", approveStatus: string, rejectText?: string) => {
     setLoading(true)
     const res = await approveSend({ approveUser: userInfo.username, approveStatus, userName, rejectText });
     if(res && res.code === 200) {
@@ -209,9 +215,76 @@ export default function ApproveManage() {
     setRejectOpen(false);
   }
 
+  const onSelectChange = (val: string) => {
+    let _params = _.cloneDeep(params);
+    
+    if (val) {
+      _params.search = uniqueAfterArr([..._params.search, { operator: 'EQ', propetryName: 'approveStatus', value: val}], 'propetryName');
+    } else {
+      _params.search = _params.search.filter(item => item.propetryName !== 'approveStatus');
+    }
+    
+    setParams(_params);
+  }
+
+  const onRangeChange = (dates: null | (Dayjs | null)[], dateStrings: string[]) => {
+    if (dates) {
+      console.log('From: ', dates[0], ', to: ', dates[1]);
+      console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    } else {
+      console.log('Clear');
+    }
+  };
+
+  const rangePresets: {
+    label: string;
+    value: [Dayjs, Dayjs];
+  }[] = [
+    { label: 'Last 7 Days', value: [dayjs().add(-7, 'd'), dayjs()] },
+    { label: 'Last 14 Days', value: [dayjs().add(-14, 'd'), dayjs()] },
+    { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
+    { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
+  ];
+
   const content = () => {
     return (
-        <div>content</div>
+        <div className="advanced-filter-content">
+          <div className="advanced-filter-content">
+            <Form 
+              layout='vertical'
+              form={form}
+            >
+              <Row gutter={24}>
+                <Col span={12}>
+                    <Form.Item name='status' label="身份">
+                        <Select placeholder="请选择">
+                          <Option value="work">职场人</Option>
+                          <Option value="student">学生</Option>
+                        </Select>
+                      </Form.Item>
+                </Col>
+                <Col span={12}>
+                      <Form.Item name='career' label="职业/专业">
+                        <Input placeholder="请输入"/>
+                      </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={24}>
+                <Col span={12}>
+                    <Form.Item name='approveStatus' label="申请时间">
+                      <RangePicker presets={rangePresets} />
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item name='finishStatus' label="通过时间">
+                      <RangePicker presets={rangePresets} />
+                    </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+        </div>
     )
   }
 
@@ -233,12 +306,12 @@ export default function ApproveManage() {
        </div>
 
        <div className='filter-wrap'>
-            <div className='search-wrap'><Input placeholder="搜索" suffix={<SearchOutlined />}/><Button type="primary">搜索</Button></div>
+            <div className='search-wrap'><Input placeholder="搜索" suffix={<SearchOutlined rev={undefined} />}/><Button type="primary">搜索</Button></div>
             <div className='filter-bar'>
                 {
                     segmentValue === 'RUNNING' ? null :
                         <div>
-                            <Select placeholder='审批状态' style={{width: 100}}>
+                            <Select placeholder='审批状态' style={{width: 100}} allowClear onChange={onSelectChange}>
                                 <Option value="FINISH">已通过</Option>
                                 <Option value="REJECT">已驳回</Option>
                             </Select>
@@ -246,8 +319,8 @@ export default function ApproveManage() {
                 }
                 
                 <div>
-                    <Popover placement="bottomRight" title='高级筛选' content={content} trigger="click">
-                        <Button icon={<UnorderedListOutlined />}>高级筛选</Button>
+                    <Popover placement="bottomRight" title='高级筛选' content={content} trigger="click" overlayClassName="advanced-pop-wrap" overlayStyle={{width: 600}}>
+                        <Button icon={<UnorderedListOutlined rev={undefined} />}>高级筛选</Button>
                     </Popover>
                 </div>
             </div>
@@ -271,13 +344,13 @@ export default function ApproveManage() {
           okText="驳回"
           cancelText="取消"
           open={rejectOpen}
-          onOk={() => onSubmit(tableItem.userName, 'REJECT', rejectVal)}
+          onOk={() => onSubmit(tableItem?.userName, 'REJECT', rejectVal)}
           onCancel={() => setRejectOpen(false)}
        >
          <div className="reject-modal-content">
             <Descriptions>
-                <Descriptions.Item label="申请人">{tableItem.infoName}</Descriptions.Item>
-                <Descriptions.Item label="账号">{tableItem.userName}</Descriptions.Item>
+                <Descriptions.Item label="申请人">{tableItem?.infoName}</Descriptions.Item>
+                <Descriptions.Item label="账号">{tableItem?.userName}</Descriptions.Item>
             </Descriptions>
          </div>
          <Input placeholder='请输入驳回理由' value={rejectVal} onChange={onRejectInputChange}/>
