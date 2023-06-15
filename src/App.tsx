@@ -4,9 +4,16 @@ import { useThemeModel } from './models/theme'
 import { useThemeColorModel } from './models/themeColor';
 import './assets/iconfont/iconfont.js';
 
+import dayjs from "dayjs";
+
+import zh_CN from "antd/locale/zh_CN";
+import "dayjs/locale/zh-cn";
+
 import Routes from './routes'
 
 import './App.css'
+
+dayjs.locale("zh-cn")
 
 function App() {
   // const [themeModel, setThemeModel] = useState('light');
@@ -24,6 +31,7 @@ function App() {
 
   return (
     <ConfigProvider
+      locale={zh_CN}
       theme={{
         token: {
           colorPrimary: themeColor,

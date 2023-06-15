@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { theme, Button, Segmented, Table, Modal, message, Input, Select, Popover, Space, Avatar, Tooltip, Tag, Descriptions, Row, Col, Form, DatePicker } from 'antd'
+import { theme, Button, Segmented, Table, Modal, message, Input, Select, Popover, Space, Avatar, Tooltip, Tag, Descriptions, Row, Col, Form, DatePicker, Slider } from 'antd'
 import { createFromIconfontCN, SearchOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs';
@@ -28,6 +28,7 @@ const userInfo = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getI
 
 export default function ApproveManage() {
   const [segmentValue, setSementValue] = useState<string | number>('RUNNING');
+  const [statusValue, setStatusValue] = useState<any>('')
   const [dataSource, setDataSource] = useState<any>([]);
   const [params, setParams] = useState<paramsTs>(initParams);
   const [total, setTotal] = useState<number>(0);
@@ -35,6 +36,7 @@ export default function ApproveManage() {
   const [rejectOpen, setRejectOpen] = useState<boolean>(false);
   const [tableItem, setTableItem] = useState<TableItem>();
   const [rejectVal, setRejectVal] = useState<string>('');
+  const [advancedOpen, setAdvancedOpen] = useState<boolean>(false)
 
   const {
     token: { colorError, colorBorderSecondary, colorText, colorPrimaryText, colorTextSecondary, colorTextLabel, colorWhite, colorSuccess },
@@ -178,6 +180,9 @@ export default function ApproveManage() {
             ]
         }
     setParams(_params);
+    setAdvancedOpen(false)
+    setStatusValue(null)
+    form.setFieldsValue({status: null, career: null, createTime: null, approveTime: null, salary: null})
     setSementValue(val)
   }
 
@@ -224,17 +229,9 @@ export default function ApproveManage() {
       _params.search = _params.search.filter(item => item.propetryName !== 'approveStatus');
     }
     
+    setStatusValue(val)
     setParams(_params);
   }
-
-  const onRangeChange = (dates: null | (Dayjs | null)[], dateStrings: string[]) => {
-    if (dates) {
-      console.log('From: ', dates[0], ', to: ', dates[1]);
-      console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-    } else {
-      console.log('Clear');
-    }
-  };
 
   const rangePresets: {
     label: string;
@@ -245,6 +242,45 @@ export default function ApproveManage() {
     { label: 'Last 30 Days', value: [dayjs().add(-30, 'd'), dayjs()] },
     { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
   ];
+
+  const onAdvancedChange = async () => {
+    const paramsEnum: any = { createTime: 'BETWEEN', approveTime: 'BETWEEN', status: 'EQ', career: 'LIKE', salary: 'BETWEEN'}
+    setLoading(true)
+    let _params = _.cloneDeep(params);
+    let advanceParams: any =  [];
+    const formInfo = form.getFieldsValue();
+
+    const { createTime, approveTime } = formInfo;
+    const formParams = {
+      ...formInfo,
+      createTime: createTime ? [createTime[0]?.valueOf('YYYY-MM-DD'), createTime[1]?.valueOf('YYYY-MM-DD')] : null,
+      approveTime: approveTime ? [approveTime[0]?.valueOf('YYYY-MM-DD'), approveTime[1]?.valueOf('YYYY-MM-DD')] : null
+    }
+
+    _.map(formParams, (item, key) => {
+      advanceParams.push({
+        propetryName: key,
+        operator: paramsEnum[key],
+        value: item
+      })
+    })
+
+    _params.search = uniqueAfterArr([..._params.search, ...advanceParams], 'propetryName');
+    console.log(_params)
+    setParams(_params)
+    setLoading(false)
+    setAdvancedOpen(false)
+};
+
+  const marks = {
+    0: '0',
+    5000: '5k',
+    10000: '10k',
+    15000: '15k',
+    20000: '20k',
+    25000: '25k',
+    30000: '30k',
+  }
 
   const content = () => {
     return (
@@ -272,17 +308,30 @@ export default function ApproveManage() {
 
               <Row gutter={24}>
                 <Col span={12}>
-                    <Form.Item name='approveStatus' label="申请时间">
+                    <Form.Item name='createTime' label="申请时间">
                       <RangePicker presets={rangePresets} />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name='finishStatus' label="通过时间">
+                    <Form.Item name='approveTime' label="通过时间">
                       <RangePicker presets={rangePresets} />
                     </Form.Item>
                 </Col>
               </Row>
+
+              <Row gutter={24}>
+                <Col span={24}>
+                    <Form.Item name='salary' label="薪资范围">
+                      <Slider range={{ draggableTrack: true }} min={0} max={30000} step={1000} marks={marks}/>
+                    </Form.Item>
+                </Col>
+              </Row>
             </Form>
+          </div>
+
+          <div className="advanced-footer">
+              <Button onClick={() => setAdvancedOpen(false)}>取消</Button>
+              <Button type='primary' onClick={onAdvancedChange}>确定</Button>
           </div>
         </div>
     )
@@ -311,7 +360,7 @@ export default function ApproveManage() {
                 {
                     segmentValue === 'RUNNING' ? null :
                         <div>
-                            <Select placeholder='审批状态' style={{width: 100}} allowClear onChange={onSelectChange}>
+                            <Select placeholder='审批状态' style={{width: 100}} allowClear onChange={onSelectChange} value={statusValue}>
                                 <Option value="FINISH">已通过</Option>
                                 <Option value="REJECT">已驳回</Option>
                             </Select>
@@ -319,8 +368,8 @@ export default function ApproveManage() {
                 }
                 
                 <div>
-                    <Popover placement="bottomRight" title='高级筛选' content={content} trigger="click" overlayClassName="advanced-pop-wrap" overlayStyle={{width: 600}}>
-                        <Button icon={<UnorderedListOutlined rev={undefined} />}>高级筛选</Button>
+                    <Popover placement="bottomRight" title='高级筛选' content={content} trigger="click" overlayClassName="advanced-pop-wrap" overlayStyle={{width: 600}} open={advancedOpen}>
+                        <Button icon={<UnorderedListOutlined rev={undefined} />} onClick={() => setAdvancedOpen(true)}>高级筛选</Button>
                     </Popover>
                 </div>
             </div>
