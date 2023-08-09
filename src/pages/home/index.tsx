@@ -16,6 +16,7 @@ import { familyCreate, getMemberInfo } from '../../utils/http'
 
 import WelcomeUser from '@/assets/img/undraw_welcome_cats_thqn.svg'
 import WelcomeSvg from '../../components/themeSvg/welecome';
+import Loading from '../../components/loading';
 
 import ThreeCard from '../../components/threeCard';
 import NewHomePage from './newHome';
@@ -71,6 +72,7 @@ export default function Home() {
   const [memberInfo, setMemberInfo] = useState<any>();
   const [reflash, setReflash] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
+  const [groupMemberList ,setGroupMemberList] = useState<any []>([]);
 
   let getTimeState = () => {
     // 获取当前时间
@@ -121,6 +123,19 @@ export default function Home() {
       
       if(res && res.data) {
         const { groupInfo, userInfo } = res.data;
+        const { groupMemberList = [], group } = groupInfo;
+        let memberList: { title: string, desc: string } [] = [];
+
+        memberList = groupMemberList.map((item: any) => {
+          return {
+            title: item.infoName,
+            desc: item.career
+          }
+        })
+
+        memberList.unshift({title: group.createUserName, desc: '团队创建者'})
+
+        setGroupMemberList(memberList)
         setMemberInfo({ groupInfo, userInfo });
       }
 
@@ -140,7 +155,7 @@ export default function Home() {
   return (
     <>
       {
-        loading ? null : 
+        loading ? <Loading/> : 
         memberInfo ? <div className={styles['dashboard-wrap']}>
         <div className={styles['left']} style={{borderRight: `1px solid ${colorBorderSecondary}`}}>
           {/* <div className={styles['card-wrap']} style={{backgroundColor: 'rgb(83, 109, 254)', backgroundImage: `linear-gradient(23deg, rgb(83, 109, 254) 0%, #fafafa 100%)`}}> */}
@@ -200,7 +215,7 @@ export default function Home() {
                     <div>
                       <List
                         itemLayout="horizontal"
-                        dataSource={data}
+                        dataSource={groupMemberList}
                         renderItem={(item, index) => (
                           <List.Item>
                             <List.Item.Meta
@@ -219,8 +234,8 @@ export default function Home() {
           </div>
         </div>
         <div className={styles['right']}>
-        <div className={styles['news-wrap-title']} style={{color: colorTextLabel}}>目标详情</div>
-          <div className={styles['target-list']}>
+        <div className={styles['news-wrap-title']} style={{ color: colorTextLabel, paddingTop: 46 }}>目标详情</div>
+          <div className={styles['target-list']} style={{border: `2px solid ${colorBorderSecondary}`}}>
           <div className={styles['target-info']}>
                   <div className={styles['target-item']}>
                     <div className={styles['target-item-title']} style={{color: colorTextSecondary}}>总目标数</div>
@@ -247,12 +262,12 @@ export default function Home() {
                 </div>
           </div>
   
-          <div className={styles['entry-card']}>
+          {/* <div className={styles['entry-card']}>
             <ThreeCard theme1={colorError} theme2={colorInfo} theme3={colorSuccess}/>
-          </div>
+          </div> */}
           
           <div className={styles['news-wrap-title']} style={{color: colorTextLabel}}>最新文章</div>
-          <div className={styles['news-list']}>
+          <div className={styles['news-list']} style={{border: `2px solid ${colorBorderSecondary}`}}>
             <List
               itemLayout="vertical"
               // size="large"
