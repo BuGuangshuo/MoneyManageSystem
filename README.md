@@ -27,7 +27,7 @@
 ## 产品展示（包含部分Mock数据功能页）
                                                     ------登录页面------
 
-![image](https://github.com/BuGuangshuo/MoneyManageSystem/assets/77154593/f0e59616-213c-416e-a37f-f5f08bc58f61)
+![image](https://github.com/BuGuangshuo/MoneyManageSystem/assets/77154593/4282de0f-b436-4735-a5d2-b1e8f787e747)
 
 
                                                   ------新用户引导页面------
