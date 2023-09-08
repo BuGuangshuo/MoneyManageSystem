@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "@ant-design/compatible": "^5.0.0",
+    "@ant-design/icons": "^5.2.6",
     "@antv/g2": "^4.1.34",
     "@reach/router": "^1.3.4",
-    "antd": "^5.5.1",
+    "antd": "^5.8.6",
+    "antd-img-crop": "^4.12.2",
     "axios": "^0.24.0",
     "dayjs": "^1.11.8",
     "hox": "^1.1.4",

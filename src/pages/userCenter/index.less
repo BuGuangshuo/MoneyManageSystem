@@ -1,34 +1,224 @@
 .usercenter-wrap {
-    height: calc(100vh - 70px);
-    overflow: auto;
-    & .setting-title {
-        padding: 18px;
-        font-weight: 600;
-        font-size: 20px;
-        border-bottom: 1px solid;
-    }
+  padding: 24px;
+  height: calc(100vh - 70px);
+  overflow: auto;
 
-    & .usercenter-content {
-        height: calc(100% - 48px);
-        margin: 24px;
-        border-radius: 6px;
+  & .setting-title {
+    padding: 18px;
+    padding-left: 24px;
+    font-weight: 600;
+    font-size: 20px;
+    border-bottom: 1px solid;
+  }
 
-        & .setting-wrap {
-            display: flex;
-            height: calc(100% - 60px);
+  & .usercenter-content {
+    height: calc(100% - 48px);
+    border-radius: 6px;
 
-            & .setting-menu {
-                width: 200px;
+    & .setting-wrap {
+      display: flex;
+      height: calc(100% - 168px);
 
-                & .ant-menu {
-                    padding-top: 14px;
-                    height: 100%;
-                }
-            }
+      & .setting-menu {
+        width: 200px;
 
-            & .setting-info {
-                flex: 1
-            }
+        & .ant-menu {
+          padding-top: 14px;
+          height: 100%;
         }
+      }
+
+      & .setting-info {
+        flex: 1;
+
+        & .setting-info-row1,
+        & .setting-info-row2 {
+          display: flex;
+          justify-content: space-between;
+          gap: 24px;
+          & .setting-info-Card1,
+          & .setting-info-Card2 {
+            padding: 18px;
+            // height: 240px;
+            border-radius: 6px;
+          }
+
+          & .setting-info-Card3,
+          & .setting-info-Card4 {
+            padding: 18px;
+            min-height: 350px;
+            border-radius: 6px;
+          }
+
+          & .setting-info-Card1,
+          & .setting-info-Card3 {
+            flex: 2;
+          }
+          & .setting-info-Card2,
+          & .setting-info-Card4 {
+            flex: 1;
+          }
+        }
+
+        & .setting-info-row1 {
+          margin-bottom: 24px;
+        }
+
+        & .setting-info-Card1,
+        & .setting-info-Card2,
+        & .setting-info-Card3,
+        & .setting-info-Card4 {
+          & .infoCardTitle {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+          }
+        }
+
+        & .setting-info-Card2 {
+          & .achieveTitleWrap {
+            display: flex;
+            justify-content: space-between;
+
+            & .moreAchieve {
+              font-weight: 600;
+              cursor: pointer;
+            }
+          }
+
+          & .userSettingAchieveWrap {
+            display: flex;
+            justify-content: space-evenly;
+            & .achieveItem {
+              & .achieveIcon {
+                font-size: 102px;
+              }
+
+              & .achieveTitle {
+                color: rgba(0, 0, 0, 0.65);
+                margin-top: 16px;
+                display: flex;
+                justify-content: center;
+              }
+            }
+          }
+        }
+
+        & .setting-info-Card3 {
+          max-height: 376px;
+          & .trendsWrap {
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100% - 42px);
+            overflow-y: auto;
+
+            & .trendsItem {
+              cursor: pointer;
+              padding: 16px 8px;
+              border-bottom: 1px solid;
+              display: flex;
+              align-items: center;
+              column-gap: 16px;
+
+              & .trendsContent {
+                font-size: 12px;
+
+                & .trendsAction {
+                  margin-bottom: 4px;
+                  font-weight: 600;
+                }
+
+                & .trendsNews {
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+
+                  @media (min-width: 1024px) {
+                    width: 750px;
+                  }
+
+                  @media (min-width: 1100px) {
+                    width: 750px;
+                  }
+                  @media (min-width: 1280px) {
+                    width: 750px;
+                  }
+
+                  @media (min-width: 1366px) {
+                    width: 750px;
+                  }
+
+                  @media (min-width: 1440px) {
+                    width: 750px;
+                  }
+
+                  @media (min-width: 1680px) {
+                    width: 750px;
+                  }
+                  @media (min-width: 1920px) {
+                    width: 950px;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        & .setting-info-Card4 {
+          & .settingInfoMsgWrap {
+            height: calc(100% - 64px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+      }
     }
+
+    .content-user-background-card {
+      height: 200px;
+      display: flex;
+      background: url(../../assets/img/stacked-waves-haikei.svg);
+      justify-content: center;
+      background-position-y: 564px;
+      background-size: cover;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+
+      & .userAvaWrap {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        & .ant-upload-wrapper {
+          display: flex;
+          justify-content: center;
+        }
+
+        & .ant-upload-select {
+          width: 85px;
+          height: 85px;
+          margin-right: 0;
+          margin-bottom: 0;
+          overflow: hidden;
+          border: none;
+        }
+
+        & .userAvaName {
+          text-align: center;
+          margin-top: 16px;
+          color: #fff;
+        }
+
+        & .userAvaInfo {
+          color: #fff;
+          text-align: center;
+          display: flex;
+          column-gap: 8px;
+          margin-top: 8px;
+        }
+      }
+    }
+  }
 }
