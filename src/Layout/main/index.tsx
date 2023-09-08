@@ -5,11 +5,12 @@ import { Layout, theme, message } from 'antd';
 
 import Loading from '../../components/loading/index'
 import { useLayoutModel } from '../../models/layout';
+import { useUserInfoModel } from '../../models/userInfo';
 import { useThemeColorModel } from '../../models/themeColor';
 
 import HeaderArea from '../header';
 import MenuSider from '../menuArea';
-import { getRolesList } from '../../utils/http';
+import { getRolesList, getUserInfo } from '../../utils/http';
 import Home from '../../pages/home'
 import UserList from '../../pages/manage/userList'
 import General from '../../pages/general'
@@ -19,6 +20,7 @@ import UserCenter from '../../pages/userCenter'
 import NotFound from '../../pages/NotFound'
 import SystemSettings from '../../pages/systemSettings';
 import ApproveManage from '../../pages/groupManage/approveManage';
+import { useUserAvatarModel } from '../../models/avatar';
 
 const { Header, Content } = Layout
 
@@ -47,7 +49,9 @@ export default function MainLayout({ children }: any) {
   const [loading, setLoading] = useState<boolean>(false)
 
   const { layoutType, setLayoutType } = useLayoutModel();
+  const { setUserData } = useUserInfoModel();
   const { setThemeColor } = useThemeColorModel();
+  const { setAvatarSrc } = useUserAvatarModel();
   
   const {
     token: { colorBgContainer },
@@ -62,12 +66,13 @@ export default function MainLayout({ children }: any) {
 
     const userInfo = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || "") : null;
 
+    setUserData(userInfo)
     setThemeColor(userInfo?.themeColor || '#536DFE');
     setLayoutType(userInfo?.layout || 'left');
     localStorage.setItem('themeColor', userInfo?.themeColor || '#536DFE');
     localStorage.setItem('layout', userInfo?.layout || 'left');
 
-    const rolesList = async () => {
+    const init = async () => {
       const res = await getRolesList(userInfo?.username || '')
       if (res) {
         const { code, data = [] } = res
@@ -75,9 +80,12 @@ export default function MainLayout({ children }: any) {
           setRolesMenu(data.menu)
         }
       }
+
+      const info = await getUserInfo({username: userInfo?.username || ''});
+      setAvatarSrc(info.data.avaterSrc)
       setLoading(false)
     }
-    rolesList()
+    init()
   }, [])
 
   return (

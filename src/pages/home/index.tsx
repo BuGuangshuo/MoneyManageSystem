@@ -45,6 +45,8 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [groupMemberList, setGroupMemberList] = useState<any[]>([]);
 
+  const { avaterSrc } = sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData') || '') : null;
+
   let getTimeState = () => {
     // 获取当前时间
     let timeNow = new Date();
@@ -99,16 +101,17 @@ export default function Home() {
       if (res && res.data) {
         const { groupInfo, userInfo } = res.data;
         const { groupMemberList = [], group } = groupInfo;
-        let memberList: { title: string; desc: string }[] = [];
+        let memberList: { title: string; desc: string, avaterSrc: string }[] = [];
 
         memberList = groupMemberList.map((item: any) => {
           return {
+            avaterSrc: item.avaterSrc,
             title: item.infoName,
             desc: item.career,
           };
         });
 
-        memberList.unshift({ title: group.createUserName, desc: "团队创建者" });
+        // memberList.unshift({ title: group.createUserName, desc: "团队创建者", avaterSrc: userInfo.avaterSrc });
 
         setGroupMemberList(memberList);
         setMemberInfo({ groupInfo, userInfo });
@@ -267,7 +270,8 @@ export default function Home() {
                               <List.Item.Meta
                                 avatar={
                                   <Avatar
-                                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                                  alt={item.avaterSrc}
+                                    src={item.avaterSrc}
                                   />
                                 }
                                 title={

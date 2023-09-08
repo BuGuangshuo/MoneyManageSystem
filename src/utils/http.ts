@@ -20,6 +20,8 @@ axios.interceptors.response.use((response:any) => {
     message.error(`服务器响应失败`)
   } else if (response.status >= 400 && response.status < 500) {
     message.error(`请求参数错误`)
+  } else if (response.data.code === 402) {
+    message.error(response.data.msg)
   } else {
     return response.data
   }
@@ -93,9 +95,14 @@ export const saveUserInfo = (params: any): Promise<any> => {
   return axios.post(`/userInfo/save`, params)
 }
 
+export const editUserInfo = (params: any): Promise<any> => {
+  return axios.post(`/userInfo/edit`, params)
+}
+
 export const saveMember = (params: any): Promise<any> => {
   return axios.post(`/member/save`, params)
 }
+
 
 export const approveSend = (params: any): Promise<any> => {
   return axios.post(`/group/approve`, params)

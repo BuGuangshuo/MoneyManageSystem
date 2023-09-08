@@ -8,20 +8,21 @@
  */
 import React, { useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop";
-import { theme, Upload, Descriptions, Avatar, Empty, message } from "antd";
-import type { UploadChangeParam } from "antd/es/upload";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import { theme, Upload, Descriptions, Avatar, Empty, message, Spin } from "antd";
+import type { RcFile } from "antd/es/upload/interface";
 import type { DescriptionsProps } from "antd";
 
 import { createFromIconfontCN, UserOutlined } from "@ant-design/icons";
 
 import MessageSvg from "../../components/themeSvg/message";
 
-import "./index.less";
+import { useUserInfoModel } from '../../models/userInfo'
 
-const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/c/font_2880815_xj4hr6djr6r.js",
-});
+import { editUserInfo, getUserInfo } from "../../utils/http";
+
+import "./index.less";
+import Loading from "../../components/loading";
+import { useUserAvatarModel } from "../../models/avatar";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -43,8 +44,11 @@ const beforeUpload = (file: RcFile) => {
 
 export default function UserCenter() {
   const [imageUrl, setImageUrl] = useState<string>();
+  const [reflash, setReflash] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const locTheme = localStorage.getItem("theme");
+  const { userData } : any = useUserInfoModel();
+  const { setAvatarSrc } = useUserAvatarModel();
 
   const items: DescriptionsProps["items"] = [
     {
@@ -80,8 +84,18 @@ export default function UserCenter() {
   ];
 
   useEffect(() => {
-    console.log(locTheme);
-  }, [locTheme]);
+    const init = async () => {
+      setLoading(true);
+      const res = await getUserInfo({ username: userData.username });
+      setImageUrl(res.data.avaterSrc)
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 500)
+    }
+
+    init();
+  }, [reflash]);
 
   const {
     token: {
@@ -93,294 +107,312 @@ export default function UserCenter() {
     },
   } = theme.useToken();
 
-  const handleChange: UploadProps["onChange"] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    getBase64(info.file.originFileObj as RcFile, (url) => {
+  const saveAvaImg = (info: any) => {
+    getBase64(info as any, async (url) => {
+      setLoading(true);
       setImageUrl(url);
+      const res = await editUserInfo({
+        userName: userData?.username,
+        avaterSrcOnly: true,
+        avaterSrc: url
+      });
+      
+      if(res) {
+        if(res.code === 200) {
+          setReflash(!reflash)
+          setAvatarSrc(res.data.avaterSrc)
+          message.success('头像修改成功')
+        }
+      }
+
+      setLoading(false);
     });
-  };
+   
+  }
 
   return (
     <div className="usercenter-wrap">
-      <div className="usercenter-content">
-        {/* <div className="setting-title" style={{ color: colorTextLabel, borderColor: colorBorderSecondary}}>个人中心</div> */}
+      <Spin spinning={loading} indicator={null}>
+        {loading && <Loading/>}
+        <div className="usercenter-content">
+          {/* <div className="setting-title" style={{ color: colorTextLabel, borderColor: colorBorderSecondary}}>个人中心</div> */}
 
-        <div className="content-user-background-card">
-          <div className="userAvaWrap">
-            <ImgCrop rotationSlider>
-              <Upload
-                name="avatar"
-                listType="picture-circle"
-                className="usercenter-avatar-uploader"
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl || ""}
-                    alt="avatar"
-                    style={{ width: "100%" }}
-                  />
-                ) : (
-                  <UserOutlined style={{ color: "#fff", fontSize: 36 }} />
-                )}
-              </Upload>
-            </ImgCrop>
-            <div className="userAvaName">Alan</div>
-            <div className="userAvaInfo">
-              <div>前端开发工程师</div>
-              <div>北京</div>
+          <div className="content-user-background-card">
+            <div className="userAvaWrap">
+              <ImgCrop rotationSlider cropShape="round" onModalOk={saveAvaImg}>
+                <Upload
+                  name="avatar"
+                  listType="picture-circle"
+                  className="usercenter-avatar-uploader"
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                >
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl || ""}
+                      alt="avatar"
+                      style={{ width: "100%" }}
+                    />
+                  ) : (
+                    <UserOutlined style={{ color: "#fff", fontSize: 36 }} />
+                  )}
+                </Upload>
+              </ImgCrop>
+              <div className="userAvaName">Alan</div>
+              <div className="userAvaInfo">
+                <div>前端开发工程师</div>
+                <div>北京</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="setting-wrap">
-          {/* <div className="setting-menu">
-            <Menu items={items} defaultSelectedKeys={['userInfo']}/>
-          </div> */}
-          <div className="setting-info">
-            {/* <Row gutter={[24, 24]}>
-              <Col span={12}>
-                <div className="setting-info-Card1">Col</div>
-              </Col>
-              <Col span={12}>
-                <div className="setting-info-Card1">Col</div>
-              </Col>
-            </Row> */}
+          <div className="setting-wrap">
+            {/* <div className="setting-menu">
+              <Menu items={items} defaultSelectedKeys={['userInfo']}/>
+            </div> */}
+            <div className="setting-info">
+              {/* <Row gutter={[24, 24]}>
+                <Col span={12}>
+                  <div className="setting-info-Card1">Col</div>
+                </Col>
+                <Col span={12}>
+                  <div className="setting-info-Card1">Col</div>
+                </Col>
+              </Row> */}
 
-            <div className="setting-info-row1">
-              <div
-                className="setting-info-Card1"
-                style={{ border: `2px solid ${colorBorderSecondary}` }}
-              >
+              <div className="setting-info-row1">
                 <div
-                  className="infoCardTitle"
-                  style={{ color: colorTextLabel }}
+                  className="setting-info-Card1"
+                  style={{ border: `2px solid ${colorBorderSecondary}` }}
                 >
-                  个人信息
-                </div>
-                <div className="info">
-                  <Descriptions items={items} layout="vertical" />
-                </div>
-              </div>
-              <div
-                className="setting-info-Card2"
-                style={{ border: `2px solid ${colorBorderSecondary}` }}
-              >
-                <div className="achieveTitleWrap">
                   <div
                     className="infoCardTitle"
                     style={{ color: colorTextLabel }}
                   >
-                    成就
+                    个人信息
                   </div>
+                  <div className="info">
+                    <Descriptions items={items} layout="vertical" />
+                  </div>
+                </div>
+                <div
+                  className="setting-info-Card2"
+                  style={{ border: `2px solid ${colorBorderSecondary}` }}
+                >
+                  <div className="achieveTitleWrap">
+                    <div
+                      className="infoCardTitle"
+                      style={{ color: colorTextLabel }}
+                    >
+                      成就
+                    </div>
+                    <div
+                      className="moreAchieve"
+                      style={{ color: colorTextLabel }}
+                    >
+                      显示更多
+                    </div>
+                  </div>
+
+                  <div className="userSettingAchieveWrap">
+                    <div className="achieveItem">
+                      <div className="achieveIcon">
+                        <svg className="icon" aria-hidden="true">
+                          <use xlinkHref="#icon-No1"></use>
+                        </svg>
+                      </div>
+                      <div className="achieveTitle DingDing">存款冠军</div>
+                    </div>
+                    <div className="achieveItem">
+                      <div className="achieveIcon">
+                        <svg className="icon" aria-hidden="true">
+                          <use xlinkHref="#icon-ewairenwuchengjiutian"></use>
+                        </svg>
+                      </div>
+                      <div className="achieveTitle DingDing">连续30天</div>
+                    </div>
+                    <div className="achieveItem">
+                      <div className="achieveIcon">
+                        <svg className="icon" aria-hidden="true">
+                          <use xlinkHref="#icon-jiangbei-"></use>
+                        </svg>
+                      </div>
+                      <div className="achieveTitle DingDing">最佳贡献</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="setting-info-row2">
+                <div
+                  className="setting-info-Card3"
+                  style={{ border: `2px solid ${colorBorderSecondary}` }}
+                >
                   <div
-                    className="moreAchieve"
+                    className="infoCardTitle"
                     style={{ color: colorTextLabel }}
                   >
-                    显示更多
+                    最新动态
+                  </div>
+                  <div className="trendsWrap">
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="trendsItem"
+                      style={{ borderColor: colorBorderSecondary }}
+                    >
+                      <div className="avatarWrap">
+                        <Avatar src={imageUrl} size="large" />
+                      </div>
+                      <div className="trendsContent">
+                        <div
+                          className="trendsAction"
+                          style={{ color: colorTextDescription }}
+                        >
+                          赞了该文章
+                        </div>
+                        <div className="trendsNews" style={{ color: colorText }}>
+                          新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className="userSettingAchieveWrap">
-                  <div className="achieveItem">
-                    <div className="achieveIcon">
-                      <svg className="icon" aria-hidden="true">
-                        <use xlinkHref="#icon-No1"></use>
-                      </svg>
-                    </div>
-                    <div className="achieveTitle DingDing">存款冠军</div>
-                  </div>
-                  <div className="achieveItem">
-                    <div className="achieveIcon">
-                      <svg className="icon" aria-hidden="true">
-                        <use xlinkHref="#icon-ewairenwuchengjiutian"></use>
-                      </svg>
-                    </div>
-                    <div className="achieveTitle DingDing">连续30天</div>
-                  </div>
-                  <div className="achieveItem">
-                    <div className="achieveIcon">
-                      <svg className="icon" aria-hidden="true">
-                        <use xlinkHref="#icon-jiangbei-"></use>
-                      </svg>
-                    </div>
-                    <div className="achieveTitle DingDing">最佳贡献</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="setting-info-row2">
-              <div
-                className="setting-info-Card3"
-                style={{ border: `2px solid ${colorBorderSecondary}` }}
-              >
                 <div
-                  className="infoCardTitle"
-                  style={{ color: colorTextLabel }}
+                  className="setting-info-Card4"
+                  style={{ border: `2px solid ${colorBorderSecondary}` }}
                 >
-                  最新动态
-                </div>
-                <div className="trendsWrap">
                   <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
+                    className="infoCardTitle"
+                    style={{ color: colorTextLabel }}
                   >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
+                    通知
                   </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
+                  <div className="settingInfoMsgWrap">
+                    <Empty
+                      description="暂无通知"
+                      image={<MessageSvg theme={colorPrimary} />}
+                    />
                   </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="trendsItem"
-                    style={{ borderColor: colorBorderSecondary }}
-                  >
-                    <div className="avatarWrap">
-                      <Avatar src="" size="large" />
-                    </div>
-                    <div className="trendsContent">
-                      <div
-                        className="trendsAction"
-                        style={{ color: colorTextDescription }}
-                      >
-                        赞了该文章
-                      </div>
-                      <div className="trendsNews" style={{ color: colorText }}>
-                        新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="setting-info-Card4"
-                style={{ border: `2px solid ${colorBorderSecondary}` }}
-              >
-                <div
-                  className="infoCardTitle"
-                  style={{ color: colorTextLabel }}
-                >
-                  通知
-                </div>
-                <div className="settingInfoMsgWrap">
-                  <Empty
-                    description="暂无通知"
-                    image={<MessageSvg theme={colorPrimary} />}
-                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Spin>
+      
     </div>
   );
 }

@@ -15,9 +15,11 @@ import { UserOutlined, SearchOutlined, createFromIconfontCN, SettingOutlined } f
 
 import { useThemeModel } from '../../models/theme'
 import { useLayoutModel } from '../../models/layout';
+import { useUserAvatarModel } from '../../models/avatar';
 
 import styles from './index.module.less'
 import MenuSider from '../menuArea'
+import { getUserInfo } from '../../utils/http'
 
 const { Header } = Layout
 
@@ -27,8 +29,11 @@ const IconFont = createFromIconfontCN({
 
 export default function HeaderArea() {
 
+  const [avaSrc, setAvaSrc] = useState<any>(null)
+
   const { setThemeType } = useThemeModel();
   const { layoutType } = useLayoutModel();
+  const { avatarSrc } = useUserAvatarModel();
 
   const {
     token: { colorBgElevated, colorText, colorBorderSecondary, colorErrorTextHover, colorPrimary },
@@ -37,6 +42,7 @@ export default function HeaderArea() {
   const handleLogout = () => {
     localStorage.removeItem('token')
     sessionStorage.removeItem('user')
+    sessionStorage.removeItem('userData')
     message.success('注销成功！')
     navigate('/login')
   }
@@ -81,7 +87,7 @@ export default function HeaderArea() {
         <div className={styles['avatar-wrap']}>
         <span>{sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || 'null').infoname : null}</span>
           <Dropdown menu={{items}} placement="bottomLeft" overlayClassName={styles['logout-wrap']} className="c-ml-8">
-            <Avatar icon={<UserOutlined />} size={{ xs: 12, sm: 24, md: 18, lg: 24, xl: 28, xxl: 36 }} style={{ backgroundColor: colorPrimary }} />
+            <Avatar icon={avatarSrc ? null : <UserOutlined />} size={{ xs: 12, sm: 24, md: 18, lg: 24, xl: 28, xxl: 36 }} style={avatarSrc ? {} : { backgroundColor: colorPrimary }} src={avatarSrc ? avatarSrc : ''}/>
           </Dropdown>
         </div>
       </div>

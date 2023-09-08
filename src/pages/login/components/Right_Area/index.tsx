@@ -7,8 +7,10 @@ import { UserOutlined, LockOutlined, createFromIconfontCN  } from '@ant-design/i
 
 import { Userlogin, UserRegister, getUserInfo } from '../../../../utils/http';
 import { useThemeModel } from '../../../../models/theme'
+import { useUserInfoModel } from '../../../../models/userInfo'
 
 import styles from '../index.module.less'
+import { useUserAvatarModel } from '../../../../models/avatar';
 
 const { useToken } = theme;
 
@@ -28,6 +30,7 @@ export default function RightArea() {
   const { token } = useToken();
 
   const { setThemeType } = useThemeModel();
+  const { setAvatarSrc } = useUserAvatarModel();
 
   const {
     token: { colorBgContainer },
@@ -55,7 +58,10 @@ export default function RightArea() {
         sessionStorage.setItem('userId', data.id)
         message.success(msg)
 
-        const res = await getUserInfo({username: data.username});
+        const res = await getUserInfo({ username: data.username });
+        setAvatarSrc(res.data.avaterSrc)
+        sessionStorage.setItem('userData', JSON.stringify(res.data))
+        
         if(res.code === 201) {
           navigate('/guidePage')
         } else {
