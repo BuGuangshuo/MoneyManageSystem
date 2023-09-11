@@ -8,21 +8,34 @@
  */
 import React, { useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop";
-import { theme, Upload, Descriptions, Avatar, Empty, message, Spin } from "antd";
+import {
+  theme,
+  Upload,
+  Descriptions,
+  Avatar,
+  Empty,
+  message,
+  Spin,
+} from "antd";
 import type { RcFile } from "antd/es/upload/interface";
 import type { DescriptionsProps } from "antd";
 
-import { createFromIconfontCN, UserOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  EyeInvisibleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 import MessageSvg from "../../components/themeSvg/message";
 
-import { useUserInfoModel } from '../../models/userInfo'
+import { useUserInfoModel } from "../../models/userInfo";
 
 import { editUserInfo, getUserInfo } from "../../utils/http";
 
 import "./index.less";
 import Loading from "../../components/loading";
 import { useUserAvatarModel } from "../../models/avatar";
+import numConvert from "../../utils/salayUnit";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -46,56 +59,13 @@ export default function UserCenter() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [reflash, setReflash] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [infoList, setInfoList] = useState<any>({});
+  const [salaryIsShow, setSalaryIsShow] = useState<boolean>(false);
 
-  const { userData } : any = useUserInfoModel();
+  const { userData }: any = useUserInfoModel();
   const { setAvatarSrc } = useUserAvatarModel();
 
-  const items: DescriptionsProps["items"] = [
-    {
-      key: "1",
-      label: "账号",
-      children: "BuGuangshuo",
-    },
-    {
-      key: "2",
-      label: "昵称",
-      children: "卜卜星",
-    },
-    {
-      key: "3",
-      label: "职业/专业",
-      children: "前端开发工程师",
-    },
-    {
-      key: "4",
-      label: "所在团队",
-      children: "攒钱小组",
-    },
-    {
-      key: "5",
-      label: "所在地区",
-      children: "辽宁省-大连市",
-    },
-    {
-      key: "6",
-      label: "注册时间",
-      children: "2023年8月15日",
-    },
-  ];
-
-  useEffect(() => {
-    const init = async () => {
-      setLoading(true);
-      const res = await getUserInfo({ username: userData.username });
-      setImageUrl(res.data.avaterSrc)
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 500)
-    }
-
-    init();
-  }, [reflash]);
+  const statusEnum: any = { work: "职场人", student: "学生" };
 
   const {
     token: {
@@ -107,6 +77,69 @@ export default function UserCenter() {
     },
   } = theme.useToken();
 
+  const items: DescriptionsProps["items"] = [
+    {
+      key: "1",
+      label: "账号",
+      children: infoList.userName,
+    },
+    {
+      key: "2",
+      label: "昵称",
+      children: infoList.infoName,
+    },
+    {
+      key: "3",
+      label: "职业/专业",
+      children: infoList.career,
+    },
+    {
+      key: "4",
+      label: "身份",
+      children: statusEnum[infoList.status],
+    },
+    {
+      key: "5",
+      label: "所在地区",
+      children: `${infoList.privinceData}-${infoList.secondCity}`,
+    },
+    {
+      key: "6",
+      label: "薪资",
+      children: (
+        <div>
+          {salaryIsShow ? numConvert(infoList.salary) : "***"}
+          {salaryIsShow ? (
+            <EyeInvisibleOutlined
+              style={{ marginLeft: 16, cursor: "pointer" }}
+              onClick={() => setSalaryIsShow(!salaryIsShow)}
+            />
+          ) : (
+            <EyeOutlined
+              style={{ marginLeft: 16, cursor: "pointer" }}
+              onClick={() => setSalaryIsShow(!salaryIsShow)}
+            />
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true);
+      const res = await getUserInfo({ username: userData.username });
+      setInfoList(res.data);
+      setImageUrl(res.data.avaterSrc);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    };
+
+    init();
+  }, [reflash]);
+
   const saveAvaImg = (info: any) => {
     getBase64(info as any, async (url) => {
       setLoading(true);
@@ -114,26 +147,25 @@ export default function UserCenter() {
       const res = await editUserInfo({
         userName: userData?.username,
         avaterSrcOnly: true,
-        avaterSrc: url
+        avaterSrc: url,
       });
-      
-      if(res) {
-        if(res.code === 200) {
-          setReflash(!reflash)
-          setAvatarSrc(res.data.avaterSrc)
-          message.success('头像修改成功')
+
+      if (res) {
+        if (res.code === 200) {
+          setReflash(!reflash);
+          setAvatarSrc(res.data.avaterSrc);
+          message.success("头像修改成功");
         }
       }
 
       setLoading(false);
     });
-   
-  }
+  };
 
   return (
     <div className="usercenter-wrap">
       <Spin spinning={loading} indicator={null}>
-        {loading && <Loading/>}
+        {loading && <Loading />}
         <div className="usercenter-content">
           {/* <div className="setting-title" style={{ color: colorTextLabel, borderColor: colorBorderSecondary}}>个人中心</div> */}
 
@@ -160,7 +192,9 @@ export default function UserCenter() {
               </ImgCrop>
               <div className="userAvaName">Alan</div>
               <div className="userAvaInfo">
-                <div>前端开发工程师</div>
+                <div className="text-3xl font-bold underline">
+                  前端开发工程师
+                </div>
                 <div>北京</div>
               </div>
             </div>
@@ -269,7 +303,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -288,7 +325,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -307,7 +347,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -326,7 +369,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -345,7 +391,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -364,7 +413,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -383,7 +435,10 @@ export default function UserCenter() {
                         >
                           赞了该文章
                         </div>
-                        <div className="trendsNews" style={{ color: colorText }}>
+                        <div
+                          className="trendsNews"
+                          style={{ color: colorText }}
+                        >
                           新华网年终特别策划：《这一年，你过得怎么样？》回访那些你最熟悉的“陌生人”带你重温这难忘的2021年回顾我们共同记忆中的生动故事！
                         </div>
                       </div>
@@ -412,7 +467,6 @@ export default function UserCenter() {
           </div>
         </div>
       </Spin>
-      
     </div>
   );
 }

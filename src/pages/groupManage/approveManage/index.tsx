@@ -21,7 +21,11 @@ import {
   DatePicker,
   Slider,
 } from "antd";
-import { SearchOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  UnorderedListOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import _ from "lodash";
@@ -63,6 +67,7 @@ export default function ApproveManage() {
       colorBorderSecondary,
       colorTextSecondary,
       colorSuccess,
+      colorPrimary,
     },
   } = theme.useToken();
 
@@ -87,9 +92,17 @@ export default function ApproveManage() {
       dataIndex: "infoName",
       key: "infoName",
       width: 200,
-      render: (text: string) => (
+      render: (text: string, record: any) => (
         <div className="table-infoName-wrap">
-          <Avatar src="" />
+          <Avatar
+            icon={
+              record.avaterSrc === "" || !record.avaterSrc ? (
+                <UserOutlined />
+              ) : null
+            }
+            style={record.avaterSrc ? {} : { backgroundColor: colorPrimary }}
+            src={record.avaterSrc}
+          />
           <div className="ava-title">
             <Tooltip title={text} placement="topLeft">
               {text}

@@ -45,7 +45,9 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [groupMemberList, setGroupMemberList] = useState<any[]>([]);
 
-  const { avaterSrc } = sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData') || '') : null;
+  const { avaterSrc } = sessionStorage.getItem("userData")
+    ? JSON.parse(sessionStorage.getItem("userData") || "")
+    : null;
 
   let getTimeState = () => {
     // 获取当前时间
@@ -101,7 +103,8 @@ export default function Home() {
       if (res && res.data) {
         const { groupInfo, userInfo } = res.data;
         const { groupMemberList = [], group } = groupInfo;
-        let memberList: { title: string; desc: string, avaterSrc: string }[] = [];
+        let memberList: { title: string; desc: string; avaterSrc: string }[] =
+          [];
 
         memberList = groupMemberList.map((item: any) => {
           return {
@@ -270,7 +273,7 @@ export default function Home() {
                               <List.Item.Meta
                                 avatar={
                                   <Avatar
-                                  alt={item.avaterSrc}
+                                    alt={item.avaterSrc}
                                     src={item.avaterSrc}
                                   />
                                 }
