@@ -192,9 +192,7 @@ export default function UserCenter() {
               </ImgCrop>
               <div className="userAvaName">Alan</div>
               <div className="userAvaInfo">
-                <div className="text-3xl font-bold underline">
-                  前端开发工程师
-                </div>
+                <div>前端开发工程师</div>
                 <div>北京</div>
               </div>
             </div>
