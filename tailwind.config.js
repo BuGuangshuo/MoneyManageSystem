@@ -20,6 +20,15 @@ module.exports = {
         ".my-animate": {
           animation: "bounce 1s infinite",
         },
+        ".page-title": {
+          "font-size": "20px",
+          "font-weight": 600,
+        },
+        ".page-header": {
+          display: "flex",
+          "justify-content": "space-between",
+          padding: "18px 18px 18px 24px",
+        },
       });
     }),
   ],

@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export default function Daybook() {
-  return (
-    <div>
-      Daybook
-    </div>
-  )
+export default function Daybook(props: any) {
+  return <div>Daybook</div>;
 }

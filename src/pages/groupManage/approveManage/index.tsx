@@ -47,7 +47,7 @@ const userInfo = sessionStorage.getItem("user")
   ? JSON.parse(sessionStorage.getItem("user") || "")
   : null;
 
-export default function ApproveManage() {
+export default function ApproveManage(props: any) {
   const [segmentValue, setSementValue] = useState<string | number>("RUNNING");
   const [statusValue, setStatusValue] = useState<any>("");
   const [status, setStatus] = useState<any>(undefined);

@@ -55,7 +55,7 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-export default function UserCenter() {
+export default function UserCenter(props: any) {
   const [imageUrl, setImageUrl] = useState<string>();
   const [reflash, setReflash] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);

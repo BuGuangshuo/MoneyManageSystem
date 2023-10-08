@@ -38,7 +38,7 @@ const data2 = Array.from({ length: 23 }).map((_, i) => ({
     "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
 }));
 
-export default function Home() {
+export default function Home(props: any) {
   const [userInfo] = useState<string>(sessionStorage.getItem("user") || "");
   const [memberInfo, setMemberInfo] = useState<any>();
   const [reflash, setReflash] = useState<boolean>(false);
@@ -176,7 +176,10 @@ export default function Home() {
                   欢迎进入财政管理系统，您可以查看您团队财政的详细概览、团队组成等基础信息。
                 </div>
                 <div className={styles["card-btn"]}>
-                  <Button type="primary" onClick={() => navigate("/general")}>
+                  <Button
+                    type="primary"
+                    onClick={() => navigate("/analysis/general")}
+                  >
                     查看概览
                   </Button>
                 </div>
