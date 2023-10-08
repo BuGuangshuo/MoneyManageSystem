@@ -1,0 +1,99 @@
+[{
+  "_id": {
+    "$oid": "637343fb53d91ab2895869b9"
+  },
+  "username": "buguangshuo",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "卜卜星",
+  "level": 0,
+  "__v": 0,
+  "createTime": {
+    "$numberLong": "1667533173000"
+  },
+  "themeColor": "#536dfe",
+  "layout": "left"
+},{
+  "_id": {
+    "$oid": "646f37c574dfceb90d66b673"
+  },
+  "username": "Rain",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "Rain",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1685010373203"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64805d65a92a4b96d2860581"
+  },
+  "username": "lixueying",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "莹莹星",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1686134117074"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "648824661fc0829963c7a64a"
+  },
+  "username": "test",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "测试用户",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1686643814202"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64d347e8a0adfed201cd2a04"
+  },
+  "username": "Test3",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "测试人员3",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1691568104456"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64f6a4cb5b5caf3523e829b3"
+  },
+  "username": "test4",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "test4",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1693885643369"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64f92f3ad9ac93ee89ff8750"
+  },
+  "username": "test666",
+  "password": "3dd3f96bbaaa571909809ea4f3d7685e3df4d558f8052a2f2a63039baa8bc37b",
+  "infoname": "test666",
+  "level": 1,
+  "themeColor": "#536DFE",
+  "layout": "left",
+  "createTime": {
+    "$numberLong": "1694052154820"
+  },
+  "__v": 0
+}]

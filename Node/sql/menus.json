@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "63735e2cda839d8b5501e827"
+  },
+  "title": "首页",
+  "pagepermisson": 1,
+  "menu_id": 1,
+  "menu_key": "/home"
+},{
+  "_id": {
+    "$oid": "637362dbda839d8b5501e828"
+  },
+  "title": "用户管理",
+  "pagepermisson": 0,
+  "menu_id": 2,
+  "menu_key": "/manage/userlist"
+},{
+  "_id": {
+    "$oid": "64819ad72bb046205756808a"
+  },
+  "title": "团队管理",
+  "pagepermisson": 1,
+  "menu_id": 4,
+  "menu_key": "/groupManage/approveManage"
+},{
+  "_id": {
+    "$oid": "63736392da839d8b5501e82a"
+  },
+  "title": "分析中心",
+  "pagepermisson": 1,
+  "menu_id": 3,
+  "menu_key": "/analysis/general"
+}]

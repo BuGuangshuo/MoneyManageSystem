@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "63735da3da839d8b5501e824"
+  },
+  "role_type": 0,
+  "role_name": "超级管理员",
+  "menu": [
+    "/home",
+    "/manage/userlist",
+    "/analysis/general",
+    "/analysis/daybook",
+    "/analysis/target",
+    "/usercenter",
+    "/systemSettings",
+    "/groupManage/approveManage"
+  ]
+},{
+  "_id": {
+    "$oid": "6374981bda839d8b5501e84c"
+  },
+  "role_type": 1,
+  "role_name": "用户",
+  "menu": [
+    "/home",
+    "/analysis/general",
+    "/analysis/daybook",
+    "/analysis/target",
+    "/usercenter",
+    "/systemSettings",
+    "/groupManage/approveManage"
+  ]
+}]

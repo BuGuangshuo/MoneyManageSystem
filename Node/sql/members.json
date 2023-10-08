@@ -1,0 +1,37 @@
+[{
+  "_id": {
+    "$oid": "6481949ee40b3c95c493df23"
+  },
+  "userName": "buguangshuo",
+  "infoName": "卜卜星",
+  "groupName": "攒钱小组",
+  "groupId": "123123",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6488401c296890f496fe7040"
+  },
+  "userName": "lixueying",
+  "infoName": "莹莹星",
+  "groupName": "攒钱小组",
+  "groupId": "123123",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64d348f6a0adfed201cd2a6d"
+  },
+  "userName": "Test3",
+  "infoName": "测试人员3",
+  "groupName": "攒钱小组",
+  "groupId": "123123",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "64f92fa3d9ac93ee89ff879f"
+  },
+  "userName": "test666",
+  "infoName": "test666",
+  "groupName": "攒钱小组",
+  "groupId": "123123",
+  "__v": 0
+}]
