@@ -72,6 +72,7 @@ export default function UserCenter(props: any) {
       colorTextLabel,
       colorPrimary,
       colorBorderSecondary,
+      colorTextSecondary,
       colorText,
       colorTextDescription,
     },
@@ -253,7 +254,12 @@ export default function UserCenter(props: any) {
                           <use xlinkHref="#icon-No1"></use>
                         </svg>
                       </div>
-                      <div className="achieveTitle DingDing">存款冠军</div>
+                      <div
+                        className="achieveTitle DingDing"
+                        style={{ color: colorTextSecondary }}
+                      >
+                        存款冠军
+                      </div>
                     </div>
                     <div className="achieveItem">
                       <div className="achieveIcon">
@@ -261,7 +267,12 @@ export default function UserCenter(props: any) {
                           <use xlinkHref="#icon-ewairenwuchengjiutian"></use>
                         </svg>
                       </div>
-                      <div className="achieveTitle DingDing">连续30天</div>
+                      <div
+                        className="achieveTitle DingDing"
+                        style={{ color: colorTextSecondary }}
+                      >
+                        连续30天
+                      </div>
                     </div>
                     <div className="achieveItem">
                       <div className="achieveIcon">
@@ -269,7 +280,12 @@ export default function UserCenter(props: any) {
                           <use xlinkHref="#icon-jiangbei-"></use>
                         </svg>
                       </div>
-                      <div className="achieveTitle DingDing">最佳贡献</div>
+                      <div
+                        className="achieveTitle DingDing"
+                        style={{ color: colorTextSecondary }}
+                      >
+                        最佳贡献
+                      </div>
                     </div>
                   </div>
                 </div>
