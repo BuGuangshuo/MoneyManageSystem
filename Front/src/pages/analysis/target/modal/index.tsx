@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { theme, InputNumber, Modal, Input, DatePicker } from "antd";
+import { theme, InputNumber, Modal, Input, DatePicker, Segmented } from "antd";
 import type { DatePickerProps } from "antd";
 
 import "../index.less";
@@ -9,6 +9,9 @@ import {
   FieldTimeOutlined,
   FormOutlined,
 } from "@ant-design/icons";
+import dayjs from "dayjs";
+
+import { targetSave } from "../../../../utils/http";
 
 const { RangePicker } = DatePicker;
 
@@ -23,6 +26,7 @@ export default function TargetModal(props: any) {
   const [dateRangeVal, setDateRangeVal] = useState<any>([]);
   const [dateVal, setDateVal] = useState<any>(null);
   const [timeType, setTimeType] = useState<string>("range");
+  const [value, setValue] = useState("开放编辑");
   const [targetParam, setTargetParam] = useState({});
 
   const {
@@ -31,7 +35,6 @@ export default function TargetModal(props: any) {
       colorSuccess,
       colorPrimary,
       colorTextSecondary,
-      colorTextTertiary,
     },
   } = theme.useToken();
 
@@ -51,8 +54,36 @@ export default function TargetModal(props: any) {
     setDateVal(date);
   };
 
+  const onTimeTypeChange = (value: any) => {
+    setValue(value);
+  };
+
   const onNext = async () => {
     if (barWidth === 3) {
+      const rangeTime =
+        dateRangeVal && dateRangeVal.length
+          ? dateRangeVal.map((item: any) => dayjs(item).format("YYYY-MM-DD"))
+          : [];
+
+      const dateTime = dateVal ? dayjs(dateVal).format("YYYY-MM-DD") : [];
+
+      const params = {
+        targetName: nameVal,
+        amountVal,
+        dateValue: timeType === "range" ? rangeTime : dateTime,
+        timeType,
+        editType: value,
+        //@ts-ignore
+        createUserName: JSON.parse(sessionStorage.getItem("user")).username,
+      };
+
+      try {
+        await targetSave(params);
+        setReflash(!reflash);
+      } catch (err) {
+        console.error(err);
+      }
+      setTargetParam(params);
       onClose();
     } else {
       try {
@@ -76,6 +107,8 @@ export default function TargetModal(props: any) {
     setAmountVal(0);
     setNameVal("");
     setDateRangeVal([]);
+    setDateVal(null);
+    setValue("开放编辑");
     onCancel();
   };
 
@@ -179,6 +212,14 @@ export default function TargetModal(props: any) {
             className="w-[322px] mt-[32px]"
           />
         )}
+
+        <Segmented
+          options={["开放编辑", "禁止编辑"]}
+          block
+          value={value}
+          onChange={onTimeTypeChange}
+          className="mt-[24px] w-[322px]"
+        />
       </div>
     ),
   };

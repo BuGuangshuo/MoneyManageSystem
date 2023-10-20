@@ -111,3 +111,11 @@ export const approveSend = (params: any): Promise<any> => {
 export const getProcess = (params: any): Promise<any> => {
   return axios.post(`/process/get`, params)
 }
+
+export const targetListBy = (params: any): Promise<any> => {
+  return axios.post(`/target/listBy`, params)
+}
+
+export const targetSave = (params: any): Promise<any> => {
+  return axios.post(`/target/save`, params)
+}
