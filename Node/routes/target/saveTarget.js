@@ -18,6 +18,7 @@ router.post("/", function (req, res) {
       targetName,
       amountVal,
       dateValue,
+      currentCount: 0,
       timeType,
       editType,
       createUserName,

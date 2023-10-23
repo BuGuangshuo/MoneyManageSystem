@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 
-import { theme, Button, Input, Select, Row, Col } from "antd";
-
-import "./index.less";
+import type { MenuProps } from "antd";
+import { theme, Button, Input, Select, Row, Col, Dropdown, Space } from "antd";
 
 import TargetBlankSvg from "../../../components/themeSvg/targetBlank";
-import { AimOutlined, SearchOutlined } from "@ant-design/icons";
+import { AimOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import TargetModal from "./modal";
 import Loading from "../../../components/loading";
 
 import { targetListBy } from "../../../utils/http";
 import { uniqueAfterArr } from "../../../utils/uniqueParamsArr";
 import _ from "lodash";
+import numConvert from "../../../utils/salayUnit";
+import BulletChart from "./charts/bullet";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 
@@ -28,7 +30,14 @@ export default function Target(props: any) {
   const [editType, setEditType] = useState<string | null>(null);
 
   const {
-    token: { colorBorderSecondary, colorTextSecondary, colorPrimary },
+    token: {
+      colorBorderSecondary,
+      colorTextSecondary,
+      colorPrimary,
+      colorText,
+      colorErrorText,
+      colorSuccessText,
+    },
   } = theme.useToken();
 
   useEffect(() => {
@@ -49,6 +58,32 @@ export default function Target(props: any) {
 
     getTargetList();
   }, [params, reflash]);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "view",
+      label: "查看",
+    },
+    {
+      key: "delete",
+      label: "删除",
+    },
+  ];
+
+  const items2: MenuProps["items"] = [
+    {
+      key: "view",
+      label: "查看",
+    },
+    {
+      key: "edit",
+      label: "编辑",
+    },
+    {
+      key: "delete",
+      label: "删除",
+    },
+  ];
 
   const onInputChange = (e: any) => {
     setInputVal(e.target.value);
@@ -110,6 +145,30 @@ export default function Target(props: any) {
   const addModelChange = () => {
     changeVisible(true);
     setIsShowEdit({ idEdit: null });
+  };
+
+  const remainFunc = (
+    type: string,
+    timeArr: string[],
+    currentCount: number,
+    targetCount: number
+  ) => {
+    const currentDate = dayjs();
+    const startDate = dayjs(timeArr[0]);
+    const endDate: any = timeArr.length === 1 ? null : dayjs(timeArr[1]);
+    if (currentDate.valueOf() < startDate.valueOf()) {
+      return "未开始";
+    } else if (currentCount >= targetCount) {
+      return <span style={{ color: colorSuccessText }}>目标完成</span>;
+    } else if (type === "range" && currentDate.valueOf() > endDate?.valueOf()) {
+      return <span style={{ color: colorErrorText }}>已到期</span>;
+    } else if (type === "range") {
+      const daysRemaining: any = endDate?.diff(currentDate, "day");
+      return `剩余 ${daysRemaining + 1} 天`;
+    } else {
+      const daysRemaining = startDate?.diff(currentDate, "day");
+      return `已开始 ${daysRemaining + 1} 天`;
+    }
   };
 
   return (
@@ -184,14 +243,15 @@ export default function Target(props: any) {
                 return (
                   <Col span={8}>
                     <div
-                      className="h-[310px]"
+                      className="h-[310px] border-solid border-2 cursor-pointer"
                       style={{
-                        border: `2px solid ${colorBorderSecondary}`,
+                        borderColor: colorBorderSecondary,
                         borderRadius: 6,
+                        transition: ".4s all",
                       }}
                     >
                       <div
-                        className="h-[48px] flex justify-between p-[16px] pl-[24px] pr-[24px] items-center"
+                        className="h-[48px] flex justify-between p-[16px] pl-[24px] pr-[16px] items-center opacity-80"
                         style={{
                           borderBottom: `1px solid ${colorBorderSecondary}`,
                           background: colorPrimary,
@@ -199,13 +259,79 @@ export default function Target(props: any) {
                           borderTopRightRadius: 4,
                         }}
                       >
-                        <div style={{ color: "#FFF" }}>{item.targetName}</div>
+                        <div
+                          className="DingDing text-[18px] w-600"
+                          style={{ color: "#FFF" }}
+                        >
+                          {item.targetName}
+                        </div>
+                        <div>
+                          <Dropdown
+                            menu={{
+                              items:
+                                item.editType === "开放编辑" ? items2 : items,
+                            }}
+                          >
+                            <MoreOutlined
+                              style={{ color: "#FFF" }}
+                              className="text-[18px] w-[600] cursor-pointer"
+                            />
+                          </Dropdown>
+                        </div>
                       </div>
                       <div className="h-[212px] p-[16px] pl-[24px] pr-[24px]">
-                        content
+                        <div className="flex relative top-[8px]">
+                          <div className="mr-[16px]">
+                            <div className="mb-[8px]">
+                              <span
+                                className="inline-block w-[3px] h-[12px] mr-[4px]"
+                                style={{
+                                  background: colorPrimary,
+                                  borderRadius: 16,
+                                }}
+                              />
+                              <span
+                                className="DingDing"
+                                style={{ color: colorTextSecondary }}
+                              >
+                                目标金额
+                              </span>
+                            </div>
+                            <div
+                              className="ml-[8px] !text-[21px] DingDing"
+                              style={{ color: colorTextSecondary }}
+                            >
+                              {numConvert(item.amountVal)}
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="mb-[8px]">
+                              <span
+                                className="DingDing"
+                                style={{ color: colorTextSecondary }}
+                              >
+                                当前金额
+                              </span>
+                            </div>
+                            <div
+                              className="ml-[8px] !text-[21px] DingDing"
+                              style={{ color: colorTextSecondary }}
+                            >
+                              {numConvert(item.currentCount)}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="h-[140px]">
+                          <BulletChart
+                            currentCount={item.currentCount}
+                            targetCount={item.amountVal}
+                          />
+                        </div>
                       </div>
                       <div
-                        className="p-[16px] pl-[24px] pr-[24px]"
+                        className="p-[16px] pl-[24px] pr-[24px] flex justify-between"
                         style={{
                           borderTop: `1px solid ${colorBorderSecondary}`,
                         }}
@@ -243,7 +369,19 @@ export default function Target(props: any) {
                               : "长期目标"}
                           </span>
                         </div>
-                        <div></div>
+                        <div
+                          className="DingDing"
+                          style={{ color: colorTextSecondary }}
+                        >
+                          {/* {item.timeType === "range" ? "剩余 " : "已开始 "}
+                          {reaminDay(item.dateValue[1])} 天 */}
+                          {remainFunc(
+                            item.timeType,
+                            item.dateValue,
+                            item.currentCount,
+                            item.amountVal
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Col>

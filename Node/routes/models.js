@@ -125,6 +125,7 @@ const Target = mongoose.model(
   new mongoose.Schema({
     targetName: String,
     amountVal: Number,
+    currentCount: Number,
     dateValue: [String] || String,
     timeType: String,
     editType: String,

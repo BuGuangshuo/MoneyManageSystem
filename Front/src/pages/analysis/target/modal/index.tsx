@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { theme, InputNumber, Modal, Input, DatePicker, Segmented } from "antd";
 import type { DatePickerProps } from "antd";
 
-import "../index.less";
 import {
   AppstoreOutlined,
   FieldTimeOutlined,
