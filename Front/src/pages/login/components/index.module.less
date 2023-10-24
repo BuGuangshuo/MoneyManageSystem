@@ -6,7 +6,7 @@
   padding: 48px;
   overflow-x: hidden;
   overflow-y: auto;
-  background: @primary-color;
+  // background: @primary-color;
   transition: all 0.3s;
   @media screen and (max-width: 1024px) {
     min-width: 410px;
@@ -37,7 +37,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
 
       & .introduce-title {
         color: #fff;
@@ -56,7 +56,8 @@
   }
 
   :global {
-    .ant-carousel,.ant-carousel .slick-slider {
+    .ant-carousel,
+    .ant-carousel .slick-slider {
       height: 100%;
     }
   }
@@ -102,8 +103,8 @@
         margin: 0 auto;
         text-align: center;
         font-size: 32px;
-        font-weight:600;
-        margin-bottom:58px;
+        font-weight: 600;
+        margin-bottom: 58px;
         // color: @gray;
       }
 
@@ -120,23 +121,26 @@
         .ant-form-item-label > label {
           font-size: 16px;
           font-weight: 500;
-          color: @gray;
+          // color: @gray;
         }
-        .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+        .ant-form-item-label
+          > label.ant-form-item-required:not(
+            .ant-form-item-required-mark-optional
+          )::before {
           display: none;
-        }   
+        }
       }
     }
 
     :global {
       .ant-input-affix-wrapper-borderless {
-        background: @pale-grey;
+        // background: @pale-grey;
         height: 46px;
         border-radius: 4px;
       }
 
       .ant-form-item-control-input-content {
-        & a{
+        & a {
           float: right;
         }
       }
