@@ -11,7 +11,7 @@ export default defineConfig({
     port: 9081,
     proxy: {
       '/v1': {
-        target: 'http://localhost:5000/',
+        target: 'https://service-nu.vercel.app/',
         changeOrigin: false,
       },
     },

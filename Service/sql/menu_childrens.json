@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "63736925da839d8b5501e831"
+  },
+  "title": "用户列表",
+  "pagepermisson": 0,
+  "menu_key": "/manage/userlist",
+  "parent_id": 2
+},{
+  "_id": {
+    "$oid": "64819b2f2bb046205756808c"
+  },
+  "title": "团队审批",
+  "pagepermisson": 1,
+  "menu_key": "/groupManage/approveManage",
+  "parent_id": 4
+},{
+  "_id": {
+    "$oid": "65227b17a73fedfa88dfa98f"
+  },
+  "title": "分析概览",
+  "pagepermisson": 1,
+  "menu_key": "/analysis/general",
+  "parent_id": 3
+},{
+  "_id": {
+    "$oid": "65227c90a73fedfa88dfa99b"
+  },
+  "title": "目标管理",
+  "pagepermisson": 1,
+  "menu_key": "/analysis/target",
+  "parent_id": 3
+}]
