@@ -13,10 +13,13 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/money", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://buguangshuo:107815@moneydatebase.sslg2ca.mongodb.net/money",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 var indexRouter = require("./routes/index");
 var regRouter = require("./routes/register");

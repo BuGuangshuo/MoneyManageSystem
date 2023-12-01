@@ -131,7 +131,7 @@ export default function UserCenter(props: any) {
       setLoading(true);
       const res = await getUserInfo({ username: userData.username });
       setInfoList(res.data);
-      setImageUrl(res.data.avaterSrc);
+      setImageUrl(res?.data?.avaterSrc);
 
       setTimeout(() => {
         setLoading(false);
@@ -154,7 +154,7 @@ export default function UserCenter(props: any) {
       if (res) {
         if (res.code === 200) {
           setReflash(!reflash);
-          setAvatarSrc(res.data.avaterSrc);
+          setAvatarSrc(res?.data?.avaterSrc);
           message.success("头像修改成功");
         }
       }
