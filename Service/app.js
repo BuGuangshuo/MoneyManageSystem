@@ -9,7 +9,8 @@
 // var express = require("express");
 
 var mongoose = require("mongoose");
-const bodyParser=require("body-parser");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 mongoose.connect(
   "mongodb+srv://buguangshuo:107815@moneydatebase.sslg2ca.mongodb.net/money",
@@ -19,8 +20,8 @@ mongoose.connect(
   }
 );
 
-const EXPRESS = require('express')
-const app = EXPRESS()
+const EXPRESS = require("express");
+const app = EXPRESS();
 
 var regRouter = require("./routes/register");
 var loginRouter = require("./routes/login");
@@ -55,10 +56,10 @@ var users = require("./routes/users");
 
 //中间件配置
 
-app.use(EXPRESS.json())
-app.use(bodyParser.urlencoded({extended:false}));  //解析form传过来的值
-
-
+// 开启所有请求都支持跨域
+app.use(cors());
+app.use(EXPRESS.json());
+app.use(bodyParser.urlencoded({ extended: false })); //解析form传过来的值
 //静态文件托管
 // app.use('/static',EXPRESS.static("static"))
 
@@ -93,21 +94,12 @@ app.use("/v1/target/save", saveTarget);
 app.use("/v1/users", users);
 app.use("/v1/register", regRouter);
 
-app.get("/",(req, res)=>{
-    res.send(`<div style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);">
-                    <h1>welcome this project</h1>
-                    <div>post-llist</div>
-                    <ul style="list-style: none;padding-left: 0;">
-                        <li><a href="https://express-vercel-ruby.vercel.app/forumList">/forumList</a></li>
-                        <li><a href="https://express-vercel-ruby.vercel.app/listStory">/listStory</a></li>
-                        <li><a href="https://express-vercel-ruby.vercel.app//novelView">/novelView</a></li>
-                    </ul>
-                    </div>
-    `)
-})
+app.get("/", (req, res) => {
+  res.send(`Welcome Service`);
+});
 
-app.listen(5000,()=>{
-    console.log('服务器启动成功')
-})
+app.listen(5000, () => {
+  console.log("服务器启动成功");
+});
 
 module.exports = app;

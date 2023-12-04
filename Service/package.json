@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@vercel/node": "^1.8.5",
@@ -15,7 +16,8 @@
     "mongoose ": "^6.0.12",
     "morgan": "~1.9.1",
     "node-dev": "^7.1.0",
-    "uglify-js": "^3.17.4"
+    "uglify-js": "^3.17.4",
+    "cors": "2.8.5"
   },
   "devDependencies": {
     "webpack": "^5.89.0",

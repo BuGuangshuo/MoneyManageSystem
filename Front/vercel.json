@@ -1,9 +1,0 @@
-{
-    "version": 2,
-    "routes": [
-      {
-        "src": "/v1/(.*)",
-        "dest": "https://service-nu.vercel.app/api/$1"
-      }
-    ]
-  }
