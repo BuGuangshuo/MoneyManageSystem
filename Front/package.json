@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
     "serve": "vite --host 192.168.0.129",
     "deploy": "vercel --prod"
   },
