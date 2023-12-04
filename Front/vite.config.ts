@@ -9,9 +9,8 @@ export default defineConfig({
     port: 9081,
     proxy: {
       "/v1": {
-        target: "https://service-brown-xi.vercel.app/",
-        changeOrigin: true,
-        secure: false,
+        target: "http://localhost:5000/",
+        changeOrigin: false,
       },
     },
   },

@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "src": "/v1/(.*)",
+      "dest": "https://service-brown-xi.vercel.app/v1/$1"
+    }
+  ]
+}
