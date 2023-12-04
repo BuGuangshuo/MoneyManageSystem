@@ -59,6 +59,7 @@ export default function RightArea() {
   };
 
   const onFinish = async (values: any) => {
+    setLoading(true);
     const { username, password } = values;
     const res = await Userlogin({ username, password: sha256(password) });
     if (res) {
@@ -199,6 +200,7 @@ export default function RightArea() {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+                loading={loading}
               >
                 登录
               </Button>
