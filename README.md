@@ -4,7 +4,7 @@
 
 # 预览地址（需开梯子访问）
 
-[财政管理系统](https://moneys-phi.vercel.app/)
+[https://moneys-phi.vercel.app](https://moneys-phi.vercel.app/)
 
 ## 产品介绍
 
