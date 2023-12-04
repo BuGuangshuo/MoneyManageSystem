@@ -32,7 +32,7 @@ export default function LeftArea() {
             <div className={styles["introduce-text-context"]}>
               <div className={styles["introduce-title"]}>数据可视化</div>
               <div className={styles["introduce-desc"]}>
-                将模糊的数据转化为图表，把数据以可视化的方式呈现给您，更加直观的观察您的财政状态。
+                将繁杂的数据转化为图表，把数据以可视化的方式呈现给您，更加直观的观察您的财政状态。
               </div>
             </div>
           </div>
