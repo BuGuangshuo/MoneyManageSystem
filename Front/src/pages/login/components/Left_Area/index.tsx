@@ -60,7 +60,7 @@ export default function LeftArea() {
           </div>
           <div className={styles["introduce-text-wrap"]}>
             <div className={styles["introduce-text-context"]}>
-              <div className={styles["introduce-title"]}>放飞自由</div>
+              <div className={styles["introduce-title"]}>财富自由</div>
               <div className={styles["introduce-desc"]}>
                 将团队的财政数据化后尽情的放飞自由，让团队实现财富管理自由。
               </div>
