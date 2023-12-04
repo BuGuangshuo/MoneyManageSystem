@@ -95,7 +95,7 @@ app.use("/v1/users", users);
 app.use("/v1/register", regRouter);
 
 app.get("/", (req, res) => {
-  res.send(`Welcome Service`);
+  res.send(`MoneySystem Service`);
 });
 
 // catch 404 and forward to error handler
