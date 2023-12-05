@@ -2,7 +2,7 @@
   "routes": [
     {
       "src": "/v1/(.*)",
-      "dest": "https://service-brown-xi.vercel.app/v1/$1"
+      "dest": "https://service-indol.vercel.app/v1/$1"
     }
   ]
 }
