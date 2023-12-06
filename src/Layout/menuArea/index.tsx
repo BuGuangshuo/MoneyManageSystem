@@ -34,14 +34,12 @@ const iconList: any = {
 };
 
 export default function MenuSider({ mode }: any) {
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-  const [siderWidth, setSiderWidth] = useState<number>(200);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
+  const [siderWidth, setSiderWidth] = useState<number>(80);
   const [rolesList, setRolesList] = useState<string[]>([]);
   const [menuList, setMenuList] = useState<any>([]);
   const [menuSelectKeys, setMenuSelectKeys] = useState<string[]>(["/home"]);
-  const [menuOpenKeys, setMenuOpenKeys] = useState<string[]>([
-    "/manage/userlist",
-  ]);
+  const [menuOpenKeys, setMenuOpenKeys] = useState<string[]>(["/home"]);
   const [groupData, setGroupData] = useState<string[]>([]);
 
   const hrefPath = window.location.href;

@@ -20,6 +20,7 @@ import {
   Form,
   DatePicker,
   Slider,
+  Switch,
 } from "antd";
 import {
   SearchOutlined,
@@ -410,10 +411,10 @@ export default function ApproveManage(props: any) {
     label: string;
     value: [Dayjs, Dayjs];
   }[] = [
-    { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
-    { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
-    { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
-    { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
+    { label: "过去7天", value: [dayjs().add(-7, "d"), dayjs()] },
+    { label: "过去30天", value: [dayjs().add(-30, "d"), dayjs()] },
+    { label: "过去半年", value: [dayjs().add(-180, "d"), dayjs()] },
+    { label: "过去一年", value: [dayjs().add(-365, "d"), dayjs()] },
   ];
 
   const onAdvancedChange = async () => {
@@ -608,6 +609,7 @@ export default function ApproveManage(props: any) {
               trigger="click"
               overlayClassName="advanced-pop-wrap"
               overlayStyle={{ width: 600 }}
+              onOpenChange={(open) => setAdvancedOpen(open)}
               open={advancedOpen}
             >
               <Button
