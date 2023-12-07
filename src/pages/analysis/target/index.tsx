@@ -15,6 +15,8 @@ import {
   Slider,
   Space,
   Empty,
+  Modal,
+  message,
 } from "antd";
 
 import TargetBlankSvg from "../../../components/themeSvg/targetBlank";
@@ -27,7 +29,7 @@ import {
 import TargetModal from "./modal";
 import Loading from "../../../components/loading";
 
-import { targetListBy } from "../../../utils/http";
+import { deleteTarget, targetListBy } from "../../../utils/http";
 import { uniqueAfterArr } from "../../../utils/uniqueParamsArr";
 import _ from "lodash";
 import numConvert from "../../../utils/salayUnit";
@@ -52,6 +54,9 @@ export default function Target(props: any) {
   const [editType, setEditType] = useState<string | null>(null);
   const [advancedOpen, setAdvancedOpen] = useState<boolean>(false);
   const [targetIsNull, setTargetIsNull] = useState<boolean>(true);
+  const [delOpen, setDelOpen] = useState<boolean>(false);
+  const [delLoading, setDelLoading] = useState<boolean>(false);
+  const [targetItem, setTargetItem] = useState<any>({});
 
   const [form] = Form.useForm();
 
@@ -124,6 +129,13 @@ export default function Target(props: any) {
             );
           }
         }
+
+        if (item.operator === "LIKE") {
+          filterRes = filterRes.filter(
+            (targetItem: any) =>
+              targetItem[item.propetryName].indexOf(item.value) >= 0
+          );
+        }
       });
 
       setTargetList(filterRes);
@@ -176,45 +188,63 @@ export default function Target(props: any) {
     }
   };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "view",
-      label: "查看",
-    },
-    {
-      key: "delete",
-      label: "删除",
-    },
-  ];
+  const handleDelete = async () => {
+    try {
+      setDelLoading(true);
+      await deleteTarget({ id: targetItem._id });
+      message.success("删除成功");
+      setDelOpen(false);
+      setReflash(!reflash);
+      setDelLoading(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDelLoading(false);
+    }
+  };
 
-  const items2: MenuProps["items"] = [
-    {
-      key: "view",
-      label: "查看",
-    },
-    {
-      key: "edit",
-      label: "编辑",
-    },
-    {
-      key: "delete",
-      label: "删除",
-    },
-  ];
+  const onTargetColumnClick = async (e: any, record: any) => {
+    const { key } = e;
+    switch (key) {
+      case "delete":
+        setTargetItem(record);
+        setDelOpen(true);
+    }
+  };
+
+  const items = (record: any) => {
+    return [
+      {
+        key: "view",
+        label: "查看",
+        onClick: (e: any) => onTargetColumnClick(e, record),
+      },
+      {
+        key: "delete",
+        label: "删除",
+        onClick: (e: any) => onTargetColumnClick(e, record),
+      },
+    ];
+  };
 
   const onInputChange = (e: any) => {
     setInputVal(e.target.value);
+    onInputSearch(e.target.value);
   };
 
-  const onInputSearch = () => {
+  const onInputSearch = (val: string) => {
     let _params = _.cloneDeep(params);
-    if (!inputVal && inputVal === "") {
+    if (!val && val === "") {
+      _params = _params.filter(
+        (item: any) => item.propetryName !== "targetName"
+      );
+      setParams(_params);
       return;
     }
     _params = uniqueAfterArr(
       [
         ..._params,
-        { propetryName: "targetName", operator: "LIKE", value: inputVal },
+        { propetryName: "targetName", operator: "LIKE", value: val },
       ],
       "propetryName"
     );
@@ -227,11 +257,16 @@ export default function Target(props: any) {
 
     if (val) {
       _params = uniqueAfterArr(
-        [..._params, { operator: "EQ", propetryName: "timeType", value: val }],
+        [
+          ..._params,
+          { operator: "EQ", propetryName: "targetType", value: val },
+        ],
         "propetryName"
       );
     } else {
-      _params = _params.filter((item: any) => item.propetryName !== "timeType");
+      _params = _params.filter(
+        (item: any) => item.propetryName !== "targetType"
+      );
     }
 
     setTargetType(val);
@@ -304,6 +339,7 @@ export default function Target(props: any) {
       dateValue: "BETWEEN",
       targetVal: "BETWEEN",
       editType: "EQ",
+      timeType: "EQ",
     };
     setLoading(true);
     let _params = _.cloneDeep(params);
@@ -330,6 +366,7 @@ export default function Target(props: any) {
     });
 
     _params = uniqueAfterArr([..._params, ...advanceParams], "propetryName");
+    console.log(_params);
 
     setParams(_params);
     setLoading(false);
@@ -362,10 +399,10 @@ export default function Target(props: any) {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="editType" label="编辑类型">
-                  <Select placeholder="编辑类型" allowClear>
-                    <Option value="开放编辑">开放编辑</Option>
-                    <Option value="禁止编辑">禁止编辑</Option>
+                <Form.Item name="timeType" label="期限类型">
+                  <Select placeholder="期限类型" allowClear>
+                    <Option value="range">定期目标</Option>
+                    <Option value="forever">长期目标</Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -423,16 +460,16 @@ export default function Target(props: any) {
             <div className="flex gap-[16px]">
               <div>
                 <Input
-                  placeholder="搜索"
+                  placeholder="搜索目标名称"
                   suffix={<SearchOutlined rev={undefined} />}
                   onChange={onInputChange}
                   value={inputVal}
                 />
               </div>
 
-              <Button type="primary" onClick={onInputSearch}>
+              {/* <Button type="primary" onClick={onInputSearch}>
                 搜索
-              </Button>
+              </Button> */}
             </div>
 
             <div className="flex gap-[16px]">
@@ -444,8 +481,8 @@ export default function Target(props: any) {
                   onChange={onTargetTypeChange}
                   value={targetType}
                 >
-                  <Option value="range">定期目标</Option>
-                  <Option value="forever">长期目标</Option>
+                  <Option value="personalTarget">个人目标</Option>
+                  <Option value="groupTarget">团队目标</Option>
                 </Select>
               </div>
 
@@ -511,17 +548,33 @@ export default function Target(props: any) {
                             borderTopRightRadius: 4,
                           }}
                         >
-                          <div
-                            className="DingDing font-[18px] w-600"
-                            style={{ color: colorText, fontSize: 18 }}
-                          >
-                            {item.targetName}
+                          <div className="flex justify-center items-center">
+                            <svg
+                              className="icon mr-[8px]"
+                              aria-hidden="true"
+                              style={
+                                item.targetType === "groupTarget"
+                                  ? {
+                                      color: colorTextSecondary,
+                                      fontSize: 18,
+                                    }
+                                  : { display: "none" }
+                              }
+                            >
+                              <use xlinkHref="#icon-tuanduiren"></use>
+                            </svg>
+                            <div
+                              className="DingDing font-[18px] w-600"
+                              style={{ color: colorText, fontSize: 18 }}
+                            >
+                              {item.targetName}
+                            </div>
                           </div>
+
                           <div>
                             <Dropdown
                               menu={{
-                                items:
-                                  item.editType === "开放编辑" ? items2 : items,
+                                items: items(item),
                               }}
                             >
                               <MoreOutlined
@@ -696,6 +749,22 @@ export default function Target(props: any) {
         </div>
       )}
 
+      <Modal
+        open={delOpen}
+        onOk={handleDelete}
+        onCancel={() => setDelOpen(false)}
+        title="删除目标"
+        okText="删除"
+        okType="danger"
+        cancelText="取消"
+        width={445}
+        confirmLoading={delLoading}
+        okButtonProps={{ type: "primary" }}
+      >
+        <p style={{ color: colorText }}>
+          此操作会清除该目标的全部信息，确定要删除该目标吗？
+        </p>
+      </Modal>
       <TargetModal
         open={open}
         isShowEdit={isShowEdit}

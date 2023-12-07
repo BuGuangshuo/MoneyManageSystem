@@ -10,6 +10,8 @@ import React, { useEffect, useState } from "react";
 
 import { Button, theme, Avatar, Progress, List, Space } from "antd";
 
+import _ from "lodash";
+
 import {
   StarOutlined,
   LikeOutlined,
@@ -17,7 +19,7 @@ import {
   createFromIconfontCN,
 } from "@ant-design/icons";
 
-import { familyCreate, getMemberInfo } from "../../utils/http";
+import { familyCreate, getMemberInfo, targetListBy } from "../../utils/http";
 
 import WelcomeSvg from "../../components/themeSvg/welecome";
 import Loading from "../../components/loading";
@@ -27,6 +29,7 @@ import NewHomePage from "./newHome";
 import styles from "./index.module.less";
 
 import { navigate } from "@reach/router";
+import numConvert from "../../utils/salayUnit";
 
 const data2 = Array.from({ length: 23 }).map((_, i) => ({
   href: "https://ant.design",
@@ -44,6 +47,8 @@ export default function Home(props: any) {
   const [reflash, setReflash] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [groupMemberList, setGroupMemberList] = useState<any[]>([]);
+  const [groupTargetInfo, setGroupTargetInfo] = useState<any[]>([]);
+  const [targetList, setTargetList] = useState<any[]>([]);
 
   const { avaterSrc } = sessionStorage.getItem("userData")
     ? JSON.parse(sessionStorage.getItem("userData") || "")
@@ -116,6 +121,20 @@ export default function Home(props: any) {
 
         // memberList.unshift({ title: group.createUserName, desc: "团队创建者", avaterSrc: userInfo.avaterSrc });
 
+        localStorage.setItem("groupId", group.groupId);
+
+        const allTargetRes = await targetListBy([]);
+
+        const targetRes = await targetListBy([
+          {
+            propetryName: "groupId",
+            operator: "EQ",
+            value: group.groupId,
+          },
+        ]);
+
+        setGroupTargetInfo(targetRes.data.result);
+        setTargetList(allTargetRes.data.result);
         setGroupMemberList(memberList);
         setMemberInfo({ groupInfo, userInfo });
       }
@@ -244,16 +263,32 @@ export default function Home(props: any) {
 
                         <div className={styles["team-process-wrap"]}>
                           <div className={styles["team-process-target"]}>
-                            目标：239000￥
+                            总金额：
+                            {_.sum(
+                              groupTargetInfo.map((item) => item.amountVal)
+                            )}
+                            ￥
                           </div>
                           <div className={styles["team-process-now"]}>
-                            当前：123500￥
+                            当前：
+                            {_.sum(
+                              groupTargetInfo.map((item) => item.currentCount)
+                            )}
+                            ￥
                           </div>
                         </div>
 
                         <div className={styles["team-process-bar"]}>
                           <Progress
-                            percent={50}
+                            percent={
+                              (_.sum(
+                                groupTargetInfo.map((item) => item.currentCount)
+                              ) /
+                                _.sum(
+                                  groupTargetInfo.map((item) => item.amountVal)
+                                )) *
+                              100
+                            }
                             status="active"
                             strokeColor="#fff"
                           />
@@ -304,6 +339,7 @@ export default function Home(props: any) {
             </div>
             <div
               className={styles["target-list"]}
+              onClick={() => navigate("/analysis/target")}
               style={{ border: `2px solid ${colorBorderSecondary}` }}
             >
               <div className={styles["target-info"]}>
@@ -315,14 +351,14 @@ export default function Home(props: any) {
                     总目标数
                   </div>
                   <div
-                    className="AiliFont"
+                    className="AiliFont text-center"
                     style={{
                       color: colorPrimaryText,
                       fontSize: 34,
                       fontWeight: 600,
                     }}
                   >
-                    114
+                    {targetList.length}
                   </div>
                 </div>
                 <div className={styles["target-item"]}>
@@ -333,14 +369,18 @@ export default function Home(props: any) {
                     已完成目标
                   </div>
                   <div
-                    className="AiliFont"
+                    className="AiliFont text-center"
                     style={{
                       color: colorPrimaryText,
                       fontSize: 34,
                       fontWeight: 600,
                     }}
                   >
-                    114
+                    {
+                      targetList.filter(
+                        (item) => item.currentCount >= item.amountVal
+                      ).length
+                    }
                   </div>
                 </div>
                 <div className={styles["target-item"]}>
@@ -348,17 +388,40 @@ export default function Home(props: any) {
                     className={styles["target-item-title"]}
                     style={{ color: colorTextSecondary }}
                   >
-                    总目标时间
+                    总金额
                   </div>
                   <div
-                    className="AiliFont"
+                    className="AiliFont text-center"
                     style={{
                       color: colorPrimaryText,
                       fontSize: 34,
                       fontWeight: 600,
                     }}
                   >
-                    114
+                    {numConvert(
+                      _.sum(targetList.map((item) => item.amountVal))
+                    )}
+                  </div>
+                </div>
+
+                <div className={styles["target-item"]}>
+                  <div
+                    className={styles["target-item-title"]}
+                    style={{ color: colorTextSecondary }}
+                  >
+                    完成金额
+                  </div>
+                  <div
+                    className="AiliFont text-center"
+                    style={{
+                      color: colorPrimaryText,
+                      fontSize: 34,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {numConvert(
+                      _.sum(targetList.map((item) => item.currentCount))
+                    )}
                   </div>
                 </div>
 
@@ -370,33 +433,21 @@ export default function Home(props: any) {
                     完成占比
                   </div>
                   <div
-                    className="AiliFont"
+                    className="AiliFont text-center"
                     style={{
                       color: colorPrimaryText,
                       fontSize: 34,
                       fontWeight: 600,
                     }}
                   >
-                    46%
-                  </div>
-                </div>
-
-                <div className={styles["target-item"]}>
-                  <div
-                    className={styles["target-item-title"]}
-                    style={{ color: colorTextSecondary }}
-                  >
-                    完成占比
-                  </div>
-                  <div
-                    className="AiliFont"
-                    style={{
-                      color: colorPrimaryText,
-                      fontSize: 34,
-                      fontWeight: 600,
-                    }}
-                  >
-                    46%
+                    {parseFloat(
+                      Number(
+                        targetList.filter(
+                          (item) => item.currentCount >= item.amountVal
+                        ).length / targetList.length
+                      ).toFixed(2)
+                    ) * 100}
+                    %
                   </div>
                 </div>
               </div>

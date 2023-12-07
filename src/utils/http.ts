@@ -126,3 +126,7 @@ export const targetListBy = (params: any): Promise<any> => {
 export const targetSave = (params: any): Promise<any> => {
   return axios.post(`/target/save`, params);
 };
+
+export const deleteTarget = (params: any): Promise<any> => {
+  return axios.post(`/target/delete`, params);
+};

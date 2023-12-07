@@ -25,7 +25,7 @@ export default function TargetModal(props: any) {
   const [dateRangeVal, setDateRangeVal] = useState<any>([]);
   const [dateVal, setDateVal] = useState<any>(null);
   const [timeType, setTimeType] = useState<string>("range");
-  const [value, setValue] = useState("开放编辑");
+  const [value, setValue] = useState("personalTarget");
   const [targetParam, setTargetParam] = useState({});
 
   const {
@@ -53,7 +53,7 @@ export default function TargetModal(props: any) {
     setDateVal(date);
   };
 
-  const onTimeTypeChange = (value: any) => {
+  const onTargetTypeChange = (value: any) => {
     setValue(value);
   };
 
@@ -69,9 +69,11 @@ export default function TargetModal(props: any) {
       const params = {
         targetName: nameVal,
         amountVal,
+        groupId:
+          value === "groupTarget" ? localStorage.getItem("groupId") : undefined,
         dateValue: timeType === "range" ? rangeTime : dateTime,
         timeType,
-        editType: value,
+        targetType: value,
         //@ts-ignore
         createUserName: JSON.parse(sessionStorage.getItem("user")).username,
       };
@@ -107,7 +109,7 @@ export default function TargetModal(props: any) {
     setNameVal("");
     setDateRangeVal([]);
     setDateVal(null);
-    setValue("开放编辑");
+    setValue("personalTarget");
     onCancel();
   };
 
@@ -213,10 +215,13 @@ export default function TargetModal(props: any) {
         )}
 
         <Segmented
-          options={["开放编辑", "禁止编辑"]}
+          options={[
+            { label: "个人目标", value: "personalTarget" },
+            { label: "团队目标", value: "groupTarget" },
+          ]}
           block
           value={value}
-          onChange={onTimeTypeChange}
+          onChange={onTargetTypeChange}
           className="mt-[24px] w-[322px]"
         />
       </div>
