@@ -6,7 +6,7 @@ import "./assets/iconfont/iconfont.js";
 
 import dayjs from "dayjs";
 
-import zh_CN from "antd/locale/zh_CN";
+import zh_CN from "antd/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
 
 import Routes from "./routes";
