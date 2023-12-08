@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-import { targetSave } from "../../../../utils/http";
+import { getMemberInfo, targetSave } from "../../../../utils/http";
 
 const { RangePicker } = DatePicker;
 
@@ -19,6 +19,7 @@ const barEnum: any = { 1: "25%", 2: "50%", 3: "100%" };
 export default function TargetModal(props: any) {
   const { open, isShowEdit, reflash, setReflash, onCancel } = props;
 
+  const [userInfo] = useState<any>(sessionStorage.getItem("user") || "");
   const [barWidth, setBarWidth] = useState<number>(1);
   const [nameVal, setNameVal] = useState<string>("");
   const [amountVal, setAmountVal] = useState<number>(0);
@@ -27,6 +28,7 @@ export default function TargetModal(props: any) {
   const [timeType, setTimeType] = useState<string>("range");
   const [value, setValue] = useState("personalTarget");
   const [targetParam, setTargetParam] = useState({});
+  const [groupInfo, setGroupInfo] = useState<any>({});
 
   const {
     token: {
@@ -36,6 +38,25 @@ export default function TargetModal(props: any) {
       colorTextSecondary,
     },
   } = theme.useToken();
+
+  useEffect(() => {
+    const init = async () => {
+      const { username } = JSON.parse(userInfo);
+      try {
+        const res = await getMemberInfo({ username });
+        if (res && res.data) {
+          const { groupInfo, userInfo } = res.data;
+          const { group } = groupInfo;
+
+          setGroupInfo(group);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      const res = await getMemberInfo({ username });
+    };
+    init();
+  }, []);
 
   const onNameChange = (e: any) => {
     setNameVal(e.target.value);
@@ -213,12 +234,15 @@ export default function TargetModal(props: any) {
             className="w-[322px] mt-[32px]"
           />
         )}
-
         <Segmented
-          options={[
-            { label: "个人目标", value: "personalTarget" },
-            { label: "团队目标", value: "groupTarget" },
-          ]}
+          options={
+            groupInfo.createUserName === JSON.parse(userInfo).username
+              ? [
+                  { label: "个人目标", value: "personalTarget" },
+                  { label: "团队目标", value: "groupTarget" },
+                ]
+              : [{ label: "个人目标", value: "personalTarget" }]
+          }
           block
           value={value}
           onChange={onTargetTypeChange}

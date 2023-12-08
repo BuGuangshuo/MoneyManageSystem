@@ -4,7 +4,7 @@
 
 # 预览地址（需开梯子访问）
 
-[https://moneys-phi.vercel.app](https://moneys-zeta.vercel.app/)
+[https://moneys-zeta.vercel.app/](https://moneys-zeta.vercel.app/)
 
 ## 产品介绍
 

@@ -42,7 +42,7 @@ const data2 = Array.from({ length: 23 }).map((_, i) => ({
 }));
 
 export default function Home(props: any) {
-  const [userInfo] = useState<string>(sessionStorage.getItem("user") || "");
+  const [userInfo] = useState<any>(sessionStorage.getItem("user") || "");
   const [memberInfo, setMemberInfo] = useState<any>();
   const [reflash, setReflash] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);

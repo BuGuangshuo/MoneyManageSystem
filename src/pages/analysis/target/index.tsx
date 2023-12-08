@@ -36,6 +36,8 @@ import numConvert from "../../../utils/salayUnit";
 import BulletChart from "./charts/bullet";
 import dayjs from "dayjs";
 
+import "./index.less";
+
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -76,16 +78,24 @@ export default function Target(props: any) {
   useEffect(() => {
     const getTargetList = async () => {
       setLoading(true);
+      // @ts-ignore
+      const { username } = JSON.parse(sessionStorage.getItem("user"));
+      const groupId = localStorage.getItem("groupId");
       try {
         const res = await targetListBy([]);
+        let realRes = [];
         if (res && res.code === 200) {
-          if (res.data.result.length) {
+          realRes = res.data.result.filter(
+            (item: any) =>
+              item.createUserName === username || item.groupId === groupId
+          );
+          if (realRes.length) {
             setTargetIsNull(false);
           } else {
             setTargetIsNull(true);
           }
-          setTargetData(res.data.result);
-          setTargetList(res.data.result);
+          setTargetData(realRes);
+          setTargetList(realRes);
           setLoading(false);
         }
       } catch (err) {
@@ -435,7 +445,7 @@ export default function Target(props: any) {
   };
 
   return (
-    <div>
+    <div className="targeManagetWrap">
       <div
         className="page-header"
         style={{ borderBottom: `1px solid ${colorBorderSecondary}` }}
@@ -532,7 +542,7 @@ export default function Target(props: any) {
                   return (
                     <Col span={8}>
                       <div
-                        className="h-[310px] border-solid border-2 cursor-pointer"
+                        className="targetItem h-[310px] border-solid border-2 cursor-pointer"
                         style={{
                           borderColor: colorBorderSecondary,
                           borderRadius: 6,
