@@ -3,6 +3,7 @@ import { ConfigProvider, theme } from "antd";
 import { useThemeModel } from "./models/theme";
 import { useThemeColorModel } from "./models/themeColor";
 import "./assets/iconfont/iconfont.js";
+import "./i18n.js";
 
 import dayjs from "dayjs";
 
@@ -19,6 +20,7 @@ function App() {
   // const [themeModel, setThemeModel] = useState('light');
 
   const loc = localStorage.getItem("theme");
+  const lang = localStorage.getItem("lang");
 
   const { themeType } = useThemeModel();
   const { themeColor } = useThemeColorModel();
@@ -26,6 +28,9 @@ function App() {
   useEffect(() => {
     if (!loc) {
       localStorage.setItem("theme", themeType);
+    }
+    if (!lang) {
+      localStorage.setItem("lang", "zh_CN");
     }
   }, []);
 

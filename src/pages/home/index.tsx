@@ -50,10 +50,6 @@ export default function Home(props: any) {
   const [groupTargetInfo, setGroupTargetInfo] = useState<any[]>([]);
   const [targetList, setTargetList] = useState<any[]>([]);
 
-  const { avaterSrc } = sessionStorage.getItem("userData")
-    ? JSON.parse(sessionStorage.getItem("userData") || "")
-    : null;
-
   let getTimeState = () => {
     // 获取当前时间
     let timeNow = new Date();
@@ -134,7 +130,13 @@ export default function Home(props: any) {
         ]);
 
         setGroupTargetInfo(targetRes.data.result);
-        setTargetList(allTargetRes.data.result);
+        setTargetList(
+          allTargetRes.data.result.filter(
+            (item: any) =>
+              item.createUserName === userInfo.userName ||
+              item.groupId === group.groupId
+          )
+        );
         setGroupMemberList(memberList);
         setMemberInfo({ groupInfo, userInfo });
       }
@@ -446,7 +448,7 @@ export default function Home(props: any) {
                           (item) => item.currentCount >= item.amountVal
                         ).length / targetList.length
                       ).toFixed(2)
-                    ) * 100}
+                    ) * 100 || 0}
                     %
                   </div>
                 </div>

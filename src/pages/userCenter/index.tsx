@@ -165,6 +165,7 @@ export default function UserCenter(props: any) {
 
   return (
     <div className="usercenter-wrap">
+      {/* @ts-ignore */}
       <Spin spinning={loading} indicator={null}>
         {loading && <Loading />}
         <div className="usercenter-content">

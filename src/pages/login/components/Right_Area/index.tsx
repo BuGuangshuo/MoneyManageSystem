@@ -8,6 +8,7 @@ import {
   message,
   theme,
   ConfigProvider,
+  Select,
   Typography,
 } from "antd";
 import { navigate } from "@reach/router";
@@ -18,16 +19,20 @@ import {
   createFromIconfontCN,
 } from "@ant-design/icons";
 
+import { useTranslation } from "react-i18next";
+
 import { Userlogin, UserRegister, getUserInfo } from "../../../../utils/http";
 import { useThemeModel } from "../../../../models/theme";
-import { useUserInfoModel } from "../../../../models/userInfo";
 
 import styles from "../index.module.less";
 import { useUserAvatarModel } from "../../../../models/avatar";
 
+import lngList from "./lngEnum";
+
 const { useToken } = theme;
 
 const { Text } = Typography;
+const { Option } = Select;
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/c/font_2880815_k27ujdzcenl.js",
@@ -36,17 +41,18 @@ const IconFont = createFromIconfontCN({
 export default function RightArea() {
   const [registerState, setRegisterState] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [lngVal, setLngVal] = useState<string>(
+    localStorage.getItem("lang") || "zh_CN"
+  );
 
   const [form] = Form.useForm();
+
+  const { t, i18n } = useTranslation();
 
   const { token } = useToken();
 
   const { setThemeType } = useThemeModel();
   const { setAvatarSrc } = useUserAvatarModel();
-
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   const onReset = () => {
     form.resetFields();
@@ -64,12 +70,12 @@ export default function RightArea() {
     const res = await Userlogin({ username, password: sha256(password) });
     if (res) {
       setLoading(false);
-      const { code, data, msg } = res;
+      const { code, data } = res;
       if (code === 200) {
         localStorage.setItem("token", "Acess");
         sessionStorage.setItem("user", JSON.stringify(data));
         sessionStorage.setItem("userId", data.id);
-        message.success(msg);
+        message.success(t("login-right-login-msg-success"));
 
         const res = await getUserInfo({ username: data.username });
         setAvatarSrc(res?.data?.avaterSrc);
@@ -81,13 +87,13 @@ export default function RightArea() {
           navigate("/home");
         }
       } else if (code === 201) {
-        message.error(msg);
+        message.error(t("login-right-login-msg-error"));
       } else {
-        message.error("登录失败");
+        message.error(t("login-right-login-msg-failed"));
       }
     } else {
       setLoading(false);
-      message.error("网络错误");
+      message.error(t("login-right-login-msg-netWork"));
     }
   };
 
@@ -96,21 +102,31 @@ export default function RightArea() {
     const res = await UserRegister(values);
     if (res) {
       setLoading(false);
-      const { code, msg } = res;
+      const { code } = res;
       if (code === 200) {
-        message.success("注册成功");
+        message.success(t("login-right-register-msg-success"));
+        setRegisterState(false);
         onReset();
         setRegisterState(false);
       } else if (code === 201) {
-        message.error(msg);
+        message.error(t("login-right-register-msg-sameUser"));
+        onReset();
+      } else if (code === 202) {
+        message.error(t("login-right-register-msg-sameName"));
         onReset();
       } else {
-        message.error("注册失败");
+        message.error(t("login-right-register-msg-failed"));
       }
     } else {
       setLoading(false);
-      message.error("网络错误");
+      message.error(t("login-right-register-msg-network-error"));
     }
+  };
+
+  const onLngSelect = (val: string) => {
+    setLngVal(val);
+    localStorage.setItem("lang", val);
+    i18n.changeLanguage(val);
   };
 
   return (
@@ -130,6 +146,19 @@ export default function RightArea() {
             style={{ color: token.colorText }}
             onClick={onThemeClick}
           />
+          <Select
+            value={lngVal}
+            onChange={onLngSelect}
+            className="w-[100px] ml-[16px]"
+          >
+            {lngList.map((item: { label: string; value: string }) => {
+              return (
+                <Option key={item.value} value={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select>
         </div>
       </div>
       {/* Login Form */}
@@ -145,7 +174,9 @@ export default function RightArea() {
               },
             }}
           >
-            <Text className={styles["form-title"]}>用户登录</Text>
+            <Text className={styles["form-title"]}>
+              {t("login-right-form-title")}
+            </Text>
           </ConfigProvider>
           <Form
             name="normal_login"
@@ -153,16 +184,22 @@ export default function RightArea() {
             layout="vertical"
             initialValues={{ remember: true }}
             onFinish={onFinish}
+            autoComplete="off"
           >
             <Form.Item
-              label="账号"
+              label={t("login-right-form-account-label")}
               colon={false}
               name="username"
-              rules={[{ required: true, message: "请输入账号!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("login-right-form-account-error"),
+                },
+              ]}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="请输入账号"
+                placeholder={t("login-right-form-account-placeholder")}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
@@ -170,21 +207,25 @@ export default function RightArea() {
 
             <Form.Item
               name="password"
-              label="密码"
+              label={t("login-right-form-pwd-label")}
               colon={false}
-              rules={[{ required: true, message: "请输入密码!" }]}
+              rules={[
+                { required: true, message: t("login-right-form-pwd-error") },
+              ]}
             >
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="请输入密码"
+                placeholder={t("login-right-form-pwd-placeholder")}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox style={{ color: token.colorText }}>记住我</Checkbox>
+                <Checkbox style={{ color: token.colorText }}>
+                  {t("login-right-form-rember")}
+                </Checkbox>
               </Form.Item>
 
               <a
@@ -192,7 +233,7 @@ export default function RightArea() {
                 href=""
                 style={{ color: token.colorPrimary }}
               >
-                忘记密码
+                {t("login-right-form-forgetPwd")}
               </a>
             </Form.Item>
             <Form.Item>
@@ -202,16 +243,16 @@ export default function RightArea() {
                 className="login-form-button"
                 loading={loading}
               >
-                登录
+                {t("login-right-form-loginBtn")}
               </Button>
             </Form.Item>
             <div>
-              如果你没有账号，在这里{" "}
+              {t("login-right-form-noAccountText")}{" "}
               <a
                 onClick={() => setRegisterState(true)}
                 style={{ color: token.colorPrimary }}
               >
-                注册
+                {t("login-right-form-noAccountText-a")}
               </a>
             </div>
           </Form>
@@ -230,7 +271,9 @@ export default function RightArea() {
               },
             }}
           >
-            <Text className={styles["form-title"]}>用户注册</Text>
+            <Text className={styles["form-title"]}>
+              {t("login-right-register-form-title")}
+            </Text>
           </ConfigProvider>
           <Form
             name="normal_register"
@@ -243,11 +286,16 @@ export default function RightArea() {
             <Form.Item
               colon={false}
               name="username"
-              rules={[{ required: true, message: "请输入账号!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("login-right-register-form-account-placeholder"),
+                },
+              ]}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="请输入账号"
+                placeholder={t("login-right-register-form-account-placeholder")}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
@@ -257,11 +305,13 @@ export default function RightArea() {
               name="password"
               colon={false}
               rules={[
-                { required: true, message: "请输入密码!" },
+                {
+                  required: true,
+                  message: t("login-right-register-form-pwd-placeholder"),
+                },
                 {
                   pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/,
-                  message:
-                    "密码长度为8-16位， 要同时包含字母与数组，不能有特殊符号",
+                  message: t("login-right-register-form-pwd-error-rule"),
                 },
               ]}
               hasFeedback
@@ -269,7 +319,7 @@ export default function RightArea() {
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="密码 (6-16个字符组成，区分大小写)"
+                placeholder={t("login-right-register-form-pwd-rule")}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
@@ -283,14 +333,16 @@ export default function RightArea() {
               rules={[
                 {
                   required: true,
-                  message: "请输入密码!",
+                  message: t("login-right-register-form-pwd-placeholder"),
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error("两次密码不一致"));
+                    return Promise.reject(
+                      new Error(t("login-right-register-form-pwd-error-same"))
+                    );
                   },
                 }),
               ]}
@@ -298,7 +350,7 @@ export default function RightArea() {
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="密码 (6-16个字符组成，区分大小写)"
+                placeholder={t("login-right-register-form-pwd-rule")}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
@@ -307,11 +359,18 @@ export default function RightArea() {
             <Form.Item
               colon={false}
               name="infoname"
-              rules={[{ required: true, message: "请输入昵称" }]}
+              rules={[
+                {
+                  required: true,
+                  message: t("login-right-register-form-infoname-placeholder"),
+                },
+              ]}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="请输入昵称"
+                placeholder={t(
+                  "login-right-register-form-infoname-placeholder"
+                )}
                 bordered={false}
                 style={{ background: token.controlItemBgHover }}
               />
@@ -324,16 +383,16 @@ export default function RightArea() {
                 className="login-form-button"
                 loading={loading}
               >
-                注册
+                {t("login-right-register-form-btn")}
               </Button>
             </Form.Item>
             <div>
-              已有账号？，直接{" "}
+              {t("login-right-register-hasAccountText")}{" "}
               <a
                 onClick={() => setRegisterState(false)}
                 style={{ color: token.colorPrimary }}
               >
-                登录
+                {t("login-right-register-hasAccountText-a")}
               </a>
             </div>
           </Form>

@@ -160,7 +160,7 @@ export default function UserList(props: any) {
   const handleOk = async () => {
     setDelLoading(true);
     try {
-      await userListDelete({ id: userInfo._id });
+      await userListDelete({ id: userInfo._id, userName: userInfo.username });
       setParams({ ...params });
       delSuccess();
     } catch {

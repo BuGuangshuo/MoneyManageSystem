@@ -9,6 +9,7 @@
 import React from "react";
 
 import { Carousel, theme } from "antd";
+import { useTranslation } from "react-i18next";
 import introduceImg from "@/assets/img/undraw_Customer_survey_re_v9cj.svg";
 import introduceImg2 from "@/assets/img/undraw_Statistics_re_kox4.svg";
 import introduceImg3 from "@/assets/img/undraw_spread_love_r9jb.svg";
@@ -18,21 +19,30 @@ const { useToken } = theme;
 
 export default function LeftArea() {
   const { token } = useToken();
+
+  const { t } = useTranslation();
+
   return (
     <div
       className={styles["left-wrap"]}
       style={{ backgroundColor: token.colorPrimary }}
     >
-      <Carousel className={styles["carouse-wrap"]} autoplay>
+      <Carousel
+        className={styles["carouse-wrap"]}
+        autoplay
+        autoplaySpeed={5000}
+      >
         <div className={styles["introduce-wrap"]}>
           <div className={styles["introduce-img-wrap"]}>
             <img src={introduceImg} alt="" height="100%" />
           </div>
           <div className={styles["introduce-text-wrap"]}>
             <div className={styles["introduce-text-context"]}>
-              <div className={styles["introduce-title"]}>数据可视化</div>
+              <div className={styles["introduce-title"]}>
+                {t("login-left-img1-title")}
+              </div>
               <div className={styles["introduce-desc"]}>
-                将繁杂的数据转化为图表，把数据以可视化的方式呈现给您，更加直观的观察您的财政状态。
+                {t("login-left-img1-desc")}
               </div>
             </div>
           </div>
@@ -45,10 +55,10 @@ export default function LeftArea() {
           <div className={styles["introduce-text-wrap"]}>
             <div className={styles["introduce-text-context"]}>
               <div className={styles["introduce-title"]}>
-                和您的伙伴共同分析
+                {t("login-left-img2-title")}
               </div>
               <div className={styles["introduce-desc"]}>
-                在团队中观察更加直观的数据并共同分享，携手共进。
+                {t("login-left-img2-desc")}
               </div>
             </div>
           </div>
@@ -60,9 +70,11 @@ export default function LeftArea() {
           </div>
           <div className={styles["introduce-text-wrap"]}>
             <div className={styles["introduce-text-context"]}>
-              <div className={styles["introduce-title"]}>财富自由</div>
+              <div className={styles["introduce-title"]}>
+                {t("login-left-img3-title")}
+              </div>
               <div className={styles["introduce-desc"]}>
-                将团队的财政数据化后尽情的放飞自由，让团队实现财富管理自由。
+                {t("login-left-img3-desc")}
               </div>
             </div>
           </div>

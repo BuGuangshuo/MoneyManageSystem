@@ -28,3 +28,20 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(225, 233, 255, 0) inset !important; //设置为透明色时不要写transparent,否则不生效，可自行调整其他颜色
+
+  -webkit-text-fill-color: var(--ant-color-text-base) !important; //字体颜色
+  -webkit-transition-delay: 99999s;
+  -webkit-transition: color 99999s ease-out, background-color 99999s ease-out;
+}
+
+.ant-input-affix-wrapper input.ant-input:focus {
+  //这个在antd中需要单独覆盖
+  background: transparent !important;
+  box-shadow: none !important;
+}
